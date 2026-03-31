@@ -274,6 +274,45 @@
       flex-shrink: 0;
     }
 
+    /* 유튜브 영상 임베드 */
+    .yt-embed {
+      margin-bottom: 16px;
+    }
+    .yt-embed-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0d1c3b;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .yt-embed-label::before {
+      content: '';
+      display: inline-block;
+      width: 18px; height: 14px;
+      background: #FF0000;
+      border-radius: 4px;
+      flex-shrink: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 14'%3E%3Crect width='18' height='14' rx='4' fill='%23FF0000'/%3E%3Cpolygon points='7,3.5 13,7 7,10.5' fill='white'/%3E%3C/svg%3E");
+      background-size: cover;
+    }
+    .yt-iframe-wrap {
+      position: relative;
+      width: 100%;
+      /* 쇼츠 세로 비율 9:16 */
+      padding-bottom: 177.78%;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #000;
+    }
+    .yt-iframe-wrap iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
     /* 홈페이지 / 유튜브 이미지 카드 */
     .link-stack {
       display: flex;
@@ -497,6 +536,19 @@
       </div>
       <div class="cb-arrow">→</div>
     </a>
+
+    <!-- 유튜브 쇼츠 임베드 -->
+    <div class="yt-embed">
+      <div class="yt-embed-label">김진기 기업분석팀장 유튜브</div>
+      <div class="yt-iframe-wrap">
+        <iframe
+          src="https://www.youtube.com/embed/a1c_2K5qxWk?rel=0&modestbranding=1"
+          title="김진기 기업분석팀장 유튜브"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
 
     <!-- 홈페이지 / 유튜브 이미지 카드 -->
     <div class="link-stack">
