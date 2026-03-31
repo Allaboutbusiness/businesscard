@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>김진기 | 오너스 경영연구소</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+      background: #f0f3f8;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── 전체 카드 래퍼 ── */
+    .card {
+      max-width: 430px;
+      margin: 0 auto;
+      background: #fff;
+      min-height: 100vh;
+    }
+
+    /* ══════════════════════════════════════
+       1. 히어로 영역 (사진 + 이름)
+    ══════════════════════════════════════ */
+    .hero {
+      position: relative;
+      background: #0d1c3b;
+      overflow: hidden;
+    }
+
+    .hero-photo {
+      width: 100%;
+      display: block;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+      object-position: center top;
+      filter: brightness(0.88);
+    }
+
+    /* 사진 위 그라데이션 오버레이 */
+    .hero-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 55%;
+      background: linear-gradient(to top, rgba(10,20,50,0.95) 0%, rgba(10,20,50,0.5) 60%, transparent 100%);
+    }
+
+    /* 이름/직책 텍스트 (사진 하단 좌측) */
+    .hero-text {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 24px 22px 28px;
+    }
+    .hero-name {
+      font-size: 32px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.5px;
+      line-height: 1.15;
+    }
+    .hero-title {
+      font-size: 14px;
+      color: rgba(255,255,255,0.75);
+      margin-top: 5px;
+      font-weight: 400;
+    }
+    .hero-company {
+      font-size: 16px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.95);
+      margin-top: 2px;
+      margin-bottom: 14px;
+    }
+
+    /* 약력 텍스트 — 이름/직책과 같은 높이, 우측 배치 */
+    .hero-career {
+      position: absolute;
+      bottom: 74px;
+      right: 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 7px;
+      text-align: right;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+    }
+    .hero-career-item {
+      font-size: 13px;
+      font-weight: 600;
+      color: #ffffff !important;
+      line-height: 1.4;
+      white-space: nowrap;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+      background: transparent !important;
+    }
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .tag {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff;
+      font-size: 11.5px;
+      font-weight: 500;
+      padding: 5px 13px;
+      border-radius: 20px;
+      letter-spacing: 0.1px;
+    }
+
+    /* ══════════════════════════════════════
+       2. 연락처 바
+    ══════════════════════════════════════ */
+    .contact-bar {
+      background: #fff;
+      border-bottom: 1px solid #eef1f7;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      padding: 14px 20px;
+      border-bottom: 1px solid #f4f6fc;
+      text-decoration: none;
+      color: inherit;
+      gap: 14px;
+    }
+    .contact-item:last-child { border-bottom: none; }
+    .c-icon {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: #edf1ff;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .c-label { font-size: 11px; color: #aaa; margin-bottom: 2px; }
+    .c-value { font-size: 15px; font-weight: 600; color: #1a1a2e; }
+
+    /* ══════════════════════════════════════
+       3. 섹션 공통
+    ══════════════════════════════════════ */
+    .section {
+      padding: 28px 20px;
+      border-bottom: 8px solid #f0f3f8;
+    }
+    .section:last-child { border-bottom: none; }
+
+    .sec-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #1c3a6e;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      opacity: 0.8;
+    }
+    .sec-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #0d1c3b;
+      letter-spacing: -0.4px;
+      margin-bottom: 16px;
+    }
+
+    /* ══════════════════════════════════════
+       4. 소개 섹션
+    ══════════════════════════════════════ */
+    .about-text {
+      font-size: 16px;
+      line-height: 2.1;
+      color: #444;
+      word-break: keep-all;
+    }
+
+    /* ══════════════════════════════════════
+       5. 서비스 섹션
+    ══════════════════════════════════════ */
+    .svc-group { margin-bottom: 20px; }
+    .svc-group:last-child { margin-bottom: 0; }
+
+    .svc-group-header {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 13px 15px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+    .svc-group-header.growth {
+      background: linear-gradient(135deg, #0d1c3b, #1c4fa0);
+      color: #fff;
+    }
+    .svc-group-header.defense {
+      background: linear-gradient(135deg, #1a4a30, #2e7d52);
+      color: #fff;
+    }
+    .svc-group-header-icon { font-size: 18px; }
+    .svc-group-sub { font-size: 11px; font-weight: 400; opacity: 0.78; margin-top: 2px; }
+
+    .svc-list { display: flex; flex-direction: column; }
+    .svc-item {
+      display: flex;
+      align-items: center;
+      padding: 13px 4px;
+      border-bottom: 1px solid #f2f4fb;
+      gap: 13px;
+    }
+    .svc-item:last-child { border-bottom: none; }
+    .svc-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .svc-dot.blue { background: #1c4fa0; }
+    .svc-dot.green { background: #2e7d52; }
+    .svc-name { font-size: 14.5px; font-weight: 600; color: #1a1a2e; }
+
+    /* ══════════════════════════════════════
+       6. 링크 섹션
+    ══════════════════════════════════════ */
+
+    /* 상담신청 배너 */
+    .consult-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(130deg, #0d1c3b 0%, #1a4a9e 100%);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 16px;
+      padding: 22px 20px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .consult-banner::before {
+      content: '';
+      position: absolute;
+      top: -50px; right: -50px;
+      width: 140px; height: 140px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50%;
+    }
+    .consult-banner::after {
+      content: '';
+      position: absolute;
+      bottom: -30px; left: -20px;
+      width: 90px; height: 90px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+    .cb-left { position: relative; z-index: 1; }
+    .cb-sub { font-size: 11px; opacity: 0.72; margin-bottom: 5px; letter-spacing: 0.3px; }
+    .cb-title { font-size: 20px; font-weight: 800; letter-spacing: -0.3px; }
+    .cb-arrow {
+      position: relative; z-index: 1;
+      width: 44px; height: 44px;
+      background: rgba(255,255,255,0.18);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    /* 홈페이지 / 유튜브 이미지 카드 */
+    .link-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .link-img-card {
+      display: block;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1.5px solid #e8edf7;
+      text-decoration: none;
+      background: #fff;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      transition: box-shadow .15s, transform .15s;
+    }
+    .link-img-card:active { transform: scale(0.98); box-shadow: 0 1px 6px rgba(0,0,0,0.08); }
+
+    /* 이미지 영역 */
+    .lic-img-wrap {
+      width: 100%;
+      height: 120px;
+      overflow: hidden;
+      background: #f5f7fc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lic-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 16px 24px;
+    }
+    .lic-img-wrap.cover img {
+      object-fit: cover;
+      padding: 0;
+    }
+
+    /* 하단 레이블 바 */
+    .lic-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 16px;
+      border-top: 1px solid #f0f3f8;
+      background: #fff;
+    }
+    .lic-label { font-size: 14px; font-weight: 700; color: #1a1a2e; }
+    .lic-sub { font-size: 11px; color: #aaa; margin-top: 2px; }
+    .lic-arrow {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: #eef2ff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      color: #1c3a6e;
+      flex-shrink: 0;
+    }
+
+    /* ── footer ── */
+    .footer {
+      text-align: center;
+      padding: 22px 20px 32px;
+      font-size: 11px;
+      color: #ccc;
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+
+  <!-- ── 1. 히어로 ── -->
+  <div class="hero">
+    <img class="hero-photo" src="photo.jpg" alt="김진기 프로필 사진" />
+    <div class="hero-overlay"></div>
+    <!-- 약력: 사진 우측 빈 공간에 독립 배치 -->
+    <div class="hero-career">
+      <div class="hero-career-item">서울시립대학교 졸업</div>
+      <div class="hero-career-item">제조 유통 전문 컨설턴트</div>
+      <div class="hero-career-item">대한민국 육군 중위 전역</div>
+    </div>
+    <!-- 이름/직책: 하단 좌측 고정 -->
+    <div class="hero-text">
+      <div class="hero-name">김진기</div>
+      <div class="hero-title">기업분석팀장</div>
+      <div class="hero-company">오너스 경영연구소</div>
+      <div class="tags">
+        <span class="tag">정책자금</span>
+        <span class="tag">기업인증</span>
+        <span class="tag">중소기업 특별 절세</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 2. 연락처 ── -->
+  <div class="contact-bar">
+    <a class="contact-item" href="tel:010-2565-7155">
+      <div class="c-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1c3a6e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8a19.79 19.79 0 01-3.07-8.68A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="c-label">휴대전화</div>
+        <div class="c-value">010-2565-7155</div>
+      </div>
+    </a>
+    <a class="contact-item" href="mailto:jinki.kimmm@gmail.com">
+      <div class="c-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1c3a6e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+      </div>
+      <div>
+        <div class="c-label">이메일</div>
+        <div class="c-value">jinki.kimmm@gmail.com</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- ── 3. 소개 ── -->
+  <div class="section">
+    <div class="sec-label">ABOUT</div>
+    <div class="sec-title">오너스 경영연구소</div>
+    <p class="about-text">
+      오너스 경영연구소는<br>
+      각 분야의 최고 전문 파트너사와 함께<br>
+      수많은 기업의 CEO분들에게<br>
+      필요한 전문적인 서비스를 제공하고 있습니다
+    </p>
+  </div>
+
+  <!-- ── 4. 서비스 ── -->
+  <div class="section">
+    <div class="sec-label">SERVICES</div>
+    <div class="sec-title">주요 서비스</div>
+
+    <!-- 그룹 1: 성장 -->
+    <div class="svc-group">
+      <div class="svc-group-header growth">
+        <span class="svc-group-header-icon">🚀</span>
+        <div>
+          기업에 <strong>자금</strong>이 필요할 때
+          <div class="svc-group-sub">성장</div>
+        </div>
+      </div>
+      <div class="svc-list">
+        <div class="svc-item">
+          <div class="svc-dot blue"></div>
+          <div class="svc-name">사옥, 공장, 창고 등 매입 자금 조달</div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-dot blue"></div>
+          <div class="svc-name">저금리 정책자금 실행</div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-dot blue"></div>
+          <div class="svc-name">정부지원금 및 R&D 컨설팅</div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-dot blue"></div>
+          <div class="svc-name">기업인증 (벤처/이노비즈/연구소)</div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-dot blue"></div>
+          <div class="svc-name">받을 수 있는 무상지원금 색출</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 그룹 2: 방어 -->
+    <div class="svc-group">
+      <div class="svc-group-header defense">
+        <span class="svc-group-header-icon">🛡️</span>
+        <div>
+          과도한 <strong>세금</strong>이 부담될 때
+          <div class="svc-group-sub">방어</div>
+        </div>
+      </div>
+      <div class="svc-list">
+        <div class="svc-item">
+          <div class="svc-dot green"></div>
+          <div class="svc-name">법인세 절감 및 세액 공제 플랜</div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-dot green"></div>
+          <div class="svc-name">상속 및 증여 사전 대비 전략</div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-dot green"></div>
+          <div class="svc-name">임원 퇴직금 및 보상 체계 수립</div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-dot green"></div>
+          <div class="svc-name">기업 보험을 활용한 유동성 확보</div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-dot green"></div>
+          <div class="svc-name">기업 보험을 활용한 법인 자금 개인화 체계 수립</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 5. 링크 ── -->
+  <div class="section">
+    <div class="sec-label">LINKS</div>
+    <div class="sec-title">바로가기</div>
+
+    <!-- 상담신청 배너 -->
+    <a class="consult-banner"
+       href="https://docs.google.com/forms/d/e/1FAIpQLSf6QtuT6mtyObED4KDgTZ7C7rs1xkES0PreLeONFEet37kwHg/viewform?usp=sharing&ouid=101053759053889131258"
+       target="_blank" rel="noopener">
+      <div class="cb-left">
+        <div class="cb-sub">무료 기업진단 · 맞춤 상담</div>
+        <div class="cb-title">상담신청서 작성 클릭</div>
+      </div>
+      <div class="cb-arrow">→</div>
+    </a>
+
+    <!-- 홈페이지 / 유튜브 이미지 카드 -->
+    <div class="link-stack">
+      <a class="link-img-card" href="https://ownersmri.com/" target="_blank" rel="noopener">
+        <div class="lic-img-wrap">
+          <img src="logo.png" alt="오너스 경영연구소 로고" />
+        </div>
+        <div class="lic-footer">
+          <div>
+            <div class="lic-label">홈페이지</div>
+            <div class="lic-sub">ownersmri.com</div>
+          </div>
+          <div class="lic-arrow">→</div>
+        </div>
+      </a>
+      <a class="link-img-card" href="https://www.youtube.com/@ownersmri" target="_blank" rel="noopener">
+        <div class="lic-img-wrap cover">
+          <img src="youtube.jpg" alt="유튜브 채널" />
+        </div>
+        <div class="lic-footer">
+          <div>
+            <div class="lic-label">유튜브 채널</div>
+            <div class="lic-sub">youtube.com/@ownersmri</div>
+          </div>
+          <div class="lic-arrow">→</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="footer">© 2025 오너스 경영연구소 · 김진기</div>
+</div>
+</body>
+</html>
