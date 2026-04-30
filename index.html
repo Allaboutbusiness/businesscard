@@ -74,16 +74,17 @@
       display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
     }
     .hero-photo {
-      width: 115px; height: 140px;
-      border-radius: 14px;
+      width: 170px; height: 208px;
+      border-radius: 16px;
       object-fit: cover; object-position: top;
-      border: 1.5px solid rgba(255,255,255,.22);
-      box-shadow: 0 8px 28px rgba(0,0,0,.45);
+      border: 2px solid rgba(255,255,255,.28);
+      box-shadow: 0 12px 40px rgba(0,0,0,.55);
     }
-    .hero-career { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+    .hero-career { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
     .hero-career-item {
-      font-size: 13px; font-weight: 500;
-      color: rgba(255,255,255,.65); letter-spacing: .2px;
+      font-size: 14px; font-weight: 500;
+      color: rgba(255,255,255,.75); letter-spacing: .2px;
+      text-shadow: 0 1px 6px rgba(0,0,0,.6);
     }
 
     /* 메인 텍스트 (하단) */
@@ -121,34 +122,34 @@
     }
 
     /* ════════════════════════════════
-       2. CONTACT BAR
+       2. CONTACT BAR — 투명 (히어로 이미지 투과)
     ════════════════════════════════ */
-    .contact-bar { background: rgba(10,12,10,.92); }
+    .contact-bar { background: transparent; }
     .contact-item {
       display: flex; align-items: center; padding: 15px 22px;
-      border-bottom: 1px solid rgba(255,255,255,.05);
-      text-decoration: none; color: #F5F3ED; gap: 14px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      text-decoration: none; color: #fff; gap: 14px;
     }
     .contact-item:last-child { border-bottom: none; }
     .c-icon {
       width: 38px; height: 38px; border-radius: 50%;
-      background: rgba(13,154,140,.15);
+      background: rgba(20,184,166,.25);
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
-    .c-label { font-size: 11px; color: rgba(245,243,237,.4); margin-bottom: 2px; }
-    .c-value  { font-size: 15px; font-weight: 600; }
+    .c-label { font-size: 11px; color: rgba(255,255,255,.55); margin-bottom: 2px; }
+    .c-value  { font-size: 15px; font-weight: 700; text-shadow: 0 1px 6px rgba(0,0,0,.5); }
 
     /* ════════════════════════════════
-       3. 명함 (contact bar 바로 아래)
+       3. 명함 — 투명 (히어로 이미지 투과)
     ════════════════════════════════ */
     .card-band {
       padding: 22px 22px;
-      background: rgba(8,10,8,.92);
+      background: transparent;
     }
     .card-band img {
       width: 100%; max-width: 420px; margin: 0 auto; display: block;
       border-radius: 14px;
-      box-shadow: 0 14px 48px rgba(0,0,0,.55);
+      box-shadow: 0 14px 48px rgba(0,0,0,.6);
     }
 
     /* ════════════════════════════════
@@ -324,7 +325,14 @@
       background: radial-gradient(circle, rgba(13,154,140,.18) 0%, transparent 70%);
       pointer-events: none;
     }
-    .cta-hanja { font-size: 64px; color: var(--teal-l); opacity: .1; line-height: 1; margin-bottom: 12px; }
+    /* 흰색 로고 — grayscale → invert → brightness로 다크 계열을 흰색으로 변환 */
+    .cta-logo {
+      display: block; margin: 0 auto 24px;
+      width: 200px; max-width: 70%;
+      filter: grayscale(1) invert(1) brightness(2);
+      mix-blend-mode: screen;
+      opacity: .85;
+    }
     .cta-title { font-size: 24px; font-weight: 800; color: #fff; line-height: 1.65; letter-spacing: -.5px; word-break: keep-all; margin-bottom: 36px; }
     .cta-btn {
       display: inline-flex; align-items: center; gap: 10px;
@@ -357,8 +365,8 @@
     @media (min-width: 640px) {
       .hero { padding: 0 40px 68px; }
       .hero-profile { top: 36px; right: 40px; gap: 12px; }
-      .hero-photo { width: 140px; height: 170px; border-radius: 16px; }
-      .hero-career-item { font-size: 13.5px; }
+      .hero-photo { width: 210px; height: 256px; border-radius: 18px; }
+      .hero-career-item { font-size: 14px; }
       .hero-name, .hero-cfo { font-size: clamp(60px, 10vw, 82px); }
       .hero-tagline { font-size: 21px; }
       .hero-cta-btn { max-width: 400px; }
@@ -392,8 +400,8 @@
     @media (min-width: 1024px) {
       .hero { padding: 0 60px 88px; justify-content: flex-end; }
       .hero-profile { top: 48px; right: 60px; gap: 14px; }
-      .hero-photo { width: 165px; height: 200px; border-radius: 20px; }
-      .hero-career-item { font-size: 14px; }
+      .hero-photo { width: 260px; height: 317px; border-radius: 22px; }
+      .hero-career-item { font-size: 15px; }
       .hero-main { max-width: 600px; }
       .hero-name, .hero-cfo { font-size: 80px; letter-spacing: -3px; }
       .hero-tagline { font-size: 23px; }
@@ -532,7 +540,7 @@
 <!-- ════ SERVICES — 탭 ════ -->
 <section class="svc-sec">
   <div class="sec-eyebrow ew-dark">SERVICES</div>
-  <div class="sec-title-dark fade-up">대표님의 고민,<br>두 가지로 나뉩니다</div>
+  <div class="sec-title-dark fade-up">모든 중소기업의<br>가장 큰 고민 두 가지가<br>무엇일까요?</div>
 
   <div class="svc-tabs">
     <button class="svc-tab-btn fund-active" id="tab-fund" onclick="switchTab('fund')">
@@ -710,7 +718,7 @@
 <!-- ════ CTA ════ -->
 <section class="cta-sec">
   <div class="cta-glow"></div>
-  <div class="cta-hanja">錢</div>
+  <img class="cta-logo" src="logo.png" alt="오너스 경영연구소" />
   <div class="cta-title fade-up">
     돈(錢)에 관한 모든 것,<br>
     함께 이야기 나눌<br>
