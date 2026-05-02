@@ -220,6 +220,12 @@
     }
     .svc-card-fund { border-top: 4px solid var(--teal-l); }
     .svc-card-tax  { border-top: 4px solid var(--amber); }
+    .svc-photo {
+      width: 100%; margin-top: 22px; border-radius: 14px;
+      object-fit: cover; display: block;
+      max-height: 320px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.45);
+    }
 
     .svc-cat { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 7px; }
     .cat-fund { color: var(--teal-l); }
@@ -540,7 +546,7 @@
 <!-- ════ SERVICES — 탭 ════ -->
 <section class="svc-sec">
   <div class="sec-eyebrow ew-dark">SERVICES</div>
-  <div class="sec-title-dark fade-up">모든 중소기업의<br>가장 큰 고민 두 가지가<br>무엇일까요?</div>
+  <div class="sec-title-dark fade-up">모든 중소기업의<br>가장 큰 고민 두 가지를<br>해결합니다</div>
 
   <div class="svc-tabs">
     <button class="svc-tab-btn fund-active" id="tab-fund" onclick="switchTab('fund')">
@@ -561,7 +567,7 @@
       <div class="svc-item"><div class="dot-fund"></div>정부지원금 및 R&amp;D 컨설팅</div>
       <div class="svc-item"><div class="dot-fund"></div>기업인증 (벤처/이노비즈/연구소)</div>
       <div class="svc-item"><div class="dot-fund"></div>받을 수 있는 무상지원금 색출</div>
-      <div class="svc-item"><div class="dot-fund"></div>복지몰 구축으로 직원 복지 향상</div>
+      <img src="case1.jpg" class="svc-photo" alt="자금 솔루션 사례">
     </div>
   </div>
 
@@ -575,6 +581,8 @@
       <div class="svc-item"><div class="dot-tax"></div>임원 퇴직금 및 보상 체계 수립</div>
       <div class="svc-item"><div class="dot-tax"></div>기업 보험을 활용한 법인 자금 개인화 체계 수립</div>
       <div class="svc-item"><div class="dot-tax"></div>사내근로복지기금을 활용한 절세</div>
+      <div class="svc-item"><div class="dot-tax"></div>복지몰 구축으로 직원 복지 향상</div>
+      <img src="case2.jpg" class="svc-photo" alt="절세 솔루션 사례">
     </div>
   </div>
 </section>
