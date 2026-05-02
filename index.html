@@ -220,11 +220,23 @@
     }
     .svc-card-fund { border-top: 4px solid var(--teal-l); }
     .svc-card-tax  { border-top: 4px solid var(--amber); }
+    /* 모바일: 세로 스택 */
+    .svc-text { flex: 1; min-width: 0; }
     .svc-photo {
       width: 100%; margin-top: 22px; border-radius: 14px;
       object-fit: cover; display: block;
       max-height: 320px;
       box-shadow: 0 8px 32px rgba(0,0,0,.45);
+    }
+    /* 데스크톱: 텍스트 좌 / 사진 우 병렬 */
+    @media (min-width: 768px) {
+      .svc-card-fund, .svc-card-tax {
+        display: flex; align-items: center; gap: 28px;
+      }
+      .svc-photo {
+        width: 46%; flex-shrink: 0;
+        margin-top: 0; max-height: 360px;
+      }
     }
 
     .svc-cat { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 7px; }
@@ -560,13 +572,15 @@
   <!-- 자금 패널 -->
   <div class="svc-panel active" id="panel-fund">
     <div class="svc-card-fund">
-      <div class="svc-cat cat-fund">자금 솔루션</div>
-      <div class="svc-title">기업에 <strong>자금</strong>이 필요할 때</div>
-      <div class="svc-item"><div class="dot-fund"></div>사옥, 공장, 창고 등 매입 자금 조달</div>
-      <div class="svc-item"><div class="dot-fund"></div>저금리 정책자금 실행</div>
-      <div class="svc-item"><div class="dot-fund"></div>정부지원금 및 R&amp;D 컨설팅</div>
-      <div class="svc-item"><div class="dot-fund"></div>기업인증 (벤처/이노비즈/연구소)</div>
-      <div class="svc-item"><div class="dot-fund"></div>받을 수 있는 무상지원금 색출</div>
+      <div class="svc-text">
+        <div class="svc-cat cat-fund">자금 솔루션</div>
+        <div class="svc-title">기업에 <strong>자금</strong>이 필요할 때</div>
+        <div class="svc-item"><div class="dot-fund"></div>사옥, 공장, 창고 등 매입 자금 조달</div>
+        <div class="svc-item"><div class="dot-fund"></div>저금리 정책자금 실행</div>
+        <div class="svc-item"><div class="dot-fund"></div>정부지원금 및 R&amp;D 컨설팅</div>
+        <div class="svc-item"><div class="dot-fund"></div>기업인증 (벤처/이노비즈/연구소)</div>
+        <div class="svc-item"><div class="dot-fund"></div>받을 수 있는 무상지원금 색출</div>
+      </div>
       <img src="case1.jpg" class="svc-photo" alt="자금 솔루션 사례">
     </div>
   </div>
@@ -574,14 +588,16 @@
   <!-- 절세 패널 -->
   <div class="svc-panel" id="panel-tax">
     <div class="svc-card-tax">
-      <div class="svc-cat cat-tax">절세 솔루션</div>
-      <div class="svc-title">과도한 <strong>세금</strong>이 부담될 때</div>
-      <div class="svc-item"><div class="dot-tax"></div>법인세 절감 및 세액 공제 플랜</div>
-      <div class="svc-item"><div class="dot-tax"></div>상속 및 증여 사전 대비 전략</div>
-      <div class="svc-item"><div class="dot-tax"></div>임원 퇴직금 및 보상 체계 수립</div>
-      <div class="svc-item"><div class="dot-tax"></div>기업 보험을 활용한 법인 자금 개인화 체계 수립</div>
-      <div class="svc-item"><div class="dot-tax"></div>사내근로복지기금을 활용한 절세</div>
-      <div class="svc-item"><div class="dot-tax"></div>복지몰 구축으로 직원 복지 향상</div>
+      <div class="svc-text">
+        <div class="svc-cat cat-tax">절세 솔루션</div>
+        <div class="svc-title">과도한 <strong>세금</strong>이 부담될 때</div>
+        <div class="svc-item"><div class="dot-tax"></div>법인세 절감 및 세액 공제 플랜</div>
+        <div class="svc-item"><div class="dot-tax"></div>상속 및 증여 사전 대비 전략</div>
+        <div class="svc-item"><div class="dot-tax"></div>임원 퇴직금 및 보상 체계 수립</div>
+        <div class="svc-item"><div class="dot-tax"></div>기업 보험을 활용한 법인 자금 개인화 체계 수립</div>
+        <div class="svc-item"><div class="dot-tax"></div>사내근로복지기금을 활용한 절세</div>
+        <div class="svc-item"><div class="dot-tax"></div>복지몰 구축으로 직원 복지 향상</div>
+      </div>
       <img src="case2.jpg" class="svc-photo" alt="절세 솔루션 사례">
     </div>
   </div>
