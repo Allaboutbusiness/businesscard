@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>김진기 | 사외 CFO | 오너스 경영연구소</title>
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#0D9A8C" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="김진기 CFO" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -888,6 +894,13 @@
     new IntersectionObserver(function(entries) {
       floatEl.classList.toggle('show', !entries[0].isIntersecting);
     }, { threshold: 0.05 }).observe(heroEl);
+  }
+
+  /* ── Service Worker 등록 ── */
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/sw.js');
+    });
   }
 </script>
 </body>
