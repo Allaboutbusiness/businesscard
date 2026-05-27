@@ -4,7 +4,7 @@
   "description": "자금부터 절세까지, 기업의 모든 돈 문제를 해결합니다",
   "start_url": "/",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "any",
   "theme_color": "#0D9A8C",
   "background_color": "#111210",
   "lang": "ko",

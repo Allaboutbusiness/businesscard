@@ -1,4 +1,4 @@
-const CACHE_NAME = 'namecard-v1';
+const CACHE_NAME = 'namecard-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
