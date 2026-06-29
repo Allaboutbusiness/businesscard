@@ -179,7 +179,7 @@
        4. STATS
     ════════════════════════════════ */
     .stats-sec {
-      background: rgba(8,10,8,.9);
+      background: transparent;   /* 고정 배경(bg.jpg) 비치도록 투명 */
       padding: 48px 22px 56px;
     }
     .sec-eyebrow {
@@ -188,7 +188,7 @@
     }
     .ew-dim  { color: rgba(245,243,237,.25); }
     .ew-teal { color: var(--teal-l); }
-    .ew-dark { color: rgba(26,25,24,.35); }
+    .ew-dark { color: rgba(245,243,237,.55); }   /* 바다 배경 위 밝게 */
 
     .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
     .stat-item {
@@ -196,17 +196,18 @@
       border-right: 1px solid rgba(255,255,255,.07);
     }
     .stat-item:last-child { border-right: none; }
-    .stat-num { font-size: 36px; font-weight: 900; color: var(--teal-l); letter-spacing: -1px; line-height: 1.05; }
-    .stat-unit { font-size: 17px; color: rgba(245,243,237,.3); }
-    .stat-lbl { font-size: 11px; color: rgba(245,243,237,.5); margin-top: 7px; line-height: 1.6; word-break: keep-all; }
+    .stat-num { font-size: 36px; font-weight: 900; color: var(--teal-l); letter-spacing: -1px; line-height: 1.05; text-shadow: 0 2px 16px rgba(0,0,0,.5); }
+    .stat-unit { font-size: 17px; color: rgba(245,243,237,.55); }
+    .stat-lbl { font-size: 11px; color: rgba(245,243,237,.7); margin-top: 7px; line-height: 1.6; word-break: keep-all; text-shadow: 0 1px 6px rgba(0,0,0,.6); }
 
     /* ════════════════════════════════
        5. SERVICES — 탭 디자인
     ════════════════════════════════ */
-    .svc-sec { background: var(--cream); padding: 64px 22px; }
+    .svc-sec { background: transparent; padding: 64px 22px; }   /* 고정 배경(bg.jpg) 비치도록 투명 */
     .sec-title-dark {
       font-size: 26px; font-weight: 800; letter-spacing: -.6px;
-      line-height: 1.4; margin-bottom: 28px; color: #1A1918; word-break: keep-all;
+      line-height: 1.4; margin-bottom: 28px; color: #F5F3ED; word-break: keep-all;
+      text-shadow: 0 2px 14px rgba(0,0,0,.55);   /* 바다 배경 위 가독성 */
     }
 
     /* 탭 버튼 */
@@ -227,9 +228,9 @@
       border-color: var(--amber);
     }
     .svc-tab-btn:not(.fund-active):not(.tax-active) {
-      background: rgba(26,25,24,.06);
-      color: rgba(26,25,24,.4);
-      border-color: transparent;
+      background: rgba(255,255,255,.08);   /* 바다 배경 위 유리 느낌 */
+      color: rgba(255,255,255,.62);
+      border-color: rgba(255,255,255,.14);
     }
 
     /* 패널 */
@@ -240,6 +241,7 @@
     .svc-card-fund, .svc-card-tax {
       border-radius: 20px; padding: 26px 20px;
       background: var(--dark);
+      box-shadow: 0 14px 48px rgba(0,0,0,.5);   /* 바다 배경 위로 카드를 띄움 */
     }
     .svc-card-fund { border-top: 4px solid var(--teal-l); }
     .svc-card-tax  { border-top: 4px solid var(--amber); }
