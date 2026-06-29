@@ -25,7 +25,13 @@
       --amber:  #F59E0B;
       --cream:  #FBFAF4;
       --dark:   #111210;
+      --content-max: 1200px;   /* 콘텐츠 최대 폭 (줌아웃/와이드 화면에서 무한 확장 방지) */
     }
+
+    /* ── 콘텐츠 최대 폭 컨테이너 ──
+       배경은 화면 전체(풀블리드)로 두되, 안쪽 콘텐츠만 최대폭으로 가두고 가운데 정렬.
+       일반 데스크톱(≤1200px 콘텐츠)에서는 영향 없음 — 그 이상 넓어질 때만 한계가 걸림. */
+    .wrap { width: 100%; max-width: var(--content-max); margin-inline: auto; }
 
     /* ── 전체 고정 배경 ── */
     .fixed-bg {
@@ -72,6 +78,8 @@
       display: flex; flex-direction: column; justify-content: flex-end;
       padding: 0 22px 52px; position: relative;
     }
+    /* 모바일: position static → .hero-profile 의 절대배치는 .hero 기준 유지 (기존 레이아웃 그대로) */
+    .hero-inner { position: static; width: 100%; }
 
     /* 우측 상단: 사진 + 약력 */
     .hero-profile {
@@ -100,12 +108,12 @@
       margin-bottom: 14px; flex-wrap: wrap;
     }
     .hero-name {
-      font-size: clamp(46px, 12vw, 72px);
+      font-size: clamp(42px, 9vw, 72px);
       font-weight: 900; color: #fff;
       letter-spacing: -2px; line-height: 1;
     }
     .hero-cfo {
-      font-size: clamp(46px, 12vw, 72px);
+      font-size: clamp(42px, 9vw, 72px);
       font-weight: 900; color: var(--teal-l);
       letter-spacing: -2px; line-height: 1;
     }
@@ -251,6 +259,24 @@
         width: 46%; flex-shrink: 0;
         margin-top: 0; max-height: 360px;
       }
+    }
+
+    /* ════════════════════════════════
+       HERO 데스크톱(≥768px): 2단 grid (텍스트 좌 / 사진 우)
+       - 사진을 절대배치 → grid 칸으로 전환 → 텍스트와 절대 겹치지 않음
+       - 하단 고정(flex-end) → 수직 중앙정렬 → 줌아웃 시 거대 여백 제거
+       - .hero-inner 를 최대폭으로 가둬 좌우 무한 확장 차단
+    ════════════════════════════════ */
+    @media (min-width: 768px) {
+      .hero { justify-content: center; padding-block: 96px; padding-inline: 40px; }
+      .hero-inner {
+        position: relative;
+        max-width: var(--content-max); margin-inline: auto;
+        display: grid; grid-template-columns: 1fr auto;
+        align-items: center; gap: 48px;
+      }
+      .hero-main    { grid-column: 1; grid-row: 1; max-width: 560px; }
+      .hero-profile { position: static; grid-column: 2; grid-row: 1; }
     }
 
     .svc-cat { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 7px; }
@@ -400,7 +426,7 @@
       .hero-profile { top: 36px; right: 40px; gap: 12px; }
       .hero-photo { width: 210px; height: 256px; border-radius: 18px; }
       .hero-career-item { font-size: 14px; }
-      .hero-name, .hero-cfo { font-size: clamp(60px, 10vw, 82px); }
+      .hero-name, .hero-cfo { font-size: clamp(50px, 8vw, 78px); }
       .hero-tagline { font-size: 21px; }
       .hero-cta-btn, .hero-cta-btn-inv { max-width: 400px; }
 
@@ -431,8 +457,9 @@
        RESPONSIVE — 데스크탑 1024px+
     ════════════════════════════════ */
     @media (min-width: 1024px) {
-      .hero { padding: 0 60px 88px; justify-content: flex-end; }
-      .hero-profile { top: 48px; right: 60px; gap: 14px; }
+      /* padding-block/inline 분리 — 768px의 수직 중앙정렬(justify-content:center)을 덮어쓰지 않음 */
+      .hero { padding-block: 110px; padding-inline: 60px; }
+      .hero-profile { gap: 14px; }
       .hero-photo { width: 260px; height: 317px; border-radius: 22px; }
       .hero-career-item { font-size: 15px; }
       .hero-main { max-width: 600px; }
@@ -467,8 +494,7 @@
        RESPONSIVE — 와이드 1280px+
     ════════════════════════════════ */
     @media (min-width: 1280px) {
-      .hero           { padding: 0 80px 88px; }
-      .hero-profile   { right: 80px; }
+      .hero           { padding-inline: 80px; }
       .contact-item   { padding: 18px 80px; }
       .card-band      { padding: 32px 80px; }
       .card-band img  { max-width: 620px; }
@@ -492,6 +518,7 @@
 
 <!-- ════ HERO ════ -->
 <section class="hero" id="heroSection">
+ <div class="hero-inner">
 
   <!-- 우측 상단: photo.jpg + 약력 (우측정렬) -->
   <div class="hero-profile">
@@ -528,10 +555,12 @@
       <span>정부지원사업 AI 매칭(무료) 바로가기</span><span>→</span>
     </a>
   </div>
+ </div>
 </section>
 
 <!-- ════ CONTACT BAR ════ -->
 <div class="contact-bar">
+ <div class="wrap">
   <a class="contact-item" href="tel:010-2565-7155">
     <div class="c-icon">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -549,6 +578,7 @@
     </div>
     <div><div class="c-label">이메일</div><div class="c-value">jinki.kimmm@gmail.com</div></div>
   </a>
+ </div>
 </div>
 
 <!-- ════ 명함 (contact bar 바로 아래) ════ -->
@@ -558,6 +588,7 @@
 
 <!-- ════ STATS ════ -->
 <section class="stats-sec">
+ <div class="wrap">
   <div class="sec-eyebrow ew-dim">TRACK RECORD</div>
   <div class="stats-grid fade-up" id="statsGrid">
     <div class="stat-item">
@@ -573,10 +604,12 @@
       <div class="stat-lbl">기업인증<br>성공 사례</div>
     </div>
   </div>
+ </div>
 </section>
 
 <!-- ════ SERVICES — 탭 ════ -->
 <section class="svc-sec">
+ <div class="wrap">
   <div class="sec-eyebrow ew-dark">SERVICES</div>
   <div class="sec-title-dark fade-up">모든 중소기업의<br>가장 큰 고민 두 가지를<br>해결합니다</div>
 
@@ -621,10 +654,12 @@
       <img src="case2.jpg" class="svc-photo" alt="절세 솔루션 사례">
     </div>
   </div>
+ </div>
 </section>
 
 <!-- ════ CASES ════ -->
 <section class="cases-sec">
+ <div class="wrap">
   <div class="sec-eyebrow ew-teal">CASES</div>
   <div class="sec-title-light fade-up">실제 컨설팅 사례</div>
 
@@ -806,11 +841,13 @@
     </div>
 
   </div>
+ </div>
 </section>
 
 <!-- ════ CTA ════ -->
 <section class="cta-sec">
   <div class="cta-glow"></div>
+ <div class="wrap">
   <img class="cta-logo" src="logo.png" alt="오너스 경영연구소" />
   <div class="cta-title fade-up">
     돈(錢)에 관한 모든 것,<br>
@@ -820,10 +857,12 @@
   <a class="cta-btn fade-up d1"
      href="https://docs.google.com/forms/d/e/1FAIpQLSf6QtuT6mtyObED4KDgTZ7C7rs1xkES0PreLeONFEet37kwHg/viewform?usp=sharing&ouid=101053759053889131258"
      target="_blank" rel="noopener">3회 무료 상담 신청 →</a>
+ </div>
 </section>
 
 <!-- ════ FOOTER ════ -->
 <footer class="footer">
+ <div class="wrap">
   <div class="footer-btns">
     <a class="footer-btn fbtn-home" href="https://ownersmri.com/" target="_blank" rel="noopener">
       🏢 오너스 경영연구소 홈페이지
@@ -833,6 +872,7 @@
     </a>
   </div>
   <div class="footer-copy">© 2025 오너스 경영연구소 · 김진기 · 010-2565-7155</div>
+ </div>
 </footer>
 
 <script>
