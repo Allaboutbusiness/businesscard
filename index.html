@@ -170,8 +170,19 @@
     }
     .hero-video-overlay {
       position: absolute; inset: 0; z-index: 1; pointer-events: none;
-      /* 영상을 아래로 갈수록 어둠으로 페이드(B) — 페이드 길게: 32%부터 완만하게 어두워짐 */
-      background: linear-gradient(180deg, rgba(5,7,5,.4) 0%, rgba(6,8,7,.5) 32%, rgba(7,9,8,.74) 66%, rgba(8,10,8,.9) 100%);
+      /* 영상을 아래로 갈수록 어둠으로 페이드(B) — 하단은 솔리드 #080a08 로 마무리(전환 띠와 정확히 맞닿게) */
+      background: linear-gradient(180deg, rgba(5,7,5,.4) 0%, rgba(6,8,7,.5) 32%, rgba(7,9,8,.78) 66%, rgba(8,10,8,.99) 100%);
+    }
+
+    /* 히어로 어둠 → 바다 배경 전환 띠: 위는 검정(영상 하단과 동일), 아래로 바다가 펼쳐짐 */
+    .sea-fade {
+      height: 260px; pointer-events: none;
+      background: linear-gradient(180deg,
+        #080a08 0%,
+        #080a08 14%,
+        rgba(8,10,8,.8) 44%,
+        rgba(8,10,8,.4) 72%,
+        transparent 100%);
     }
 
     /* 우측 상단: 사진 + 약력 */
@@ -672,6 +683,9 @@
   </div>
  </div>
 </section>
+
+<!-- ════ 히어로 어둠 → 바다 전환 띠 ════ -->
+<div class="sea-fade"></div>
 
 <!-- ════ CONTACT BAR ════ -->
 <div class="contact-bar" id="contact">
