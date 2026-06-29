@@ -158,7 +158,21 @@
     /* 모바일: 사진·텍스트를 정상 흐름(세로)으로 배치 — 사진 절대배치 제거.
        margin-top:auto(아래 .hero-main)로 화면이 충분히 높으면 텍스트를 하단에 고정,
        짧으면 사진 아래로 자연 스택 → 좁거나 짧은(줌인) 화면에서도 절대 겹치지 않음. */
-    .hero-inner { display: flex; flex-direction: column; flex: 1; width: 100%; }
+    .hero-inner { display: flex; flex-direction: column; flex: 1; width: 100%; position: relative; z-index: 2; }
+
+    /* 히어로 배경 동영상 (미리보기) */
+    .hero-video {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; z-index: 0; pointer-events: none;
+      /* 하단으로 갈수록 영상을 투명하게 (페이드 길게: 35%부터 시작) */
+      -webkit-mask-image: linear-gradient(to bottom, #000 35%, rgba(0,0,0,.4) 70%, transparent 100%);
+              mask-image: linear-gradient(to bottom, #000 35%, rgba(0,0,0,.4) 70%, transparent 100%);
+    }
+    .hero-video-overlay {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      /* 영상을 아래로 갈수록 어둠으로 페이드(B) — 페이드 길게: 32%부터 완만하게 어두워짐 */
+      background: linear-gradient(180deg, rgba(5,7,5,.4) 0%, rgba(6,8,7,.5) 32%, rgba(7,9,8,.74) 66%, rgba(8,10,8,.9) 100%);
+    }
 
     /* 우측 상단: 사진 + 약력 */
     .hero-profile {
@@ -615,6 +629,10 @@
 
 <!-- ════ HERO ════ -->
 <section class="hero" id="heroSection">
+  <video class="hero-video" autoplay muted loop playsinline poster="bg.jpg">
+    <source src="hero-bg.mp4" type="video/mp4">
+  </video>
+  <div class="hero-video-overlay"></div>
  <div class="hero-inner">
 
   <!-- 우측 상단: photo.jpg + 약력 (우측정렬) -->
