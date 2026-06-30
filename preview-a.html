@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>김진기 | 사외 CFO | 오너스 경영연구소</title>
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#0D9A8C" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="김진기 CFO" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 72px; }   /* 고정 헤더 높이만큼 앵커 보정 */
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+      color: #F5F3ED;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    :root {
+      --teal:   #0D9A8C;
+      --teal-l: #14B8A6;
+      --amber:  #F59E0B;
+      --cream:  #FBFAF4;
+      --dark:   #111210;
+      --content-max: 1200px;   /* 콘텐츠 최대 폭 (줌아웃/와이드 화면에서 무한 확장 방지) */
+    }
+
+    /* ── 콘텐츠 최대 폭 컨테이너 ──
+       배경은 화면 전체(풀블리드)로 두되, 안쪽 콘텐츠만 최대폭으로 가두고 가운데 정렬.
+       일반 데스크톱(≤1200px 콘텐츠)에서는 영향 없음 — 그 이상 넓어질 때만 한계가 걸림. */
+    .wrap { width: 100%; max-width: var(--content-max); margin-inline: auto; }
+
+    /* ── 전체 고정 배경 ── */
+    .fixed-bg {
+      position: fixed; inset: 0; z-index: -2;
+      background: url('bg.jpg') center top / cover no-repeat;
+    }
+    .fixed-bg-overlay {
+      position: fixed; inset: 0; z-index: -1;
+      background: linear-gradient(180deg,
+        rgba(5,7,5,.5) 0%,
+        rgba(7,9,7,.68) 55%,
+        rgba(8,10,8,.86) 100%);
+    }
+
+    /* ── 페이드인 ── */
+    .fade-up {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity .85s cubic-bezier(.22,1,.36,1), transform .85s cubic-bezier(.22,1,.36,1);
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: .1s; }
+    .d2 { transition-delay: .22s; }
+    .d3 { transition-delay: .34s; }
+
+    /* ── 플로팅 CTA ── */
+    .float-cta {
+      position: fixed; bottom: 20px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      z-index: 999;
+      background: var(--teal); color: #fff;
+      font-size: 15px; font-weight: 700;
+      padding: 14px 28px; border-radius: 50px;
+      text-decoration: none; white-space: nowrap;
+      box-shadow: 0 6px 28px rgba(13,154,140,.45);
+      opacity: 0; transition: opacity .4s, transform .4s; pointer-events: none;
+    }
+    .float-cta.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+
+    /* ════════════════════════════════
+       상단 고정 헤더 (맨 위 투명 → 스크롤 시 배경색)
+    ════════════════════════════════ */
+    .site-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 22px;
+      background: transparent;
+      transition: background .3s, box-shadow .3s, padding .3s, border-color .3s;
+    }
+    .site-header.scrolled {
+      background: rgba(10,12,11,.82);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 4px 24px rgba(0,0,0,.35);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      padding-top: 11px; padding-bottom: 11px;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 9px;
+      font-size: 16px; font-weight: 800; color: #fff; text-decoration: none;
+      letter-spacing: -.3px; white-space: nowrap; text-shadow: 0 1px 8px rgba(0,0,0,.55);
+    }
+    .nav-brand .brand-mark {
+      width: 20px; height: 20px; border-radius: 6px;
+      background: var(--teal-l); flex-shrink: 0;
+    }
+    .nav-links { display: flex; align-items: center; gap: 26px; }
+    .nav-link {
+      font-size: 15px; font-weight: 600; color: rgba(255,255,255,.85);
+      text-decoration: none; white-space: nowrap; transition: color .2s;
+      text-shadow: 0 1px 6px rgba(0,0,0,.5);
+    }
+    .nav-link:hover { color: var(--teal-l); }
+    .nav-cta {
+      font-size: 14px; font-weight: 700; color: #fff;
+      background: var(--teal); padding: 10px 18px; border-radius: 10px;
+      text-decoration: none; white-space: nowrap;
+      box-shadow: 0 4px 16px rgba(13,154,140,.4); transition: filter .2s;
+    }
+    .nav-cta:hover { filter: brightness(1.08); }
+
+    /* 햄버거 버튼 (모바일) */
+    .nav-toggle {
+      display: none; flex-direction: column; justify-content: center; gap: 5px;
+      width: 42px; height: 42px; padding: 0; cursor: pointer;
+      background: transparent; border: none;
+    }
+    .nav-toggle span {
+      display: block; width: 24px; height: 2px; margin: 0 auto;
+      background: #fff; border-radius: 2px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.5); transition: transform .3s, opacity .3s;
+    }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* 모바일: 텍스트 메뉴를 드롭다운으로 */
+    @media (max-width: 767px) {
+      .nav-toggle { display: flex; }
+      .nav-links {
+        position: absolute; top: 100%; left: 0; right: 0;
+        flex-direction: column; align-items: stretch; gap: 0;
+        background: rgba(10,12,11,.96);
+        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        padding: 6px 22px 16px; border-bottom: 1px solid rgba(255,255,255,.08);
+        box-shadow: 0 12px 32px rgba(0,0,0,.4);
+        transform: translateY(-10px); opacity: 0; pointer-events: none;
+        transition: opacity .25s, transform .25s;
+      }
+      .nav-links.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
+      .nav-link {
+        padding: 15px 2px; border-bottom: 1px solid rgba(255,255,255,.07);
+        font-size: 16px; text-shadow: none;
+      }
+      .nav-cta { margin-top: 14px; text-align: center; padding: 15px; font-size: 15px; }
+    }
+
+    /* ════════════════════════════════
+       1. HERO
+    ════════════════════════════════ */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      padding: 78px 22px 52px; position: relative;   /* 상단 78px: 고정 헤더 공간 */
+    }
+    /* 모바일: 사진·텍스트를 정상 흐름(세로)으로 배치 — 사진 절대배치 제거.
+       margin-top:auto(아래 .hero-main)로 화면이 충분히 높으면 텍스트를 하단에 고정,
+       짧으면 사진 아래로 자연 스택 → 좁거나 짧은(줌인) 화면에서도 절대 겹치지 않음. */
+    .hero-inner { display: flex; flex-direction: column; flex: 1; width: 100%; position: relative; z-index: 2; }
+
+    /* 히어로 배경 동영상 (미리보기) */
+    .hero-video {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; z-index: 0; pointer-events: none;
+      /* 하단으로 갈수록 영상을 투명하게 (페이드 길게: 35%부터 시작) */
+      -webkit-mask-image: linear-gradient(to bottom, #000 35%, rgba(0,0,0,.4) 70%, transparent 100%);
+              mask-image: linear-gradient(to bottom, #000 35%, rgba(0,0,0,.4) 70%, transparent 100%);
+    }
+    .hero-video-overlay {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      /* 영상을 아래로 갈수록 어둠으로 페이드(B) — 하단은 솔리드 #080a08 로 마무리(전환 띠와 정확히 맞닿게) */
+      background: linear-gradient(180deg, rgba(5,7,5,.4) 0%, rgba(6,8,7,.5) 32%, rgba(7,9,8,.78) 66%, rgba(8,10,8,.99) 100%);
+    }
+
+    /* 히어로 어둠 → 바다 배경 전환 띠: 위는 검정(영상 하단과 동일), 아래로 바다가 펼쳐짐 */
+    .sea-fade {
+      height: 260px; pointer-events: none;
+      background: linear-gradient(180deg,
+        #080a08 0%,
+        #080a08 14%,
+        rgba(8,10,8,.8) 44%,
+        rgba(8,10,8,.4) 72%,
+        transparent 100%);
+    }
+
+    /* 우측 상단: 사진 + 약력 */
+    .hero-profile {
+      align-self: flex-end;
+      display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+    }
+    .hero-photo {
+      width: 170px; height: 208px;
+      border-radius: 16px;
+      object-fit: cover; object-position: top;
+      border: 2px solid rgba(255,255,255,.28);
+      box-shadow: 0 12px 40px rgba(0,0,0,.55);
+    }
+    .hero-career { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+    .hero-career-item {
+      font-size: 14px; font-weight: 500;
+      color: rgba(255,255,255,.75); letter-spacing: .2px;
+      text-shadow: 0 1px 6px rgba(0,0,0,.6);
+    }
+
+    /* ===== 프로필 사진 3개 시안 (미리보기 비교용) ===== */
+    /* A: 누끼 대형 인물 — 프레임 없이 떠 있는 흑백 전신 + 틸 글로우 */
+    .hero-photo.va {
+      width: clamp(220px, 58vw, 290px); height: auto; max-height: 72vh;
+      border: none; border-radius: 0; box-shadow: none; object-fit: contain;
+      filter: drop-shadow(0 22px 46px rgba(0,0,0,.62)) drop-shadow(0 0 26px rgba(20,184,166,.26));
+    }
+    /* B: 프레임 + 틸 듀오톤 (브랜드 색 통일) */
+    .hero-photo.vb {
+      background: linear-gradient(160deg, #0e3b37 0%, #061d1b 100%);
+      border-color: rgba(20,184,166,.5);
+      box-shadow: 0 14px 40px rgba(0,0,0,.5), 0 0 0 1px rgba(20,184,166,.22);
+      object-position: center top;
+    }
+    /* C: 프레임 + 흑백 + 틸 테두리/글로우 (편집형 흑백) */
+    .hero-photo.vc {
+      background: linear-gradient(160deg, #1b2023 0%, #0a0d0f 100%);
+      border: 2px solid rgba(20,184,166,.65);
+      box-shadow: 0 14px 40px rgba(0,0,0,.55), 0 0 26px rgba(20,184,166,.3);
+      object-position: center top;
+    }
+
+    /* 메인 텍스트 (하단) */
+    .hero-main { position: relative; z-index: 1; margin-top: auto; }
+    .hero-name-row {
+      display: flex; align-items: baseline; gap: 12px;
+      margin-bottom: 14px; flex-wrap: wrap;
+    }
+    .hero-name {
+      font-size: clamp(42px, 9vw, 72px);
+      font-weight: 900; color: #fff;
+      letter-spacing: -2px; line-height: 1;
+    }
+    .hero-cfo {
+      font-size: clamp(42px, 9vw, 72px);
+      font-weight: 900; color: var(--teal-l);
+      letter-spacing: -2px; line-height: 1;
+    }
+    .hero-tagline {
+      font-size: 18px; font-weight: 600;
+      color: rgba(255,255,255,.8);
+      line-height: 1.7; margin-bottom: 20px; word-break: keep-all;
+    }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+    .hero-tag {
+      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+      color: rgba(255,255,255,.85); font-size: 12px; padding: 5px 13px; border-radius: 20px;
+    }
+    .hero-cta-btn {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--teal); color: #fff; text-decoration: none;
+      border-radius: 14px; padding: 18px 20px;
+      font-size: 16px; font-weight: 700;
+      box-shadow: 0 4px 24px rgba(13,154,140,.4);
+    }
+    .hero-cta-btn-inv {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #fff; color: var(--teal); text-decoration: none;
+      border-radius: 14px; padding: 18px 20px;
+      font-size: 16px; font-weight: 700;
+      box-shadow: 0 4px 24px rgba(13,154,140,.4);
+      margin-top: 12px;
+    }
+
+    /* ════════════════════════════════
+       2. CONTACT BAR — 투명 (히어로 이미지 투과)
+    ════════════════════════════════ */
+    .contact-bar { background: transparent; }
+    .contact-item {
+      display: flex; align-items: center; padding: 15px 22px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      text-decoration: none; color: #fff; gap: 14px;
+    }
+    .contact-item:last-child { border-bottom: none; }
+    .c-icon {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: rgba(20,184,166,.25);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .c-label { font-size: 11px; color: rgba(255,255,255,.55); margin-bottom: 2px; }
+    .c-value  { font-size: 15px; font-weight: 700; text-shadow: 0 1px 6px rgba(0,0,0,.5); }
+
+    /* ════════════════════════════════
+       3. 명함 — 투명 (히어로 이미지 투과)
+    ════════════════════════════════ */
+    .card-band {
+      padding: 22px 22px;
+      background: transparent;
+    }
+    .card-band img {
+      width: 100%; max-width: 420px; margin: 0 auto; display: block;
+      border-radius: 14px;
+      box-shadow: 0 14px 48px rgba(0,0,0,.6);
+    }
+
+    /* ════════════════════════════════
+       4. STATS
+    ════════════════════════════════ */
+    .stats-sec {
+      background: rgba(8,10,8,.9);   /* 구역 구분용 검정 박스 (복원) */
+      padding: 48px 22px 56px;
+    }
+    .sec-eyebrow {
+      font-size: 10px; font-weight: 700; letter-spacing: 2.5px;
+      text-transform: uppercase; margin-bottom: 28px;
+    }
+    .ew-dim  { color: rgba(245,243,237,.25); }
+    .ew-teal { color: var(--teal-l); }
+    .ew-dark { color: rgba(245,243,237,.55); }   /* 바다 배경 위 밝게 */
+
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .stat-item {
+      text-align: center; padding: 0 8px;
+      border-right: 1px solid rgba(255,255,255,.07);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-num { font-size: 36px; font-weight: 900; color: var(--teal-l); letter-spacing: -1px; line-height: 1.05; }
+    .stat-unit { font-size: 17px; color: rgba(245,243,237,.3); }
+    .stat-lbl { font-size: 11px; color: rgba(245,243,237,.5); margin-top: 7px; line-height: 1.6; word-break: keep-all; }
+
+    /* ════════════════════════════════
+       5. SERVICES — 탭 디자인
+    ════════════════════════════════ */
+    .svc-sec { background: transparent; padding: 64px 22px; }   /* 고정 배경(bg.jpg) 비치도록 투명 */
+    .sec-title-dark {
+      font-size: 26px; font-weight: 800; letter-spacing: -.6px;
+      line-height: 1.4; margin-bottom: 28px; color: #F5F3ED; word-break: keep-all;
+      text-shadow: 0 2px 14px rgba(0,0,0,.55);   /* 바다 배경 위 가독성 */
+    }
+
+    /* 탭 버튼 */
+    .svc-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+    .svc-tab-btn {
+      flex: 1; padding: 14px 10px;
+      border: 2px solid transparent; border-radius: 14px;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      transition: all .25s; line-height: 1.35; word-break: keep-all;
+      font-family: inherit;
+    }
+    .svc-tab-btn.fund-active {
+      background: var(--dark); color: #fff;
+      border-color: var(--teal-l);
+    }
+    .svc-tab-btn.tax-active {
+      background: var(--dark); color: #fff;
+      border-color: var(--amber);
+    }
+    .svc-tab-btn:not(.fund-active):not(.tax-active) {
+      background: rgba(255,255,255,.08);   /* 바다 배경 위 유리 느낌 */
+      color: rgba(255,255,255,.62);
+      border-color: rgba(255,255,255,.14);
+    }
+
+    /* 패널 */
+    .svc-panel { display: none; animation: panelIn .3s ease; }
+    .svc-panel.active { display: block; }
+    @keyframes panelIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    .svc-card-fund, .svc-card-tax {
+      border-radius: 20px; padding: 26px 20px;
+      background: var(--dark);
+      box-shadow: 0 14px 48px rgba(0,0,0,.5);   /* 바다 배경 위로 카드를 띄움 */
+    }
+    .svc-card-fund { border-top: 4px solid var(--teal-l); }
+    .svc-card-tax  { border-top: 4px solid var(--amber); }
+    /* 모바일: 세로 스택 */
+    .svc-text { flex: 1; min-width: 0; }
+    .svc-photo {
+      width: 100%; margin-top: 22px; border-radius: 14px;
+      object-fit: cover; display: block;
+      max-height: 320px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.45);
+    }
+    /* 데스크톱: 텍스트 좌 / 사진 우 병렬 */
+    @media (min-width: 768px) {
+      .svc-card-fund, .svc-card-tax {
+        display: flex; align-items: center; gap: 28px;
+      }
+      .svc-photo {
+        width: 46%; flex-shrink: 0;
+        margin-top: 0; max-height: 360px;
+      }
+    }
+
+    /* ════════════════════════════════
+       HERO 데스크톱(≥768px): 2단 grid (텍스트 좌 / 사진 우)
+       - 사진을 절대배치 → grid 칸으로 전환 → 텍스트와 절대 겹치지 않음
+       - 하단 고정(flex-end) → 수직 중앙정렬 → 줌아웃 시 거대 여백 제거
+       - .hero-inner 를 최대폭으로 가둬 좌우 무한 확장 차단
+    ════════════════════════════════ */
+    @media (min-width: 768px) {
+      .hero { justify-content: center; padding-block: 96px; padding-inline: 40px; }
+      .hero-inner {
+        position: relative; flex: initial;   /* 모바일 flex:1 해제 → 수직 중앙정렬 복귀 */
+        max-width: var(--content-max); margin-inline: auto;
+        display: grid; grid-template-columns: 1fr auto;
+        align-items: center; gap: 48px;
+      }
+      .hero-main    { grid-column: 1; grid-row: 1; max-width: 560px; margin-top: 0; }
+      .hero-profile { grid-column: 2; grid-row: 1; align-self: center; }
+    }
+
+    .svc-cat { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 7px; }
+    .cat-fund { color: var(--teal-l); }
+    .cat-tax  { color: var(--amber); }
+    .svc-title { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 20px; }
+    .svc-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.06);
+      color: rgba(255,255,255,.82); font-size: 14px;
+    }
+    .svc-item:last-child { border-bottom: none; }
+    .dot-fund { width:5px;height:5px;border-radius:50%;background:var(--teal-l);flex-shrink:0; }
+    .dot-tax  { width:5px;height:5px;border-radius:50%;background:var(--amber);flex-shrink:0; }
+
+    /* ════════════════════════════════
+       6. CASES
+    ════════════════════════════════ */
+    .cases-sec { background: #1C1E1A; padding: 64px 22px; }
+    .sec-title-light {
+      font-size: 26px; font-weight: 800; color: #fff;
+      letter-spacing: -.5px; line-height: 1.4; margin-bottom: 28px; word-break: keep-all;
+    }
+    .case-list { display: flex; flex-direction: column; gap: 14px; }
+
+    .case-card {
+      border-radius: 18px; border: 1px solid rgba(255,255,255,.12);
+      overflow: hidden; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      background: rgba(255,255,255,.04);
+      transition: border-color .3s;
+    }
+    .case-card.open { border-color: var(--teal-l); background: rgba(20,184,166,.05); }
+
+    .case-hd {
+      display: flex; align-items: center;
+      padding: 22px 18px; gap: 16px; user-select: none;
+    }
+    .case-ord {
+      font-size: 52px; font-weight: 900;
+      color: rgba(255,255,255,.88); letter-spacing: -2px;
+      line-height: 1; flex-shrink: 0; min-width: 58px;
+    }
+    .case-card.open .case-ord { color: var(--teal-l); }
+    .case-hd-body { flex: 1; min-width: 0; }
+    .case-badge {
+      display: inline-block; font-size: 9px; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 3px 9px; border-radius: 20px; margin-bottom: 7px;
+    }
+    .cb-b { background: rgba(96,165,250,.15); color: #60A5FA; }
+    .cb-g { background: rgba(52,211,153,.15); color: #34D399; }
+    .cb-p { background: rgba(167,139,250,.15); color: #A78BFA; }
+    .cb-o { background: rgba(251,146,60,.15);  color: #FB923C; }
+    .case-ttl { font-size: 17px; font-weight: 700; color: rgba(255,255,255,.92); line-height: 1.45; word-break: keep-all; }
+    .case-prev { font-size: 12px; color: var(--teal-l); font-weight: 600; margin-top: 5px; }
+    .case-chev { font-size: 11px; color: rgba(255,255,255,.25); transition: transform .35s, color .35s; flex-shrink: 0; margin-top: 4px; }
+    .case-card.open .case-chev { transform: rotate(180deg); color: var(--teal-l); }
+
+    .case-bd { max-height: 0; overflow: hidden; transition: max-height .6s cubic-bezier(.22,1,.36,1); }
+    .case-card.open .case-bd { max-height: 1100px; }
+    .case-bd-inner { padding: 0 18px 24px; }
+    .case-hr { height: 1px; background: rgba(255,255,255,.08); margin-bottom: 18px; }
+
+    .info-pills { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 18px; }
+    .info-pill {
+      background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
+      border-radius: 8px; padding: 7px 11px;
+    }
+    .pill-lbl { font-size: 9px; color: rgba(255,255,255,.38); letter-spacing: .5px; margin-bottom: 2px; }
+    .pill-val { font-size: 12px; font-weight: 700; color: rgba(255,255,255,.88); }
+
+    .blk-title { font-size: 10px; font-weight: 700; color: rgba(255,255,255,.38); letter-spacing: 1px; text-transform: uppercase; margin: 14px 0 8px; }
+    .blk-text  { font-size: 13.5px; color: rgba(255,255,255,.78); line-height: 1.85; word-break: keep-all; }
+    .sol-list  { display: flex; flex-direction: column; gap: 8px; }
+    .sol-row   { display: flex; align-items: flex-start; gap: 9px; font-size: 13.5px; color: rgba(255,255,255,.78); line-height: 1.65; }
+    .sol-dot   { width: 4px; height: 4px; border-radius: 50%; background: var(--teal-l); flex-shrink: 0; margin-top: 8px; }
+
+    /* RESULT — 강조 */
+    .res-box {
+      margin-top: 20px; border-radius: 14px; padding: 20px 18px;
+      background: linear-gradient(135deg, #0a7a6e 0%, #0D9A8C 100%);
+      box-shadow: 0 4px 20px rgba(13,154,140,.3);
+    }
+    .res-lbl { font-size: 10px; font-weight: 700; color: rgba(255,255,255,.65); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+    .res-val  { font-size: 15px; font-weight: 800; color: #fff; line-height: 1.8; }
+
+    .who-box {
+      margin-top: 12px; border-radius: 12px; padding: 14px;
+      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.09);
+    }
+    .who-lbl  { font-size: 10px; font-weight: 700; color: rgba(255,255,255,.35); letter-spacing: .5px; margin-bottom: 6px; }
+    .who-text { font-size: 13px; color: rgba(255,255,255,.68); line-height: 1.75; }
+
+    /* ════════════════════════════════
+       7. CTA
+    ════════════════════════════════ */
+    .cta-sec {
+      text-align: center; padding: 80px 24px 96px; position: relative;
+      background: #111210;
+    }
+    .cta-glow {
+      position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
+      width: 360px; height: 360px;
+      background: radial-gradient(circle, rgba(13,154,140,.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    /* 흰색 로고 — grayscale → invert → brightness로 다크 계열을 흰색으로 변환 */
+    .cta-logo {
+      display: block; margin: 0 auto 24px;
+      width: 200px; max-width: 70%;
+      filter: grayscale(1) invert(1) brightness(2);
+      mix-blend-mode: screen;
+      opacity: .85;
+    }
+    .cta-title { font-size: 24px; font-weight: 800; color: #fff; line-height: 1.65; letter-spacing: -.5px; word-break: keep-all; margin-bottom: 36px; }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--teal); color: #fff; text-decoration: none;
+      font-size: 17px; font-weight: 700;
+      padding: 18px 36px; border-radius: 50px;
+      box-shadow: 0 6px 32px rgba(13,154,140,.45);
+    }
+    .cta-btn:active { filter: brightness(.92); }
+
+    /* ════════════════════════════════
+       8. FOOTER
+    ════════════════════════════════ */
+    .footer { background: #0a0b09; padding: 36px 22px 52px; }
+    .footer-btns { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    .footer-btn {
+      display: flex; align-items: center; justify-content: center;
+      gap: 12px; padding: 18px 20px; border-radius: 16px;
+      text-decoration: none; font-size: 15px; font-weight: 700;
+      border: 1.5px solid; transition: opacity .2s;
+    }
+    .footer-btn:active { opacity: .75; }
+    .fbtn-home { background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.15); color: #fff; }
+    .fbtn-yt   { background: rgba(255,50,50,.08); border-color: rgba(255,50,50,.2); color: #FF4A4A; }
+    .footer-copy { font-size: 11px; color: rgba(245,243,237,.18); text-align: center; }
+
+    /* ════════════════════════════════
+       RESPONSIVE — 태블릿 640px+
+    ════════════════════════════════ */
+    @media (min-width: 640px) {
+      .hero { padding: 78px 40px 68px; }
+      .hero-profile { gap: 12px; }
+      .hero-photo { width: 210px; height: 256px; border-radius: 18px; }
+      .hero-career-item { font-size: 14px; }
+      .hero-name, .hero-cfo { font-size: clamp(50px, 8vw, 78px); }
+      .hero-tagline { font-size: 21px; }
+      .hero-cta-btn, .hero-cta-btn-inv { max-width: 400px; }
+
+      .contact-item { padding: 17px 40px; }
+      .card-band { padding: 26px 40px; }
+
+      .stats-sec { padding: 60px 40px 68px; }
+      .stat-num  { font-size: 44px; }
+      .stat-lbl  { font-size: 12px; }
+
+      .svc-sec { padding: 72px 40px; }
+      .sec-title-dark { font-size: 28px; }
+      .svc-tabs { gap: 12px; max-width: 480px; }
+      .svc-tab-btn { font-size: 14px; padding: 15px 12px; }
+
+      .cases-sec { padding: 72px 40px; }
+      .sec-title-light { font-size: 28px; }
+
+      .cta-sec { padding: 96px 40px 112px; }
+      .cta-title { font-size: 28px; }
+
+      .footer { padding: 44px 40px 60px; }
+      .footer-btns { flex-direction: row; gap: 12px; }
+      .footer-btn { flex: 1; }
+    }
+
+    /* ════════════════════════════════
+       RESPONSIVE — 데스크탑 1024px+
+    ════════════════════════════════ */
+    @media (min-width: 1024px) {
+      /* padding-block/inline 분리 — 768px의 수직 중앙정렬(justify-content:center)을 덮어쓰지 않음 */
+      .hero { padding-block: 110px; padding-inline: 60px; }
+      .hero-profile { gap: 14px; }
+      .hero-photo { width: 260px; height: 317px; border-radius: 22px; }
+      .hero-career-item { font-size: 15px; }
+      .hero-main { max-width: 600px; }
+      .hero-name, .hero-cfo { font-size: 80px; letter-spacing: -3px; }
+      .hero-tagline { font-size: 23px; }
+
+      .contact-item { padding: 18px 60px; }
+
+      .card-band { padding: 30px 60px; }
+      .card-band img { max-width: 560px; }
+
+      .stats-sec { padding: 72px 60px 80px; }
+      .stat-num  { font-size: 52px; }
+      .stat-lbl  { font-size: 13px; }
+
+      .svc-sec { padding: 80px 60px; }
+      .sec-title-dark { font-size: 32px; }
+
+      .cases-sec { padding: 80px 60px; }
+      .sec-title-light { font-size: 32px; }
+      /* 케이스 2열 */
+      .case-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+
+      .cta-sec { padding: 112px 60px 128px; }
+      .cta-title { font-size: 32px; }
+
+      .footer { padding: 52px 60px 72px; }
+      .footer-btns { max-width: 580px; }
+    }
+
+    /* ════════════════════════════════
+       RESPONSIVE — 와이드 1280px+
+    ════════════════════════════════ */
+    @media (min-width: 1280px) {
+      .hero           { padding-inline: 80px; }
+      .contact-item   { padding: 18px 80px; }
+      .card-band      { padding: 32px 80px; }
+      .card-band img  { max-width: 620px; }
+      .stats-sec,
+      .svc-sec,
+      .cases-sec,
+      .cta-sec,
+      .footer         { padding-left: 80px; padding-right: 80px; }
+      .footer-btns    { max-width: 640px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════ 상단 고정 헤더 ════ -->
+<header class="site-header" id="siteHeader">
+  <a class="nav-brand" href="#heroSection"><span class="brand-mark"></span>김진기 사외 CFO</a>
+  <nav class="nav-links" id="navLinks">
+    <a class="nav-link" href="#stats">실적</a>
+    <a class="nav-link" href="#services">서비스</a>
+    <a class="nav-link" href="#cases">컨설팅 사례</a>
+    <a class="nav-link" href="#contact">연락처</a>
+    <a class="nav-cta"
+       href="https://docs.google.com/forms/d/e/1FAIpQLSf6QtuT6mtyObED4KDgTZ7C7rs1xkES0PreLeONFEet37kwHg/viewform?usp=sharing&ouid=101053759053889131258"
+       target="_blank" rel="noopener">상담문의</a>
+  </nav>
+  <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<div class="fixed-bg"></div>
+<div class="fixed-bg-overlay"></div>
+
+<a class="float-cta" id="floatCta"
+   href="https://docs.google.com/forms/d/e/1FAIpQLSf6QtuT6mtyObED4KDgTZ7C7rs1xkES0PreLeONFEet37kwHg/viewform?usp=sharing&ouid=101053759053889131258"
+   target="_blank" rel="noopener">3회 무료 상담 신청 →</a>
+
+<!-- ════ HERO ════ -->
+<section class="hero" id="heroSection">
+  <video class="hero-video" autoplay muted loop playsinline poster="bg.jpg">
+    <source src="hero-bg.mp4" type="video/mp4">
+  </video>
+  <div class="hero-video-overlay"></div>
+ <div class="hero-inner">
+
+  <!-- 우측 상단: photo.jpg + 약력 (우측정렬) -->
+  <div class="hero-profile">
+    <img class="hero-photo va" src="photo_cut_tight.png" alt="김진기" />
+    <div class="hero-career">
+      <div class="hero-career-item">서울시립대학교 졸업</div>
+      <div class="hero-career-item">대한민국 육군 중위 전역</div>
+      <div class="hero-career-item">제조 유통 전문 컨설턴트</div>
+    </div>
+  </div>
+
+  <!-- 하단 메인 -->
+  <div class="hero-main">
+    <div class="hero-name-row">
+      <span class="hero-name">김진기</span>
+      <span class="hero-cfo">사외 CFO</span>
+    </div>
+    <div class="hero-tagline">
+      자금부터 절세까지,<br>기업의 모든 돈 문제를 해결합니다
+    </div>
+    <div class="hero-tags">
+      <span class="hero-tag">정책자금</span>
+      <span class="hero-tag">기업인증</span>
+      <span class="hero-tag">중소기업 특별 절세</span>
+    </div>
+    <a class="hero-cta-btn"
+       href="https://docs.google.com/forms/d/e/1FAIpQLSf6QtuT6mtyObED4KDgTZ7C7rs1xkES0PreLeONFEet37kwHg/viewform?usp=sharing&ouid=101053759053889131258"
+       target="_blank" rel="noopener">
+      <span>3회 무료 상담신청 바로가기</span><span>→</span>
+    </a>
+    <a class="hero-cta-btn-inv"
+       href="https://jiwonsaup-git-main-allaboutbusiness-projects.vercel.app/programs"
+       target="_blank" rel="noopener">
+      <span>정부지원사업 AI 매칭(무료) 바로가기</span><span>→</span>
+    </a>
+  </div>
+ </div>
+</section>
+
+<!-- ════ 히어로 어둠 → 바다 전환 띠 ════ -->
+<div class="sea-fade"></div>
+
+<!-- ════ CONTACT BAR ════ -->
+<div class="contact-bar" id="contact">
+ <div class="wrap">
+  <a class="contact-item" href="tel:010-2565-7155">
+    <div class="c-icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8a19.79 19.79 0 01-3.07-8.68A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/>
+      </svg>
+    </div>
+    <div><div class="c-label">휴대전화</div><div class="c-value">010-2565-7155</div></div>
+  </a>
+  <a class="contact-item" href="mailto:jinki.kimmm@gmail.com">
+    <div class="c-icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+    </div>
+    <div><div class="c-label">이메일</div><div class="c-value">jinki.kimmm@gmail.com</div></div>
+  </a>
+ </div>
+</div>
+
+<!-- ════ 명함 (contact bar 바로 아래) ════ -->
+<div class="card-band">
+  <img src="card.jpg" alt="김진기 명함" />
+</div>
+
+<!-- ════ STATS ════ -->
+<section class="stats-sec" id="stats">
+ <div class="wrap">
+  <div class="sec-eyebrow ew-dim">TRACK RECORD</div>
+  <div class="stats-grid fade-up" id="statsGrid">
+    <div class="stat-item">
+      <div class="stat-num"><span class="count" data-target="1000">0</span><span class="stat-unit">+</span></div>
+      <div class="stat-lbl">컨설팅<br>사례</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num"><span class="count" data-target="60">0</span><span class="stat-unit">억+</span></div>
+      <div class="stat-lbl">정책자금<br>실행 누적</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num"><span class="count" data-target="30">0</span><span class="stat-unit">건+</span></div>
+      <div class="stat-lbl">기업인증<br>성공 사례</div>
+    </div>
+  </div>
+ </div>
+</section>
+
+<!-- ════ SERVICES — 탭 ════ -->
+<section class="svc-sec" id="services">
+ <div class="wrap">
+  <div class="sec-eyebrow ew-dark">SERVICES</div>
+  <div class="sec-title-dark fade-up">모든 중소기업의<br>가장 큰 고민 두 가지를<br>해결합니다</div>
+
+  <div class="svc-tabs">
+    <button class="svc-tab-btn fund-active" id="tab-fund" onclick="switchTab('fund')">
+      자금이 필요할 때
+    </button>
+    <button class="svc-tab-btn" id="tab-tax" onclick="switchTab('tax')">
+      세금이 부담될 때
+    </button>
+  </div>
+
+  <!-- 자금 패널 -->
+  <div class="svc-panel active" id="panel-fund">
+    <div class="svc-card-fund">
+      <div class="svc-text">
+        <div class="svc-cat cat-fund">자금 솔루션</div>
+        <div class="svc-title">기업에 <strong>자금</strong>이 필요할 때</div>
+        <div class="svc-item"><div class="dot-fund"></div>사옥, 공장, 창고 등 매입 자금 조달</div>
+        <div class="svc-item"><div class="dot-fund"></div>저금리 정책자금 실행</div>
+        <div class="svc-item"><div class="dot-fund"></div>정부지원금 및 R&amp;D 컨설팅</div>
+        <div class="svc-item"><div class="dot-fund"></div>기업인증 (벤처/이노비즈/연구소)</div>
+        <div class="svc-item"><div class="dot-fund"></div>받을 수 있는 무상지원금 색출</div>
+      </div>
+      <img src="case1.jpg" class="svc-photo" alt="자금 솔루션 사례">
+    </div>
+  </div>
+
+  <!-- 절세 패널 -->
+  <div class="svc-panel" id="panel-tax">
+    <div class="svc-card-tax">
+      <div class="svc-text">
+        <div class="svc-cat cat-tax">절세 솔루션</div>
+        <div class="svc-title">과도한 <strong>세금</strong>이 부담될 때</div>
+        <div class="svc-item"><div class="dot-tax"></div>법인세 절감 및 세액 공제 플랜</div>
+        <div class="svc-item"><div class="dot-tax"></div>상속 및 증여 사전 대비 전략</div>
+        <div class="svc-item"><div class="dot-tax"></div>임원 퇴직금 및 보상 체계 수립</div>
+        <div class="svc-item"><div class="dot-tax"></div>기업 보험을 활용한 법인 자금 개인화 체계 수립</div>
+        <div class="svc-item"><div class="dot-tax"></div>사내근로복지기금을 활용한 절세</div>
+        <div class="svc-item"><div class="dot-tax"></div>복지몰 구축으로 직원 복지 향상</div>
+      </div>
+      <img src="case2.jpg" class="svc-photo" alt="절세 솔루션 사례">
+    </div>
+  </div>
+ </div>
+</section>
+
+<!-- ════ CASES ════ -->
+<section class="cases-sec" id="cases">
+ <div class="wrap">
+  <div class="sec-eyebrow ew-teal">CASES</div>
+  <div class="sec-title-light fade-up">실제 컨설팅 사례</div>
+
+  <div class="case-list">
+
+    <!-- 01 -->
+    <div class="case-card fade-up d1" id="case1" onclick="toggleCase('case1')">
+      <div class="case-hd">
+        <div class="case-ord">01</div>
+        <div class="case-hd-body">
+          <div class="case-badge cb-b">정책자금 · 기업인증</div>
+          <div class="case-ttl">화장품 제조업<br>운영자금 3억 실행 사례</div>
+          <div class="case-prev">저금리 3억 실행 성공 →</div>
+        </div>
+        <div class="case-chev">▼</div>
+      </div>
+      <div class="case-bd">
+        <div class="case-bd-inner">
+          <div class="case-hr"></div>
+          <div class="info-pills">
+            <div class="info-pill"><div class="pill-lbl">업종</div><div class="pill-val">화장품 제조업</div></div>
+            <div class="info-pill"><div class="pill-lbl">업력·매출</div><div class="pill-val">창업 2년 / 8천만</div></div>
+            <div class="info-pill"><div class="pill-lbl">직원 수</div><div class="pill-val">1명</div></div>
+            <div class="info-pill"><div class="pill-lbl">대표 연령</div><div class="pill-val">만 34세</div></div>
+          </div>
+          <div class="blk-title">문제 상황</div>
+          <div class="blk-text">수출을 위한 생산·마케팅·운영 자금이 필요했으나, 매출이 적고 직원도 1명뿐이어서 자금 확보에 신경 쓸 여력이 없는 상황이었습니다.</div>
+          <div class="blk-title">해결 방법</div>
+          <div class="sol-list">
+            <div class="sol-row"><div class="sol-dot"></div>단순 제조업에서 디지털 솔루션 기업으로 BM 고도화</div>
+            <div class="sol-row"><div class="sol-dot"></div>바이브코딩으로 웹사이트 직접 제작, 기술 가시화</div>
+            <div class="sol-row"><div class="sol-dot"></div>정부기관 사전 협의로 자금실행 허들 제거</div>
+            <div class="sol-row"><div class="sol-dot"></div>기업부설연구소 설립 + 디지털 솔루션 특허 출원</div>
+          </div>
+          <div class="res-box">
+            <div class="res-lbl">RESULT</div>
+            <div class="res-val">저금리 정책자금 (2.5%~3.1%) 3억 실행 성공</div>
+          </div>
+          <div class="who-box">
+            <div class="who-lbl">이런 대표님께 필요합니다</div>
+            <div class="who-text">자금이 필요한데 매출이 적은 제조업 대표님<br>혼자 하기에는 시간이 너무 부족한 대표님</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 -->
+    <div class="case-card fade-up d2" id="case2" onclick="toggleCase('case2')">
+      <div class="case-hd">
+        <div class="case-ord">02</div>
+        <div class="case-hd-body">
+          <div class="case-badge cb-g">시설자금 · 공장매입</div>
+          <div class="case-ttl">도시락 제조업<br>시설자금 36억 실행 사례</div>
+          <div class="case-prev">저금리 36억 실행 성공 →</div>
+        </div>
+        <div class="case-chev">▼</div>
+      </div>
+      <div class="case-bd">
+        <div class="case-bd-inner">
+          <div class="case-hr"></div>
+          <div class="info-pills">
+            <div class="info-pill"><div class="pill-lbl">업종</div><div class="pill-val">도시락 제조업</div></div>
+            <div class="info-pill"><div class="pill-lbl">업력·매출</div><div class="pill-val">창업 3년 / 24억</div></div>
+            <div class="info-pill"><div class="pill-lbl">직원 수</div><div class="pill-val">8명</div></div>
+            <div class="info-pill"><div class="pill-lbl">대표 연령</div><div class="pill-val">만 37세</div></div>
+          </div>
+          <div class="blk-title">문제 상황</div>
+          <div class="blk-text">매출은 늘어나는데 공장 규모가 너무 작아 한계에 부딪혔습니다. 이익을 계속 재투자해야 하는 구조라 법인 현금이 많지 않은 상황에서 공장 매입이 필요했습니다.</div>
+          <div class="blk-title">해결 방법</div>
+          <div class="sol-list">
+            <div class="sol-row"><div class="sol-dot"></div>기업부설연구소 설립 + 제조 공정 특허 출원</div>
+            <div class="sol-row"><div class="sol-dot"></div>은행 지점장 네트워크 + 보증기관 연결</div>
+            <div class="sol-row"><div class="sol-dot"></div>대표님이 직접 받아 온 조건보다 좋은 한도·금리로 비딩 진행</div>
+          </div>
+          <div class="res-box">
+            <div class="res-lbl">RESULT</div>
+            <div class="res-val">저금리 정책자금 (3.9%) 36억 실행 성공</div>
+          </div>
+          <div class="who-box">
+            <div class="who-lbl">이런 대표님께 필요합니다</div>
+            <div class="who-text">토지 매입·공장 설립 등 시설자금이 필요한 대표님<br>최대 한도, 최저 금리로 시설자금을 받으려는 대표님</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 -->
+    <div class="case-card fade-up d3" id="case3" onclick="toggleCase('case3')">
+      <div class="case-hd">
+        <div class="case-ord">03</div>
+        <div class="case-hd-body">
+          <div class="case-badge cb-p">법인 자산 개인화 · 절세</div>
+          <div class="case-ttl">법인 자산 12억을<br>실효세율 5%로 개인화한 사례</div>
+          <div class="case-prev">절감 세금 최소 2억 7천만 원 →</div>
+        </div>
+        <div class="case-chev">▼</div>
+      </div>
+      <div class="case-bd">
+        <div class="case-bd-inner">
+          <div class="case-hr"></div>
+          <div class="info-pills">
+            <div class="info-pill"><div class="pill-lbl">업종</div><div class="pill-val">2차전지 제조업</div></div>
+            <div class="info-pill"><div class="pill-lbl">업력·매출</div><div class="pill-val">창업 11년 / 70억</div></div>
+            <div class="info-pill"><div class="pill-lbl">직원·가족</div><div class="pill-val">14명 / 5인 가족</div></div>
+            <div class="info-pill"><div class="pill-lbl">대표 연령</div><div class="pill-val">만 61세</div></div>
+          </div>
+          <div class="blk-title">문제 상황</div>
+          <div class="blk-text">법인 자산을 개인화하려 하니 세금이 50%에 달하는 상황이었고, 상속·증여에 관한 준비가 전혀 안 되어있었습니다.</div>
+          <div class="blk-title">해결 방법</div>
+          <div class="sol-list">
+            <div class="sol-row"><div class="sol-dot"></div>정관 개정으로 임원 퇴직급여 기준 재설정</div>
+            <div class="sol-row"><div class="sol-dot"></div>배우자 증여 활용, 법인 주식 6억 이익소각으로 개인화 설계</div>
+            <div class="sol-row"><div class="sol-dot"></div>가족을 임원으로 등재하여 급여 설정</div>
+            <div class="sol-row"><div class="sol-dot"></div>법인보험으로 가족 퇴직 재원 마련 (1인당 1.2억 × 5인 = 6억)</div>
+          </div>
+          <div class="res-box">
+            <div class="res-lbl">RESULT</div>
+            <div class="res-val">
+              법인 주식 6억 → 증여세 0원으로 개인화<br>
+              법인 자산 6억 → 퇴직금플랜 실효세율 5%<br>
+              절감 세금 최소 2억 7천만 원
+            </div>
+          </div>
+          <div class="who-box">
+            <div class="who-lbl">이런 대표님께 필요합니다</div>
+            <div class="who-text">법인에 미처분이익잉여금이 쌓인 대표님<br>상속·증여 대비 준비가 안 된 대표님<br>세금을 너무 많이 내고 있는 대표님</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 -->
+    <div class="case-card fade-up d4" id="case4" onclick="toggleCase('case4')">
+      <div class="case-hd">
+        <div class="case-ord">04</div>
+        <div class="case-hd-body">
+          <div class="case-badge cb-o">임원 보상설계 · 인재 리텐션</div>
+          <div class="case-ttl">투자 유치 스타트업<br>핵심 임원 3인 장기인센티브 설계 사례</div>
+          <div class="case-prev">1억 7천만 원 가치의 퇴직재원 마련 →</div>
+        </div>
+        <div class="case-chev">▼</div>
+      </div>
+      <div class="case-bd">
+        <div class="case-bd-inner">
+          <div class="case-hr"></div>
+          <div class="info-pills">
+            <div class="info-pill"><div class="pill-lbl">업종</div><div class="pill-val">IT 솔루션 개발업</div></div>
+            <div class="info-pill"><div class="pill-lbl">업력·매출</div><div class="pill-val">창업 6년 / 57억</div></div>
+            <div class="info-pill"><div class="pill-lbl">직원 수</div><div class="pill-val">22명</div></div>
+            <div class="info-pill"><div class="pill-lbl">대표 연령</div><div class="pill-val">만 44세</div></div>
+          </div>
+          <div class="blk-title">문제 상황</div>
+          <div class="blk-text">시리즈A 투자 유치 이후 핵심 임원 3인에 대한 기여 보상이 필요했으나, 상여금으로 지급하면 근로소득세 최고세율(49.5%)이 적용되어 실수령액이 절반 이하로 줄어드는 문제가 있었습니다.</div>
+          <div class="blk-title">해결 방법</div>
+          <div class="sol-list">
+            <div class="sol-row"><div class="sol-dot"></div>법인 명의의 보험 가입</div>
+            <div class="sol-row"><div class="sol-dot"></div>일정 시점 보험료 납입 중단, 보험계약 유지</div>
+            <div class="sol-row"><div class="sol-dot"></div>임원 퇴직 시 보험계약자를 임원으로 변경(현물이전)하여 퇴직급여로 처리</div>
+            <div class="sol-row"><div class="sol-dot"></div>자사 직영 복지몰 연계 및 사내근로복지기금 출연으로 임직원 전용 복지 혜택 무상 구축</div>
+          </div>
+          <div class="res-box">
+            <div class="res-lbl">RESULT</div>
+            <div class="res-val">
+              (Before) 상여 지급 → 근로소득세 최고세율 49.5% 적용<br>
+              (After) 보험증권 지급 → 퇴직소득세 분리과세 전환<br>
+              <br>
+              임원 1인당 보험증권(약 1억 7천만 원) 수령 후 선택 가능:<br>
+              ① 해약환급금 즉시 수령 (약 1억 7천만 원)<br>
+              ② 공시이율 기반 복리 적립 유지<br>
+              ③ 수익자 지정 후 사망보험금으로 전환
+            </div>
+          </div>
+          <div class="who-box">
+            <div class="who-lbl">이런 대표님께 필요합니다</div>
+            <div class="who-text">투자 유치 후 핵심 임원에게 세부담 없이 보상하려는 대표님<br>경쟁사 스카우트로부터 핵심 인재를 지키고 싶은 대표님<br>대기업 수준의 임직원 복지 체계를 갖추고 싶은 대표님</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+ </div>
+</section>
+
+<!-- ════ CTA ════ -->
+<section class="cta-sec">
+  <div class="cta-glow"></div>
+ <div class="wrap">
+  <img class="cta-logo" src="logo.png" alt="오너스 경영연구소" />
+  <div class="cta-title fade-up">
+    돈(錢)에 관한 모든 것,<br>
+    함께 이야기 나눌<br>
+    사외 CFO가 필요합니다.
+  </div>
+  <a class="cta-btn fade-up d1"
+     href="https://docs.google.com/forms/d/e/1FAIpQLSf6QtuT6mtyObED4KDgTZ7C7rs1xkES0PreLeONFEet37kwHg/viewform?usp=sharing&ouid=101053759053889131258"
+     target="_blank" rel="noopener">3회 무료 상담 신청 →</a>
+ </div>
+</section>
+
+<!-- ════ FOOTER ════ -->
+<footer class="footer">
+ <div class="wrap">
+  <div class="footer-btns">
+    <a class="footer-btn fbtn-home" href="https://ownersmri.com/" target="_blank" rel="noopener">
+      오너스 경영연구소 홈페이지
+    </a>
+    <a class="footer-btn fbtn-yt" href="https://www.youtube.com/@ownersmri" target="_blank" rel="noopener">
+      유튜브 채널 바로가기
+    </a>
+  </div>
+  <div class="footer-copy">© 2025 오너스 경영연구소 · 김진기 · 010-2565-7155</div>
+ </div>
+</footer>
+
+<script>
+  /* ── 헤더: 스크롤 시 배경색 + 모바일 메뉴 토글 ── */
+  (function() {
+    var header = document.getElementById('siteHeader');
+    var toggle = document.getElementById('navToggle');
+    var navLinks = document.getElementById('navLinks');
+    function onScroll() { header.classList.toggle('scrolled', window.scrollY > 30); }
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    toggle.addEventListener('click', function() {
+      var open = navLinks.classList.toggle('open');
+      toggle.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    /* 메뉴 항목 클릭 시 모바일 드롭다운 닫기 */
+    navLinks.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        navLinks.classList.remove('open');
+        toggle.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  })();
+
+  /* ── 탭 전환 ── */
+  function switchTab(id) {
+    const fundBtn = document.getElementById('tab-fund');
+    const taxBtn  = document.getElementById('tab-tax');
+    fundBtn.className = 'svc-tab-btn' + (id === 'fund' ? ' fund-active' : '');
+    taxBtn.className  = 'svc-tab-btn' + (id === 'tax'  ? ' tax-active'  : '');
+    document.getElementById('panel-fund').classList.toggle('active', id === 'fund');
+    document.getElementById('panel-tax').classList.toggle('active',  id === 'tax');
+  }
+
+  /* ── 아코디언 ── */
+  function toggleCase(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+
+  /* ── 페이드인 ── */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+
+  /* ── 숫자 카운팅 (촤르륵 효과) ── */
+  function countUp(el, target, ms) {
+    ms = ms || 1800;
+    var start = null;
+    function tick(ts) {
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / ms, 1);
+      var ease = 1 - Math.pow(1 - p, 4);  /* ease-out quartic */
+      el.textContent = Math.floor(ease * target);
+      if (p < 1) requestAnimationFrame(tick);
+      else el.textContent = target;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  var statsStarted = false;
+  var statsEl = document.getElementById('statsGrid');
+  if (statsEl) {
+    var statsIo = new IntersectionObserver(function(entries) {
+      if (entries[0].isIntersecting && !statsStarted) {
+        statsStarted = true;
+        document.querySelectorAll('.count').forEach(function(el) {
+          countUp(el, parseInt(el.dataset.target, 10));
+        });
+        statsIo.disconnect();
+      }
+    }, { threshold: 0.15 });
+    statsIo.observe(statsEl);
+  }
+
+  /* ── 플로팅 CTA ── */
+  var heroEl  = document.getElementById('heroSection');
+  var floatEl = document.getElementById('floatCta');
+  if (heroEl && floatEl) {
+    new IntersectionObserver(function(entries) {
+      floatEl.classList.toggle('show', !entries[0].isIntersecting);
+    }, { threshold: 0.05 }).observe(heroEl);
+  }
+
+  /* ── Service Worker 등록 ── */
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/sw.js');
+    });
+  }
+</script>
+</body>
+</html>
