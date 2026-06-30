@@ -204,6 +204,15 @@
       text-shadow: 0 1px 6px rgba(0,0,0,.6);
     }
 
+    /* 프로필 사진: 프레임 없이 누끼만 — 하단 소프트 페이드 + 옅은 그림자 */
+    .hero-photo.vd {
+      border: none; border-radius: 0; background: none; box-shadow: none;
+      object-position: center top;
+      filter: drop-shadow(0 14px 30px rgba(0,0,0,.55));
+      -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+              mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+    }
+
     /* 메인 텍스트 (하단) */
     .hero-main { position: relative; z-index: 1; margin-top: auto; }
     .hero-name-row {
@@ -648,7 +657,7 @@
 
   <!-- 우측 상단: photo.jpg + 약력 (우측정렬) -->
   <div class="hero-profile">
-    <img class="hero-photo" src="photo.jpg" alt="김진기" />
+    <img class="hero-photo vd" src="photo_crop.png" alt="김진기" />
     <div class="hero-career">
       <div class="hero-career-item">서울시립대학교 졸업</div>
       <div class="hero-career-item">대한민국 육군 중위 전역</div>
