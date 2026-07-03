@@ -440,14 +440,24 @@
     .cat-fund { color: var(--teal-l); }
     .cat-tax  { color: var(--amber); }
     .svc-title { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 20px; }
+    /* 문구당 흰색 박스 + 큰 글씨 + 클릭 시 관련 사례로 이동 + 호버 색변화 */
     .svc-item {
-      display: flex; align-items: center; gap: 12px;
-      padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.06);
-      color: rgba(255,255,255,.82); font-size: 14px;
+      display: flex; align-items: center; gap: 13px;
+      background: #ffffff; color: #17181a;
+      padding: 16px 18px; border-radius: 12px;
+      font-size: 16px; font-weight: 600; line-height: 1.4;
+      box-shadow: 0 3px 12px rgba(0,0,0,.2);
+      cursor: pointer; border: 2px solid transparent;
+      transition: background .2s, border-color .2s, transform .2s, box-shadow .2s;
     }
-    .svc-item:last-child { border-bottom: none; }
-    .dot-fund { width:5px;height:5px;border-radius:50%;background:var(--teal-l);flex-shrink:0; }
-    .dot-tax  { width:5px;height:5px;border-radius:50%;background:var(--amber);flex-shrink:0; }
+    .svc-item:not(:last-child) { margin-bottom: 10px; }
+    .svc-item .svc-arrow { margin-left: auto; padding-left: 10px; color: rgba(23,24,26,.3); font-weight: 700; transition: color .2s, transform .2s; }
+    #panel-fund .svc-item:hover { background: #e8f9f5; border-color: var(--teal-l); transform: translateX(5px); box-shadow: 0 8px 22px rgba(20,184,166,.3); }
+    #panel-fund .svc-item:hover .svc-arrow { color: var(--teal); transform: translateX(3px); }
+    #panel-tax .svc-item:hover { background: #fdf3e2; border-color: var(--amber); transform: translateX(5px); box-shadow: 0 8px 22px rgba(245,158,11,.3); }
+    #panel-tax .svc-item:hover .svc-arrow { color: #b9760a; transform: translateX(3px); }
+    .dot-fund { width:8px;height:8px;border-radius:50%;background:var(--teal-l);flex-shrink:0; }
+    .dot-tax  { width:8px;height:8px;border-radius:50%;background:var(--amber);flex-shrink:0; }
 
     /* ════════════════════════════════
        6. CASES
@@ -830,11 +840,11 @@
       <div class="svc-text">
         <div class="svc-cat cat-fund">자금 솔루션</div>
         <div class="svc-title">기업에 <strong>자금</strong>이 필요할 때</div>
-        <div class="svc-item"><div class="dot-fund"></div>사옥, 공장, 창고 등 매입 자금 조달</div>
-        <div class="svc-item"><div class="dot-fund"></div>저금리 정책자금 실행</div>
-        <div class="svc-item"><div class="dot-fund"></div>정부지원금 및 R&amp;D 컨설팅</div>
-        <div class="svc-item"><div class="dot-fund"></div>기업인증 (벤처/이노비즈/연구소)</div>
-        <div class="svc-item"><div class="dot-fund"></div>받을 수 있는 무상지원금 색출</div>
+        <div class="svc-item" onclick="goToCase('case1')"><div class="dot-fund"></div>저금리 정책자금 실행<span class="svc-arrow">→</span></div>
+        <div class="svc-item" onclick="goToCase('case2')"><div class="dot-fund"></div>사옥, 공장, 창고 등 매입 자금 조달<span class="svc-arrow">→</span></div>
+        <div class="svc-item" onclick="goToCase('case4')"><div class="dot-fund"></div>AC/VC 투자 연계 및 기업 보육<span class="svc-arrow">→</span></div>
+        <div class="svc-item" onclick="goToCase('case2')"><div class="dot-fund"></div>정부지원금 및 R&amp;D 컨설팅<span class="svc-arrow">→</span></div>
+        <div class="svc-item" onclick="goToCase('case1')"><div class="dot-fund"></div>기업인증 (벤처/이노비즈/연구소)<span class="svc-arrow">→</span></div>
       </div>
       <img src="case1.jpg" class="svc-photo" alt="자금 솔루션 사례">
     </div>
@@ -846,12 +856,12 @@
       <div class="svc-text">
         <div class="svc-cat cat-tax">절세 솔루션</div>
         <div class="svc-title">과도한 <strong>세금</strong>이 부담될 때</div>
-        <div class="svc-item"><div class="dot-tax"></div>법인세 절감 및 세액 공제 플랜</div>
-        <div class="svc-item"><div class="dot-tax"></div>상속 및 증여 사전 대비 전략</div>
-        <div class="svc-item"><div class="dot-tax"></div>임원 퇴직금 및 보상 체계 수립</div>
-        <div class="svc-item"><div class="dot-tax"></div>기업 보험을 활용한 법인 자금 개인화 체계 수립</div>
-        <div class="svc-item"><div class="dot-tax"></div>사내근로복지기금을 활용한 절세</div>
-        <div class="svc-item"><div class="dot-tax"></div>복지몰 구축으로 직원 복지 향상</div>
+        <div class="svc-item" onclick="goToCase('case3')"><div class="dot-tax"></div>법인세 절감 및 세액 공제 플랜<span class="svc-arrow">→</span></div>
+        <div class="svc-item" onclick="goToCase('case3')"><div class="dot-tax"></div>상속 및 증여 사전 대비 전략<span class="svc-arrow">→</span></div>
+        <div class="svc-item" onclick="goToCase('case4')"><div class="dot-tax"></div>임원 퇴직금 및 보상 체계 수립<span class="svc-arrow">→</span></div>
+        <div class="svc-item" onclick="goToCase('case3')"><div class="dot-tax"></div>기업 보험을 활용한 법인 자금 개인화 체계 수립<span class="svc-arrow">→</span></div>
+        <div class="svc-item" onclick="goToCase('case4')"><div class="dot-tax"></div>사내근로복지기금을 활용한 절세<span class="svc-arrow">→</span></div>
+        <div class="svc-item" onclick="goToCase('case4')"><div class="dot-tax"></div>복지몰 구축으로 직원 복지 향상<span class="svc-arrow">→</span></div>
       </div>
       <img src="case2.jpg" class="svc-photo" alt="절세 솔루션 사례">
     </div>
@@ -1114,6 +1124,14 @@
   /* ── 아코디언 ── */
   function toggleCase(id) {
     document.getElementById(id).classList.toggle('open');
+  }
+
+  /* ── 서비스 항목 클릭 → 관련 사례로 이동 + 펼치기 ── */
+  function goToCase(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.classList.add('open');
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   /* ── 페이드인 ── */
