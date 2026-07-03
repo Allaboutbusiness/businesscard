@@ -214,13 +214,19 @@
 
 
     /* civ4: preview-3 글 양식 + preview-2 사진 위치. 사진 또렷, 가장자리만 블러·페더로 블렌딩 */
-    .civ4 .ci-photo { position: absolute; top: 0; right: 0; height: 100%; width: 47%; z-index: 0; pointer-events: none; }
+    /* civ4 기본(≤1023): 사진은 은은한 배경, 약력 텍스트 전체폭 */
+    .civ4 .ci-photo { position: absolute; top: 0; right: 0; height: 100%; width: 60%; opacity: .28; z-index: 0; pointer-events: none; }
     .civ4 .ci-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
-    .civ4 .ci-inner { padding-right: 52%; }   /* 텍스트를 좌측에 가둬 우측 사진과 겹치지 않게 */
+    .civ4 .ci-text { position: relative; z-index: 1; }
     .civ4 .ci-photo-sharp {   /* 블러 없음 — 선명한 사진 + 가장자리만 부드러운 페이드로 블렌딩 */
       -webkit-mask-image: radial-gradient(92% 112% at 56% 50%, #000 60%, rgba(0,0,0,.45) 83%, transparent 100%);
               mask-image: radial-gradient(92% 112% at 56% 50%, #000 60%, rgba(0,0,0,.45) 83%, transparent 100%); }
-    @media (max-width: 767px) { .civ4 .ci-photo { opacity: .3; } .civ4 .ci-inner { padding-right: 0; } }
+    /* ≥1024: flex 2단 — 약력 최소폭(≥540px) 보장해 문장이 좁아지지 않게, 사진은 남는 공간 차지(좁으면 사진이 줆) */
+    @media (min-width: 1024px) {
+      .civ4 .ci-inner { display: flex; align-items: stretch; gap: 44px; }
+      .civ4 .ci-text { flex: 1 1 560px; min-width: 540px; max-width: 660px; }
+      .civ4 .ci-photo { position: relative; opacity: 1; width: auto; height: auto; flex: 0 1 42%; min-width: 300px; align-self: stretch; min-height: 460px; }
+    }
 
     /* 우측 상단: 사진 + 약력 */
     .hero-profile {
@@ -732,10 +738,8 @@
 
 <!-- ════ 회사 소개 (COMPANY) ════ -->
 <section class="company-intro civ4" id="company">
-  <div class="ci-photo">
-    <img class="ci-photo-sharp" src="az-corp.png" alt="주식회사 오너스경영연구소 사옥" />
-  </div>
   <div class="ci-inner">
+    <div class="ci-text">
     <div class="ci-eyebrow">COMPANY</div>
     <h2 class="ci-title">주식회사 오너스경영연구소</h2>
     <dl class="ci-table">
@@ -746,6 +750,10 @@
       <div class="ci-row"><dt>주요 사업</dt><dd><span class="hl">경영 컨설팅</span> : 정책자금, 기업인증, 가업승계 등<br><span class="hl">기업 보육</span> : AC/VC 투자 및 연계형 지원사업(TIPS, LIPS 등), R&amp;D 지원사업, 기업 밸류에이션 설계</dd></div>
       <div class="ci-row"><dt>주요 사례</dt><dd>법인 보험을 활용한 법인자금 개인화·상속·증여<br>복지몰 구축, 사내근로복지기금<br>경정청구, 벤처인증 등 절세 액 100억원 이상</dd></div>
     </dl>
+    </div>
+    <div class="ci-photo">
+      <img class="ci-photo-sharp" src="az-corp.png" alt="주식회사 오너스경영연구소 사옥" />
+    </div>
   </div>
 </section>
 
