@@ -185,6 +185,42 @@
         transparent 100%);
     }
 
+    /* ════════════════════════════════
+       회사 소개 (COMPANY) — 좌: 약력 / 우: 사옥 사진(블러·페이드 블렌딩)
+    ════════════════════════════════ */
+    .company-intro {
+      position: relative; overflow: hidden;
+      background: #080a08;              /* 히어로 하단 어둠과 동일 톤 */
+      padding: 74px 22px 92px;
+    }
+    .ci-inner { position: relative; z-index: 1; max-width: var(--content-max); margin-inline: auto; }
+    .ci-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 2.5px; color: var(--teal-l); margin-bottom: 12px; }
+    .ci-title { font-size: clamp(22px, 4.4vw, 34px); font-weight: 800; color: #fff; letter-spacing: -.5px; margin-bottom: 30px; word-break: keep-all; text-shadow: 0 2px 16px rgba(0,0,0,.5); }
+    .ci-table { display: flex; flex-direction: column; max-width: 660px; }
+    .ci-row { display: grid; grid-template-columns: 88px 1fr; gap: 16px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.1); }
+    .ci-row:last-child { border-bottom: none; }
+    .ci-row dt { font-size: 14px; font-weight: 700; color: var(--teal-l); }
+    .ci-row dd { font-size: 14px; color: rgba(255,255,255,.86); line-height: 1.65; word-break: keep-all; }
+    .ci-row dd.amber { color: var(--amber); font-weight: 600; }
+    @media (min-width: 768px) {
+      .company-intro { padding: 86px 40px 104px; }
+      .ci-row { grid-template-columns: 108px 1fr; gap: 22px; }
+      .ci-row dt, .ci-row dd { font-size: 15px; }
+    }
+    @media (min-width: 1024px) { .company-intro { padding-left: 60px; padding-right: 60px; } }
+
+
+
+
+    /* civ4: preview-3 글 양식 + preview-2 사진 위치. 사진 또렷, 가장자리만 블러·페더로 블렌딩 */
+    .civ4 .ci-photo { position: absolute; top: 0; right: 0; height: 100%; width: 47%; z-index: 0; pointer-events: none; }
+    .civ4 .ci-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+    .civ4 .ci-inner { padding-right: 52%; }   /* 텍스트를 좌측에 가둬 우측 사진과 겹치지 않게 */
+    .civ4 .ci-photo-sharp {   /* 블러 없음 — 선명한 사진 + 가장자리만 부드러운 페이드로 블렌딩 */
+      -webkit-mask-image: radial-gradient(92% 112% at 56% 50%, #000 60%, rgba(0,0,0,.45) 83%, transparent 100%);
+              mask-image: radial-gradient(92% 112% at 56% 50%, #000 60%, rgba(0,0,0,.45) 83%, transparent 100%); }
+    @media (max-width: 767px) { .civ4 .ci-photo { opacity: .3; } .civ4 .ci-inner { padding-right: 0; } }
+
     /* 우측 상단: 사진 + 약력 */
     .hero-profile {
       align-self: flex-end;
@@ -691,6 +727,25 @@
     </a>
   </div>
  </div>
+</section>
+
+<!-- ════ 회사 소개 (COMPANY) ════ -->
+<section class="company-intro civ4">
+  <div class="ci-photo">
+    <img class="ci-photo-sharp" src="az-corp.png" alt="주식회사 오너스경영연구소 사옥" />
+  </div>
+  <div class="ci-inner">
+    <div class="ci-eyebrow">COMPANY</div>
+    <h2 class="ci-title">주식회사 오너스경영연구소</h2>
+    <dl class="ci-table">
+      <div class="ci-row"><dt>회사명</dt><dd>주식회사 오너스경영연구소</dd></div>
+      <div class="ci-row"><dt>설립일</dt><dd>2021년 09월 01일</dd></div>
+      <div class="ci-row"><dt>회사주소</dt><dd>서울시 영등포구 국회대로 50길 20</dd></div>
+      <div class="ci-row"><dt>임직원수</dt><dd>전문 컨설턴트 50명 (변호사, 회계사, 변리사, 세무사, 경영지도사 등)</dd></div>
+      <div class="ci-row"><dt>주요 사업</dt><dd>경영 컨설팅 : 정책자금, 기업인증, 가업승계 등<br>기업 보육 : AC/VC 투자 및 연계형 지원사업(TIPS, LIPS 등), R&amp;D 지원사업, 기업 밸류에이션 설계</dd></div>
+      <div class="ci-row"><dt>주요 사례</dt><dd class="amber">법인 보험을 활용한 법인자금 개인화·상속·증여<br>복지몰 구축, 사내근로복지기금<br>경정청구, 벤처인증 등 절세 액 100억원 이상</dd></div>
+    </dl>
+  </div>
 </section>
 
 <!-- ════ 히어로 어둠 → 바다 전환 띠 ════ -->
