@@ -711,14 +711,14 @@
     }
     /* SERVICES - 다이프틱(자금 | 세금 두 면 확장) */
     .dip{ --dteal:#14b8a6;--dteal-d:#0a8a7d;--damber:#f7a63b;--damber-d:#d67f18;
-      font-family:'Pretendard','Pretendard Variable',sans-serif; background:#080d0c; padding:74px 0 88px; position:relative; color:#eaf0ee; }
+      font-family:'Pretendard','Pretendard Variable',sans-serif; background:#080d0c; padding:74px 0 104px; position:relative; color:#eaf0ee; }
     .dip .cap{max-width:1220px;margin:0 auto 28px;padding:0 30px}
     .dip .eye{font:900 12px/1 'Archivo',sans-serif;letter-spacing:.3em;color:var(--dteal);margin-bottom:12px}
     .dip .h{font-size:clamp(26px,4vw,42px);font-weight:900;line-height:1.2;letter-spacing:-.03em;color:#fff;word-break:keep-all}
     .dip .h b{color:var(--dteal)}.dip .h i{font-style:normal;color:var(--damber)}
     .dip .sub{margin-top:12px;color:#8b9a95;font-size:14px;word-break:keep-all}
-    .dip .split{display:flex;gap:12px;max-width:1220px;margin:0 auto;padding:0 30px;height:clamp(460px,66vh,620px)}
-    .dip .half{position:relative;flex:1;border-radius:22px;overflow:hidden;cursor:pointer;transition:flex .6s cubic-bezier(.7,0,.2,1);isolation:isolate}
+    .dip .split{display:flex;gap:12px;max-width:1220px;margin:0 auto;padding:0 30px;align-items:stretch}
+    .dip .half{position:relative;flex:1;min-height:clamp(560px,56vh,620px);border-radius:22px;overflow:hidden;cursor:pointer;transition:flex .6s cubic-bezier(.7,0,.2,1);isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end}
     .dip .split:hover .half{flex:.6}
     .dip .half:hover{flex:2.5}
     .dip .half img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.06);transition:transform .8s,filter .6s;filter:grayscale(.35) brightness(.6)}
@@ -729,7 +729,7 @@
     .dip .edge{position:absolute;top:0;bottom:0;left:0;width:5px;z-index:3}
     .dip .h-fund .edge{background:linear-gradient(180deg,var(--dteal),var(--dteal-d))}
     .dip .h-tax .edge{background:linear-gradient(180deg,var(--damber),var(--damber-d))}
-    .dip .dbody{position:absolute;inset:0;z-index:2;padding:clamp(24px,3vw,42px);display:flex;flex-direction:column;justify-content:flex-end}
+    .dip .dbody{position:relative;z-index:2;width:100%;padding:clamp(24px,3vw,42px);display:flex;flex-direction:column}
     .dip .num{position:absolute;top:26px;left:30px;font:900 clamp(48px,7vw,104px)/.8 'Archivo',sans-serif;color:rgba(255,255,255,.1);letter-spacing:-.04em}
     .dip .kicker{font:900 12px/1 'Archivo',sans-serif;letter-spacing:.24em;margin-bottom:14px}
     .dip .h-fund .kicker{color:var(--dteal)}.dip .h-tax .kicker{color:var(--damber)}
@@ -745,13 +745,21 @@
     .dip .h-fund .it:hover .iarr{color:var(--dteal-d)}.dip .h-tax .it:hover .iarr{color:var(--damber-d)}
     .dip .peek{position:absolute;bottom:clamp(20px,2.6vw,32px);right:clamp(20px,2.6vw,32px);z-index:4;font-size:12.5px;color:#fff;font-weight:700;opacity:1;transition:opacity .3s;background:rgba(8,14,12,.6);border:1px solid rgba(255,255,255,.24);padding:9px 15px;border-radius:999px;white-space:nowrap}
     .dip .half:hover .peek{opacity:0}
-    @media(max-width:760px){
-      .dip .split{flex-direction:column;height:auto;gap:14px}
-      .dip .half{flex:none;height:auto;min-height:230px}
+    /* 태블릿·모바일: 전체 항목 항상 노출(hover 의존 제거) */
+    @media(max-width:1024px){
+      .dip .split{flex-direction:column;gap:14px}
+      .dip .half{flex:none;min-height:340px}
       .dip .split:hover .half{flex:none}.dip .half:hover{flex:none}
       .dip .reveal{max-height:none;opacity:1;margin-top:20px}
-      .dip .peek{display:none}.dip .dbody{position:relative;padding:26px}
-      .dip .half img{filter:grayscale(0) brightness(.58)}
+      .dip .peek{display:none}
+      .dip .half img{filter:grayscale(0) brightness(.55)}
+    }
+    @media(max-width:520px){
+      .dip .cap{margin-bottom:22px}
+      .dip .dbody{padding:24px 20px}
+      .dip .num{top:18px;left:22px}
+      .dip .dtitle{font-size:clamp(24px,7vw,32px)}
+      .dip .it{padding:13px 14px;font-size:14px}
     }
   </style>
 </head>
