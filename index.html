@@ -474,9 +474,10 @@
       overflow: hidden; cursor: pointer;
       -webkit-tap-highlight-color: transparent;
       background: rgba(255,255,255,.04);
-      transition: border-color .3s;
+      transition: border-color .3s, background .3s, box-shadow .3s;
     }
-    .case-card.open { border-color: var(--teal-l); background: rgba(20,184,166,.05); }
+    /* 펼치면 흰색 배경 (시인성) — 내부 글자/박스는 아래 오버라이드에서 어둡게 */
+    .case-card.open { border-color: var(--teal-l); background: #ffffff; box-shadow: 0 14px 44px rgba(0,0,0,.45); }
 
     .case-hd {
       display: flex; align-items: center;
@@ -537,6 +538,26 @@
     }
     .who-lbl  { font-size: 10px; font-weight: 700; color: rgba(255,255,255,.35); letter-spacing: .5px; margin-bottom: 6px; }
     .who-text { font-size: 13px; color: rgba(255,255,255,.68); line-height: 1.75; }
+
+    /* ── 펼친 사례 카드(흰 배경)용 글자·박스 색 조율 ── */
+    .case-card.open .case-ord { color: var(--teal); }
+    .case-card.open .case-ttl { color: #16181a; }
+    .case-card.open .case-prev { color: var(--teal); }
+    .case-card.open .case-chev { color: var(--teal); }
+    .case-card.open .case-hr { background: rgba(0,0,0,.1); }
+    .case-card.open .info-pill { background: rgba(0,0,0,.04); border-color: rgba(0,0,0,.1); }
+    .case-card.open .pill-lbl { color: rgba(0,0,0,.45); }
+    .case-card.open .pill-val { color: #16181a; }
+    .case-card.open .blk-title { color: rgba(0,0,0,.45); }
+    .case-card.open .blk-text { color: rgba(0,0,0,.72); }
+    .case-card.open .sol-row { color: rgba(0,0,0,.74); }
+    .case-card.open .who-box { background: rgba(0,0,0,.04); border-color: rgba(0,0,0,.09); }
+    .case-card.open .who-lbl { color: rgba(0,0,0,.42); }
+    .case-card.open .who-text { color: rgba(0,0,0,.64); }
+    .case-card.open .cb-b { background: rgba(37,99,235,.12); color: #1D4ED8; }
+    .case-card.open .cb-g { background: rgba(5,150,105,.13); color: #047857; }
+    .case-card.open .cb-p { background: rgba(124,58,237,.12); color: #6D28D9; }
+    .case-card.open .cb-o { background: rgba(234,88,12,.13); color: #C2410C; }
 
     /* ════════════════════════════════
        7. CTA
