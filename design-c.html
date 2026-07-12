@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>서비스 섹션 시안 C · 미니멀 인덱스</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&display=swap" rel="stylesheet"/>
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{--paper:#f4f1ea; --paper-2:#eae5da; --ink:#181613; --ink-2:#4a463f; --accent:#0c8b7d; --accent-d:#0a6e63; --line:rgba(24,22,19,.16)}
+  html{-webkit-font-smoothing:antialiased}
+  body{
+    font-family:'Pretendard','Pretendard Variable',sans-serif; color:var(--ink);
+    background:
+      radial-gradient(100% 60% at 100% 0%, rgba(12,139,125,.06) 0%, transparent 50%),
+      linear-gradient(180deg,#f6f3ec,#efe9dd);
+    min-height:100vh; display:flex; align-items:center; justify-content:center; padding:64px 22px;
+  }
+  body::before{content:""; position:fixed; inset:0; pointer-events:none; opacity:.4; mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
+  .wrap{width:100%; max-width:1160px; position:relative}
+  .badge{font:500 11px/1 'Fraunces',serif; letter-spacing:.28em; color:var(--accent-d); margin:0 0 22px 2px}
+  .top{display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; border-bottom:2px solid var(--ink); padding-bottom:20px; margin-bottom:8px}
+  .eyebrow{font:600 13px/1 'Fraunces',serif; font-style:italic; letter-spacing:.06em; color:var(--accent-d)}
+  .head{font-size:clamp(28px,4.6vw,46px); font-weight:800; line-height:1.14; letter-spacing:-.03em}
+  .head span{color:var(--accent)}
+  .meta{font:500 12px/1.6 'Fraunces',serif; color:var(--ink-2); text-align:right; white-space:nowrap}
+
+  .tabs{display:flex; gap:26px; margin:26px 0 4px}
+  .tab{font-family:inherit; font-size:15px; font-weight:700; color:rgba(24,22,19,.4); background:0; border:0; padding:6px 0; cursor:pointer; position:relative; letter-spacing:-.01em}
+  .tab::after{content:""; position:absolute; left:0; right:100%; bottom:0; height:2px; background:var(--accent); transition:right .3s}
+  .tab.active{color:var(--ink)}
+  .tab.active::after{right:0}
+
+  .panel[hidden]{display:none}
+  .layout{display:grid; grid-template-columns:1fr; gap:36px}
+  @media(min-width:920px){.layout{grid-template-columns:1.35fr .65fr; gap:56px; align-items:start}}
+  .cat{font:500 11px/1 'Fraunces',serif; letter-spacing:.24em; text-transform:uppercase; color:var(--accent-d); margin:20px 0 18px}
+
+  .idx{list-style:none; border-top:1px solid var(--line)}
+  .row{display:grid; grid-template-columns:auto 1fr auto; align-items:baseline; gap:22px; padding:22px 8px 22px 4px; border-bottom:1px solid var(--line); cursor:pointer; position:relative; transition:padding .3s, background .3s}
+  .row:hover{padding-left:18px; background:rgba(12,139,125,.05)}
+  .n{font:500 clamp(30px,3.4vw,42px)/.9 'Fraunces',serif; color:rgba(24,22,19,.28); transition:color .3s, transform .3s}
+  .row:hover .n{color:var(--accent); transform:translateY(-1px)}
+  .t{font-size:clamp(16px,1.7vw,19px); font-weight:700; letter-spacing:-.02em; line-height:1.35; align-self:center}
+  .go{align-self:center; color:var(--accent); opacity:0; transform:translateX(-6px); transition:.3s; font-size:16px; font-weight:700}
+  .row:hover .go{opacity:1; transform:translateX(0)}
+
+  .aside{position:relative}
+  .figure{position:relative; border-radius:2px; overflow:hidden; box-shadow:0 24px 50px rgba(24,22,19,.22)}
+  .figure img{width:100%; height:100%; min-height:340px; max-height:520px; object-fit:cover; display:block; filter:grayscale(.35) contrast(1.03); transition:filter .5s, transform .8s}
+  .figure:hover img{filter:grayscale(0); transform:scale(1.03)}
+  .figure figcaption{position:absolute; left:0; bottom:0; right:0; padding:16px 18px; color:#fff; font:600 12.5px/1.5 'Pretendard',sans-serif; background:linear-gradient(0deg,rgba(10,20,18,.85),transparent)}
+  .tag{display:inline-block; margin-top:14px; font:500 12px/1 'Fraunces',serif; font-style:italic; color:var(--ink-2)}
+  .tag b{color:var(--accent-d); font-style:normal; font-weight:600}
+
+  .fade{opacity:0; transform:translateY(14px); animation:up .8s cubic-bezier(.22,1,.36,1) forwards}
+  @keyframes up{to{opacity:1;transform:none}}
+  .d1{animation-delay:.06s}.d2{animation-delay:.16s}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="badge fade">시안 C — EDITORIAL INDEX</div>
+    <div class="top fade">
+      <div>
+        <p class="eyebrow">Consulting</p>
+        <h2 class="head">모든 중소기업의<br>가장 큰 고민, <span>두 가지</span></h2>
+      </div>
+      <p class="meta">FUNDING &amp; TAX<br>SOLUTION — 2024</p>
+    </div>
+
+    <div class="tabs fade d1">
+      <button class="tab active" data-t="fund">01 &nbsp;자금이 필요할 때</button>
+      <button class="tab" data-t="tax">02 &nbsp;세금이 부담될 때</button>
+    </div>
+
+    <div class="panel fade d2" data-p="fund">
+      <div class="layout">
+        <div>
+          <p class="cat">Funding Solution — 기업에 자금이 필요할 때</p>
+          <ol class="idx">
+            <li class="row"><span class="n">01</span><span class="t">저금리 정책자금 실행</span><span class="go">→</span></li>
+            <li class="row"><span class="n">02</span><span class="t">사옥, 공장, 창고 등 매입 자금 조달</span><span class="go">→</span></li>
+            <li class="row"><span class="n">03</span><span class="t">AC/VC 투자 연계 및 기업 보육</span><span class="go">→</span></li>
+            <li class="row"><span class="n">04</span><span class="t">정부지원금 및 R&amp;D 컨설팅</span><span class="go">→</span></li>
+            <li class="row"><span class="n">05</span><span class="t">기업인증 (벤처/이노비즈/연구소)</span><span class="go">→</span></li>
+          </ol>
+        </div>
+        <div class="aside">
+          <figure class="figure"><img src="/case1.jpg" alt="자금 솔루션 사례"/><figcaption>저금리 정책자금 · 시설자금 실행 현장</figcaption></figure>
+          <span class="tag"><b>실행 사례</b> — 정책자금 3억 · 시설자금 36억</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" data-p="tax" hidden>
+      <div class="layout">
+        <div>
+          <p class="cat">Tax Solution — 과도한 세금이 부담될 때</p>
+          <ol class="idx">
+            <li class="row"><span class="n">01</span><span class="t">법인세 절감 및 세액 공제 플랜</span><span class="go">→</span></li>
+            <li class="row"><span class="n">02</span><span class="t">상속 및 증여 사전 대비 전략</span><span class="go">→</span></li>
+            <li class="row"><span class="n">03</span><span class="t">임원 퇴직금 및 보상 체계 수립</span><span class="go">→</span></li>
+            <li class="row"><span class="n">04</span><span class="t">기업 보험을 활용한 법인 자금 개인화 체계 수립</span><span class="go">→</span></li>
+            <li class="row"><span class="n">05</span><span class="t">사내근로복지기금을 활용한 절세</span><span class="go">→</span></li>
+            <li class="row"><span class="n">06</span><span class="t">복지몰 구축으로 직원 복지 향상</span><span class="go">→</span></li>
+          </ol>
+        </div>
+        <div class="aside">
+          <figure class="figure"><img src="/case2.jpg" alt="절세 솔루션 사례"/><figcaption>법인 절세 · 자금 개인화 설계</figcaption></figure>
+          <span class="tag"><b>실행 사례</b> — 절세액 누적 100억 이상</span>
+        </div>
+      </div>
+    </div>
+  </div>
+<script>
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click',function(){
+      document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active')});
+      t.classList.add('active');
+      var id=t.dataset.t;
+      document.querySelectorAll('.panel').forEach(function(p){p.hidden=(p.dataset.p!==id)});
+    });
+  });
+</script>
+</body>
+</html>
