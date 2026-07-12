@@ -110,6 +110,19 @@
       box-shadow: 0 4px 16px rgba(13,154,140,.4); transition: filter .2s;
     }
     .nav-cta:hover { filter: brightness(1.08); }
+    /* 공유하기 버튼 (URL 클립보드 복사) */
+    .nav-share {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 14px; font-weight: 700; color: #fff;
+      background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.22);
+      padding: 9px 15px; border-radius: 10px; cursor: pointer;
+      white-space: nowrap; font-family: inherit;
+      text-shadow: 0 1px 6px rgba(0,0,0,.4);
+      transition: background .2s, border-color .2s, color .2s;
+    }
+    .nav-share:hover { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.4); }
+    .nav-share.copied { background: var(--teal); border-color: var(--teal); text-shadow: none; }
+    .nav-share svg { width: 15px; height: 15px; flex-shrink: 0; }
 
     /* 햄버거 버튼 (모바일) */
     .nav-toggle {
@@ -145,6 +158,7 @@
         font-size: 16px; text-shadow: none;
       }
       .nav-cta { margin-top: 14px; text-align: center; padding: 15px; font-size: 15px; }
+      .nav-share { margin-top: 12px; width: 100%; justify-content: center; padding: 14px; font-size: 15px; text-shadow: none; }
     }
 
     /* ════════════════════════════════
@@ -705,6 +719,10 @@
     <a class="nav-link" href="#contact">연락처</a>
     <a class="nav-link" href="#services">컨설팅</a>
     <a class="nav-link" href="#cases">사례</a>
+    <button class="nav-share" id="navShare" type="button" onclick="copyPageUrl(this)" aria-label="페이지 링크 복사">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      <span>공유하기</span>
+    </button>
     <a class="nav-cta"
        href="https://docs.google.com/forms/d/e/1FAIpQLSf6QtuT6mtyObED4KDgTZ7C7rs1xkES0PreLeONFEet37kwHg/viewform?usp=sharing&ouid=101053759053889131258"
        target="_blank" rel="noopener">상담문의</a>
@@ -1153,6 +1171,32 @@
     if (!el) return;
     el.classList.add('open');
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* ── 공유하기: 페이지 URL 클립보드 복사 + "복사됨!" 피드백 ── */
+  function copyPageUrl(btn) {
+    var url = location.origin + location.pathname;
+    var span = btn.querySelector('span');
+    function show() {
+      if (!span.getAttribute('data-orig')) span.setAttribute('data-orig', span.textContent);
+      span.textContent = '복사됨!';
+      btn.classList.add('copied');
+      clearTimeout(btn._t);
+      btn._t = setTimeout(function () {
+        span.textContent = span.getAttribute('data-orig');
+        btn.classList.remove('copied');
+      }, 1600);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(show).catch(function () { fallbackCopyUrl(url); show(); });
+    } else { fallbackCopyUrl(url); show(); }
+  }
+  function fallbackCopyUrl(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.top = '-9999px'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
   }
 
   /* ── 페이드인 ── */
