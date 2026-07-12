@@ -10,6 +10,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="김진기 CFO" />
   <link rel="apple-touch-icon" href="/icon-192.png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;900&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; scroll-padding-top: 72px; }   /* 고정 헤더 높이만큼 앵커 보정 */
@@ -707,6 +709,50 @@
       .footer         { padding-left: 80px; padding-right: 80px; }
       .footer-btns    { max-width: 640px; }
     }
+    /* SERVICES - 다이프틱(자금 | 세금 두 면 확장) */
+    .dip{ --dteal:#14b8a6;--dteal-d:#0a8a7d;--damber:#f7a63b;--damber-d:#d67f18;
+      font-family:'Pretendard','Pretendard Variable',sans-serif; background:#080d0c; padding:74px 0 88px; position:relative; color:#eaf0ee; }
+    .dip .cap{max-width:1220px;margin:0 auto 28px;padding:0 30px}
+    .dip .eye{font:900 12px/1 'Archivo',sans-serif;letter-spacing:.3em;color:var(--dteal);margin-bottom:12px}
+    .dip .h{font-size:clamp(26px,4vw,42px);font-weight:900;line-height:1.2;letter-spacing:-.03em;color:#fff;word-break:keep-all}
+    .dip .h b{color:var(--dteal)}.dip .h i{font-style:normal;color:var(--damber)}
+    .dip .sub{margin-top:12px;color:#8b9a95;font-size:14px;word-break:keep-all}
+    .dip .split{display:flex;gap:12px;max-width:1220px;margin:0 auto;padding:0 30px;height:clamp(460px,66vh,620px)}
+    .dip .half{position:relative;flex:1;border-radius:22px;overflow:hidden;cursor:pointer;transition:flex .6s cubic-bezier(.7,0,.2,1);isolation:isolate}
+    .dip .split:hover .half{flex:.6}
+    .dip .half:hover{flex:2.5}
+    .dip .half img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.06);transition:transform .8s,filter .6s;filter:grayscale(.35) brightness(.6)}
+    .dip .half:hover img{transform:scale(1);filter:grayscale(0) brightness(.7)}
+    .dip .scrim{position:absolute;inset:0;z-index:1}
+    .dip .h-fund .scrim{background:linear-gradient(180deg,rgba(6,12,11,.15),rgba(6,26,23,.85)),linear-gradient(90deg,rgba(20,184,166,.28),transparent 60%)}
+    .dip .h-tax .scrim{background:linear-gradient(180deg,rgba(12,9,4,.15),rgba(28,18,4,.85)),linear-gradient(90deg,rgba(247,166,59,.26),transparent 60%)}
+    .dip .edge{position:absolute;top:0;bottom:0;left:0;width:5px;z-index:3}
+    .dip .h-fund .edge{background:linear-gradient(180deg,var(--dteal),var(--dteal-d))}
+    .dip .h-tax .edge{background:linear-gradient(180deg,var(--damber),var(--damber-d))}
+    .dip .dbody{position:absolute;inset:0;z-index:2;padding:clamp(24px,3vw,42px);display:flex;flex-direction:column;justify-content:flex-end}
+    .dip .num{position:absolute;top:26px;left:30px;font:900 clamp(48px,7vw,104px)/.8 'Archivo',sans-serif;color:rgba(255,255,255,.1);letter-spacing:-.04em}
+    .dip .kicker{font:900 12px/1 'Archivo',sans-serif;letter-spacing:.24em;margin-bottom:14px}
+    .dip .h-fund .kicker{color:var(--dteal)}.dip .h-tax .kicker{color:var(--damber)}
+    .dip .dtitle{font-size:clamp(26px,3.4vw,42px);font-weight:900;line-height:1.12;letter-spacing:-.03em;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.55)}
+    .dip .reveal{max-height:0;opacity:0;overflow:hidden;transition:max-height .6s cubic-bezier(.7,0,.2,1),opacity .5s .1s,margin .6s}
+    .dip .half:hover .reveal{max-height:560px;opacity:1;margin-top:22px}
+    .dip .items{list-style:none;display:flex;flex-direction:column;gap:9px;max-width:560px}
+    .dip .it{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;background:#fff;color:#17181a;font-size:clamp(13px,1vw,15.5px);font-weight:700;box-shadow:0 6px 20px rgba(0,0,0,.34);transition:transform .2s}
+    .dip .it:hover{transform:translateX(4px)}
+    .dip .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .dip .h-fund .dot{background:var(--dteal-d)}.dip .h-tax .dot{background:var(--damber-d)}
+    .dip .iarr{margin-left:auto;font-weight:800;color:rgba(23,24,26,.28);transition:color .2s}
+    .dip .h-fund .it:hover .iarr{color:var(--dteal-d)}.dip .h-tax .it:hover .iarr{color:var(--damber-d)}
+    .dip .peek{position:absolute;bottom:clamp(20px,2.6vw,32px);right:clamp(20px,2.6vw,32px);z-index:4;font-size:12.5px;color:#fff;font-weight:700;opacity:1;transition:opacity .3s;background:rgba(8,14,12,.6);border:1px solid rgba(255,255,255,.24);padding:9px 15px;border-radius:999px;white-space:nowrap}
+    .dip .half:hover .peek{opacity:0}
+    @media(max-width:760px){
+      .dip .split{flex-direction:column;height:auto;gap:14px}
+      .dip .half{flex:none;height:auto;min-height:230px}
+      .dip .split:hover .half{flex:none}.dip .half:hover{flex:none}
+      .dip .reveal{max-height:none;opacity:1;margin-top:20px}
+      .dip .peek{display:none}.dip .dbody{position:relative;padding:26px}
+      .dip .half img{filter:grayscale(0) brightness(.58)}
+    }
   </style>
 </head>
 <body>
@@ -858,54 +904,53 @@
  </div>
 </section>
 
-<!-- ════ SERVICES — 탭 ════ -->
-<section class="svc-sec" id="services">
- <div class="wrap">
-  <div class="sec-eyebrow ew-dark">CONSULTING</div>
-  <div class="sec-title-dark fade-up">모든 중소기업의<br>가장 큰 고민 두 가지를<br>해결합니다</div>
-
-  <div class="svc-tabs">
-    <button class="svc-tab-btn fund-active" id="tab-fund" onclick="switchTab('fund')">
-      자금이 필요할 때
-    </button>
-    <button class="svc-tab-btn" id="tab-tax" onclick="switchTab('tax')">
-      세금이 부담될 때
-    </button>
+<!-- ════ SERVICES — 다이프틱 ════ -->
+<section class="dip" id="services">
+  <div class="cap">
+    <p class="eye">CONSULTING</p>
+    <h2 class="h">기업의 <b>자금</b>과 <i>세금</i>,<br>가장 큰 고민을 해결합니다</h2>
+    <p class="sub">마우스를 올리면 해당 영역이 펼쳐지며 세부 솔루션이 드러납니다.</p>
   </div>
-
-  <!-- 자금 패널 -->
-  <div class="svc-panel active" id="panel-fund">
-    <div class="svc-card-fund">
-      <div class="svc-text">
-        <div class="svc-cat cat-fund">자금 솔루션</div>
-        <div class="svc-title">기업에 <strong>자금</strong>이 필요할 때</div>
-        <div class="svc-item" onclick="goToCase('case1')"><div class="dot-fund"></div>저금리 정책자금 실행<span class="svc-arrow">→</span></div>
-        <div class="svc-item" onclick="goToCase('case2')"><div class="dot-fund"></div>사옥, 공장, 창고 등 매입 자금 조달<span class="svc-arrow">→</span></div>
-        <div class="svc-item" onclick="goToCase('case4')"><div class="dot-fund"></div>AC/VC 투자 연계 및 기업 보육<span class="svc-arrow">→</span></div>
-        <div class="svc-item" onclick="goToCase('case2')"><div class="dot-fund"></div>정부지원금 및 R&amp;D 컨설팅<span class="svc-arrow">→</span></div>
-        <div class="svc-item" onclick="goToCase('case1')"><div class="dot-fund"></div>기업인증 (벤처/이노비즈/연구소)<span class="svc-arrow">→</span></div>
+  <div class="split">
+    <div class="half h-fund">
+      <img src="case1.jpg" alt="자금 솔루션"/>
+      <span class="scrim"></span><span class="edge"></span>
+      <span class="num">01</span>
+      <div class="dbody">
+        <div class="kicker">자금 솔루션</div>
+        <h3 class="dtitle">기업에 자금이<br>필요할 때</h3>
+        <div class="reveal">
+          <ul class="items">
+            <li class="it"><span class="dot"></span>저금리 정책자금 실행<span class="iarr">→</span></li>
+            <li class="it"><span class="dot"></span>사옥, 공장, 창고 등 매입 자금 조달<span class="iarr">→</span></li>
+            <li class="it"><span class="dot"></span>AC/VC 투자 연계 및 기업 보육<span class="iarr">→</span></li>
+            <li class="it"><span class="dot"></span>정부지원금 및 R&amp;D 컨설팅<span class="iarr">→</span></li>
+            <li class="it"><span class="dot"></span>기업인증 (벤처/이노비즈/연구소)<span class="iarr">→</span></li>
+          </ul>
+        </div>
       </div>
-      <img src="case1.jpg" class="svc-photo" alt="자금 솔루션 사례">
+      <span class="peek">＋ 5가지 자금 솔루션 보기</span>
+    </div>
+    <div class="half h-tax">
+      <img src="case2.jpg" alt="절세 솔루션"/>
+      <span class="scrim"></span><span class="edge"></span>
+      <span class="num">02</span>
+      <div class="dbody">
+        <div class="kicker">절세 솔루션</div>
+        <h3 class="dtitle">과도한 세금이<br>부담될 때</h3>
+        <div class="reveal">
+          <ul class="items">
+            <li class="it"><span class="dot"></span>법인세 절감 및 세액 공제 플랜<span class="iarr">→</span></li>
+            <li class="it"><span class="dot"></span>상속 및 증여 사전 대비 전략<span class="iarr">→</span></li>
+            <li class="it"><span class="dot"></span>임원 퇴직금 및 보상 체계 수립<span class="iarr">→</span></li>
+            <li class="it"><span class="dot"></span>기업 보험을 활용한 법인 자금 개인화<span class="iarr">→</span></li>
+            <li class="it"><span class="dot"></span>사내근로복지기금 및 복지몰을 활용한 절세와 복지<span class="iarr">→</span></li>
+          </ul>
+        </div>
+      </div>
+      <span class="peek">＋ 5가지 절세 솔루션 보기</span>
     </div>
   </div>
-
-  <!-- 절세 패널 -->
-  <div class="svc-panel" id="panel-tax">
-    <div class="svc-card-tax">
-      <div class="svc-text">
-        <div class="svc-cat cat-tax">절세 솔루션</div>
-        <div class="svc-title">과도한 <strong>세금</strong>이 부담될 때</div>
-        <div class="svc-item" onclick="goToCase('case3')"><div class="dot-tax"></div>법인세 절감 및 세액 공제 플랜<span class="svc-arrow">→</span></div>
-        <div class="svc-item" onclick="goToCase('case3')"><div class="dot-tax"></div>상속 및 증여 사전 대비 전략<span class="svc-arrow">→</span></div>
-        <div class="svc-item" onclick="goToCase('case4')"><div class="dot-tax"></div>임원 퇴직금 및 보상 체계 수립<span class="svc-arrow">→</span></div>
-        <div class="svc-item" onclick="goToCase('case3')"><div class="dot-tax"></div>기업 보험을 활용한 법인 자금 개인화 체계 수립<span class="svc-arrow">→</span></div>
-        <div class="svc-item" onclick="goToCase('case4')"><div class="dot-tax"></div>사내근로복지기금을 활용한 절세<span class="svc-arrow">→</span></div>
-        <div class="svc-item" onclick="goToCase('case4')"><div class="dot-tax"></div>복지몰 구축으로 직원 복지 향상<span class="svc-arrow">→</span></div>
-      </div>
-      <img src="case2.jpg" class="svc-photo" alt="절세 솔루션 사례">
-    </div>
-  </div>
- </div>
 </section>
 
 <!-- ════ CASES ════ -->
@@ -1150,27 +1195,9 @@
     });
   })();
 
-  /* ── 탭 전환 ── */
-  function switchTab(id) {
-    const fundBtn = document.getElementById('tab-fund');
-    const taxBtn  = document.getElementById('tab-tax');
-    fundBtn.className = 'svc-tab-btn' + (id === 'fund' ? ' fund-active' : '');
-    taxBtn.className  = 'svc-tab-btn' + (id === 'tax'  ? ' tax-active'  : '');
-    document.getElementById('panel-fund').classList.toggle('active', id === 'fund');
-    document.getElementById('panel-tax').classList.toggle('active',  id === 'tax');
-  }
-
   /* ── 아코디언 ── */
   function toggleCase(id) {
     document.getElementById(id).classList.toggle('open');
-  }
-
-  /* ── 서비스 항목 클릭 → 관련 사례로 이동 + 펼치기 ── */
-  function goToCase(id) {
-    var el = document.getElementById(id);
-    if (!el) return;
-    el.classList.add('open');
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   /* ── 공유하기: 페이지 URL 클립보드 복사 + "복사됨!" 피드백 ── */
