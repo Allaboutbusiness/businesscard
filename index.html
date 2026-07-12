@@ -761,6 +761,54 @@
       .dip .dtitle{font-size:clamp(24px,7vw,32px)}
       .dip .it{padding:13px 14px;font-size:14px}
     }
+    /* ═══════════════════════════════
+       상담신청 폼 (#apply) — 커스텀 → 구글폼 접수 → 구글시트
+    ═══════════════════════════════ */
+    .ap-sec{background:linear-gradient(180deg,#0a1613,#0c1c18 55%,#0a1613);padding:84px 24px 124px;position:relative;font-family:'Pretendard','Apple SD Gothic Neo',sans-serif;color:#e9f1ef}
+    .ap-wrap{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1fr 1.3fr;gap:52px;align-items:start}
+    .ap-eyebrow{font-size:12px;font-weight:800;letter-spacing:3px;color:var(--teal-l);margin-bottom:14px}
+    .ap-title{font-size:clamp(26px,3.2vw,36px);font-weight:800;line-height:1.3;letter-spacing:-.5px;color:#fff;margin-bottom:18px;word-break:keep-all}
+    .ap-desc{font-size:15px;line-height:1.85;color:#9db3ad;margin-bottom:30px;word-break:keep-all}
+    .ap-info{display:flex;flex-direction:column;gap:13px}
+    .ap-card{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:17px 20px}
+    .ap-card .k{font-size:10.5px;font-weight:800;letter-spacing:1.4px;color:var(--teal-l);margin-bottom:7px}
+    .ap-card .v{font-size:14.5px;line-height:1.55;color:#dbe7e4;font-weight:600}
+    .ap-card a{color:inherit;text-decoration:none}
+    .ap-formcard{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:clamp(24px,3vw,38px)}
+    .ap-sink{position:absolute;width:0;height:0;border:0;left:-9999px}
+    .ap-grid{display:grid;grid-template-columns:1fr 1fr;gap:17px}
+    .ap-field{display:flex;flex-direction:column;gap:7px;min-width:0}
+    .ap-field.full{grid-column:1/-1}
+    .ap-lbl{font-size:12.5px;font-weight:700;color:#cdded9}
+    .ap-lbl .rq{color:var(--amber);margin-left:2px}
+    .ap-in,.ap-sel{width:100%;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:13px 14px;color:#fff;font-size:14.5px;font-family:inherit;transition:border-color .2s,background .2s}
+    .ap-in::placeholder{color:#6f847f}
+    .ap-in:focus,.ap-sel:focus{outline:none;border-color:var(--teal-l);background:rgba(0,0,0,.42)}
+    .ap-sel{appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:38px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2314B8A6' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 13px center}
+    .ap-sel option{background:#12201d;color:#fff}
+    .ap-sel:required:invalid{color:#6f847f}
+    .ap-chips{display:flex;flex-wrap:wrap;gap:9px}
+    .ap-chip input{position:absolute;opacity:0;width:0;height:0}
+    .ap-chip span{display:inline-block;padding:10px 15px;border:1px solid rgba(255,255,255,.16);border-radius:999px;font-size:13px;font-weight:600;color:#c4d4d0;cursor:pointer;transition:.15s;user-select:none}
+    .ap-chip span:hover{border-color:var(--teal-l);color:#eafffb}
+    .ap-chip input:checked+span{background:var(--teal);border-color:var(--teal);color:#fff}
+    .ap-chip input:focus-visible+span{outline:2px solid var(--teal-l);outline-offset:2px}
+    .ap-consent{grid-column:1/-1;display:flex;align-items:flex-start;gap:10px;margin-top:4px;font-size:13px;color:#a7bbb6;line-height:1.65;cursor:pointer}
+    .ap-consent input{margin-top:2px;width:17px;height:17px;flex-shrink:0;accent-color:var(--teal)}
+    .ap-submit{grid-column:1/-1;margin-top:6px;background:linear-gradient(135deg,#f7ad3c,#e08e08);color:#1c1303;font-size:16px;font-weight:800;border:none;border-radius:12px;padding:17px;cursor:pointer;transition:transform .15s,box-shadow .2s;box-shadow:0 10px 30px rgba(245,158,11,.26)}
+    .ap-submit:hover{transform:translateY(-2px);box-shadow:0 14px 38px rgba(245,158,11,.4)}
+    .ap-submit:disabled{opacity:.6;cursor:progress;transform:none}
+    .ap-err{grid-column:1/-1;color:#ffb0b0;font-size:13px;font-weight:600;background:rgba(220,60,60,.12);border:1px solid rgba(220,60,60,.3);border-radius:9px;padding:11px 13px;display:none}
+    .ap-err.show{display:block}
+    .ap-done{display:none;text-align:center;padding:44px 20px}
+    .ap-done.show{display:block;animation:apFade .5s ease}
+    @keyframes apFade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    .ap-done .chk{width:66px;height:66px;border-radius:50%;background:var(--teal);display:grid;place-items:center;margin:0 auto 20px;box-shadow:0 10px 30px rgba(13,154,140,.4)}
+    .ap-done h3{font-size:22px;font-weight:800;color:#fff;margin-bottom:12px}
+    .ap-done p{font-size:14.5px;color:#9db3ad;line-height:1.75}
+    .ap-done .ph{margin-top:16px;font-size:16px;font-weight:700;color:var(--teal-l)}
+    @media(max-width:880px){ .ap-wrap{grid-template-columns:1fr;gap:34px} }
+    @media(max-width:560px){ .ap-sec{padding:62px 15px 116px} .ap-grid{grid-template-columns:1fr} .ap-formcard{padding:22px 17px} }
   </style>
 </head>
 <body>
@@ -777,9 +825,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
       <span>공유하기</span>
     </button>
-    <a class="nav-cta"
-       href="https://docs.google.com/forms/d/e/1FAIpQLSf6QtuT6mtyObED4KDgTZ7C7rs1xkES0PreLeONFEet37kwHg/viewform?usp=sharing&ouid=101053759053889131258"
-       target="_blank" rel="noopener">상담문의</a>
+    <a class="nav-cta" href="#apply">상담문의</a>
   </nav>
   <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기" aria-expanded="false">
     <span></span><span></span><span></span>
@@ -789,9 +835,7 @@
 <div class="fixed-bg"></div>
 <div class="fixed-bg-overlay"></div>
 
-<a class="float-cta" id="floatCta"
-   href="https://docs.google.com/forms/d/e/1FAIpQLSf6QtuT6mtyObED4KDgTZ7C7rs1xkES0PreLeONFEet37kwHg/viewform?usp=sharing&ouid=101053759053889131258"
-   target="_blank" rel="noopener">3회 무료 상담 신청 →</a>
+<a class="float-cta" id="floatCta" href="#apply">3회 무료 상담 신청 →</a>
 
 <!-- ════ HERO ════ -->
 <section class="hero" id="heroSection">
@@ -825,9 +869,7 @@
       <span class="hero-tag">기업인증</span>
       <span class="hero-tag">중소기업 특별 절세</span>
     </div>
-    <a class="hero-cta-btn"
-       href="https://docs.google.com/forms/d/e/1FAIpQLSf6QtuT6mtyObED4KDgTZ7C7rs1xkES0PreLeONFEet37kwHg/viewform?usp=sharing&ouid=101053759053889131258"
-       target="_blank" rel="noopener">
+    <a class="hero-cta-btn" href="#apply">
       <span>3회 무료 상담신청 바로가기</span><span>→</span>
     </a>
     <a class="hero-cta-btn-inv"
@@ -1158,10 +1200,138 @@
     함께 이야기 나눌<br>
     사외 CFO가 필요합니다.
   </div>
-  <a class="cta-btn fade-up d1"
-     href="https://docs.google.com/forms/d/e/1FAIpQLSf6QtuT6mtyObED4KDgTZ7C7rs1xkES0PreLeONFEet37kwHg/viewform?usp=sharing&ouid=101053759053889131258"
-     target="_blank" rel="noopener">3회 무료 상담 신청 →</a>
+  <a class="cta-btn fade-up d1" href="#apply">3회 무료 상담 신청 →</a>
  </div>
+</section>
+
+<!-- ════ 상담신청 (커스텀 폼 → 구글폼 접수 → 구글시트) ════ -->
+<section class="ap-sec" id="apply">
+  <div class="ap-wrap">
+    <div class="ap-left">
+      <div class="ap-eyebrow">CONSULTATION</div>
+      <h2 class="ap-title">기업의 돈 문제,<br>지금 무료로 진단받으세요</h2>
+      <p class="ap-desc">간단한 정보를 남겨주시면 각 분야 전문가가 귀사의 상황을 분석해, 맞춤 자금·절세 방안을 제안해 드립니다. 3회 무료 상담을 제공합니다.</p>
+      <div class="ap-info">
+        <div class="ap-card"><div class="k">전화 상담</div><div class="v"><a href="tel:010-2565-7155">010-2565-7155</a></div></div>
+        <div class="ap-card"><div class="k">이메일</div><div class="v"><a href="mailto:jinki.kimmm@gmail.com">jinki.kimmm@gmail.com</a></div></div>
+        <div class="ap-card"><div class="k">담당</div><div class="v">김진기 · 사외 CFO<br>오너스 경영연구소</div></div>
+      </div>
+    </div>
+
+    <div class="ap-right">
+      <iframe name="apSink" id="apSink" class="ap-sink" title="접수 처리"></iframe>
+      <form class="ap-formcard" id="apForm"
+            action="https://docs.google.com/forms/d/e/1FAIpQLSf6QtuT6mtyObED4KDgTZ7C7rs1xkES0PreLeONFEet37kwHg/formResponse"
+            method="POST" target="apSink" novalidate>
+        <div class="ap-grid">
+          <div class="ap-field">
+            <label class="ap-lbl" for="ap_name">신청인 성함<span class="rq">*</span></label>
+            <input class="ap-in" id="ap_name" name="entry.195368683" data-req type="text" placeholder="홍길동" autocomplete="name">
+          </div>
+          <div class="ap-field">
+            <label class="ap-lbl" for="ap_tel">연락처<span class="rq">*</span></label>
+            <input class="ap-in" id="ap_tel" name="entry.8982561" data-req type="tel" placeholder="010-0000-0000" autocomplete="tel">
+          </div>
+          <div class="ap-field">
+            <label class="ap-lbl" for="ap_company">업체명<span class="rq">*</span></label>
+            <input class="ap-in" id="ap_company" name="entry.806238115" data-req type="text" placeholder="주식회사 예시">
+          </div>
+          <div class="ap-field">
+            <label class="ap-lbl" for="ap_loc">사업 소재지<span class="rq">*</span></label>
+            <input class="ap-in" id="ap_loc" name="entry.2062142960" data-req type="text" placeholder="예: 서울시 강남, 경기도 수원">
+          </div>
+          <div class="ap-field">
+            <label class="ap-lbl" for="ap_biztype">사업자 형태<span class="rq">*</span></label>
+            <select class="ap-sel" id="ap_biztype" name="entry.518507044" data-req required>
+              <option value="" selected disabled hidden>선택하세요</option>
+              <option value="개인사업자">개인사업자</option>
+              <option value="법인사업자">법인사업자</option>
+              <option value="예비사업자">예비사업자</option>
+              <option value="컨설턴트, 전문자격사(이하 질문에 무작위 체크, 최하단 '컨설팅 협업 문의' 체크)">컨설턴트 · 전문자격사</option>
+            </select>
+          </div>
+          <div class="ap-field">
+            <label class="ap-lbl" for="ap_industry">업종<span class="rq">*</span></label>
+            <select class="ap-sel" id="ap_industry" name="entry.328779733" data-req required>
+              <option value="" selected disabled hidden>선택하세요</option>
+              <option value="제조업">제조업</option>
+              <option value="도소매업">도소매업</option>
+              <option value="IT개발업">IT개발업</option>
+              <option value="서비스업">서비스업</option>
+              <option value="건설업">건설업</option>
+              <option value="기타">기타</option>
+            </select>
+          </div>
+          <div class="ap-field">
+            <label class="ap-lbl" for="ap_rev">연 매출 규모<span class="rq">*</span></label>
+            <select class="ap-sel" id="ap_rev" name="entry.1322791980" data-req required>
+              <option value="" selected disabled hidden>선택하세요</option>
+              <option value="3억 미만">3억 미만</option>
+              <option value="3~10억">3~10억</option>
+              <option value="10~30억">10~30억</option>
+              <option value="30~80억">30~80억</option>
+              <option value="80억 이상">80억 이상</option>
+            </select>
+          </div>
+          <div class="ap-field">
+            <label class="ap-lbl" for="ap_emp">직원 규모<span class="rq">*</span></label>
+            <select class="ap-sel" id="ap_emp" name="entry.2056091753" data-req required>
+              <option value="" selected disabled hidden>선택하세요</option>
+              <option value="5인 미만">5인 미만</option>
+              <option value="5~9인">5~9인</option>
+              <option value="10인 이상">10인 이상</option>
+            </select>
+          </div>
+          <div class="ap-field">
+            <label class="ap-lbl" for="ap_route">최초 유입경로<span class="rq">*</span></label>
+            <select class="ap-sel" id="ap_route" name="entry.2118846133" data-req required>
+              <option value="SNS(온라인 명함, 인스타그램, 유튜브)" selected>SNS(온라인 명함·인스타·유튜브)</option>
+              <option value="인터넷 검색(네이버, 구글 등 포털사이트)">인터넷 검색(네이버·구글 등)</option>
+              <option value="네이버 블로그">네이버 블로그</option>
+              <option value="지인 소개">지인 소개</option>
+              <option value="기타">기타</option>
+            </select>
+          </div>
+          <div class="ap-field">
+            <label class="ap-lbl" for="ap_tax">세금 체납 유무</label>
+            <select class="ap-sel" id="ap_tax" name="entry.1949056294" data-optional>
+              <option value="" selected>선택 안 함</option>
+              <option value="세금체납 없음">세금체납 없음</option>
+              <option value="세급체납 중">세금체납 중</option>
+            </select>
+          </div>
+
+          <div class="ap-field full">
+            <label class="ap-lbl">상담 유형 <span style="font-weight:600;color:#8ba39d">(중복 선택 가능)</span><span class="rq">*</span></label>
+            <div class="ap-chips">
+              <label class="ap-chip"><input type="checkbox" name="entry.1210990703" value="정책자금(중진공/소진공/신보/기보/재단 등)"><span>정책자금</span></label>
+              <label class="ap-chip"><input type="checkbox" name="entry.1210990703" value="정부지원사업(무상지원금/바우처사업)"><span>정부지원사업</span></label>
+              <label class="ap-chip"><input type="checkbox" name="entry.1210990703" value="기업 인증(벤처,연구소,이노비즈,메인비즈,ISO인증 등)"><span>기업 인증</span></label>
+              <label class="ap-chip"><input type="checkbox" name="entry.1210990703" value="법인 전환 / 법적 분쟁 / 인사&amp;노무"><span>법인전환·법률·노무</span></label>
+              <label class="ap-chip"><input type="checkbox" name="entry.1210990703" value="재무 관리(절세, 증여, 상속, 경정청구 등 법인자금 개인화)"><span>재무·절세</span></label>
+              <label class="ap-chip"><input type="checkbox" name="entry.1210990703" value="복지몰 구축 및 사내근로복지기금 설립"><span>복지몰·사내근로복지기금</span></label>
+              <label class="ap-chip"><input type="checkbox" name="entry.1210990703" value="컨설팅 협업 문의"><span>컨설팅 협업</span></label>
+            </div>
+          </div>
+
+          <input type="hidden" name="entry.1340519393" value="">
+
+          <div class="ap-err" id="apErr"></div>
+
+          <label class="ap-consent"><input type="checkbox" id="apAgree"><span>개인정보(성함·연락처·업체정보)의 수집·이용에 동의합니다. 수집된 정보는 상담 목적으로만 이용되며, 목적 달성 후 파기됩니다.</span></label>
+
+          <button type="submit" class="ap-submit" id="apSubmit">전문가 상담 신청하기 →</button>
+        </div>
+      </form>
+
+      <div class="ap-done" id="apDone">
+        <div class="chk"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <h3>신청이 정상 접수되었습니다</h3>
+        <p>담당자가 확인 후 순차적으로 연락드리겠습니다.<br>빠른 상담을 원하시면 아래로 전화 주세요.</p>
+        <div class="ph"><a href="tel:010-2565-7155" style="color:inherit;text-decoration:none">📞 010-2565-7155</a></div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- ════ FOOTER ════ -->
@@ -1285,6 +1455,64 @@
       navigator.serviceWorker.register('/sw.js');
     });
   }
+</script>
+
+<script>
+/* ── 상담신청 폼: 검증 + 네이티브 제출(iframe) → 구글폼 접수 → 구글시트 ── */
+(function(){
+  var form = document.getElementById('apForm');
+  if (!form) return;
+  var sink = document.getElementById('apSink');
+  var errBox = document.getElementById('apErr');
+  var doneBox = document.getElementById('apDone');
+  var btn = document.getElementById('apSubmit');
+  var agree = document.getElementById('apAgree');
+  var sent = false;
+
+  /* 유입코드(?code=) 자동 채움 — 캠페인 소스 추적용 */
+  try {
+    var code = new URLSearchParams(location.search).get('code');
+    if (code) { var hid = form.querySelector('input[name="entry.1340519393"]'); if (hid) hid.value = code; }
+  } catch (e) {}
+
+  form.addEventListener('submit', function(e) {
+    /* 재검증 대비: 선택형 재활성화 */
+    form.querySelectorAll('select[data-optional]').forEach(function(s){ s.disabled = false; });
+    errBox.classList.remove('show'); errBox.textContent = '';
+
+    var miss = [];
+    form.querySelectorAll('[data-req]').forEach(function(el){
+      if (!String(el.value || '').trim()) miss.push(el);
+    });
+    var consult = form.querySelectorAll('input[name="entry.1210990703"]:checked').length;
+
+    if (miss.length || consult === 0 || !agree.checked) {
+      e.preventDefault();
+      var msg = [];
+      if (miss.length) msg.push('필수 항목(*)을 모두 입력해 주세요');
+      if (consult === 0) msg.push('상담 유형을 1개 이상 선택해 주세요');
+      if (!agree.checked) msg.push('개인정보 수집·이용에 동의해 주세요');
+      errBox.textContent = msg.join('   ·   ');
+      errBox.classList.add('show');
+      (miss[0] || errBox).scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (miss[0] && miss[0].focus) { try { miss[0].focus(); } catch (_) {} }
+      return;
+    }
+    /* 미선택 선택형(세금체납)은 빈 값 전송 방지 위해 제외 */
+    form.querySelectorAll('select[data-optional]').forEach(function(s){ if (!s.value) s.disabled = true; });
+    /* 검증 통과 → 네이티브 제출이 숨은 iframe으로 진행됨 */
+    sent = true;
+    btn.disabled = true; btn.textContent = '접수 중…';
+  });
+
+  /* iframe 로드 = 구글 접수 완료 → 성공 화면 전환 */
+  sink.addEventListener('load', function(){
+    if (!sent) return;          /* 최초 빈 로드는 무시 */
+    form.style.display = 'none';
+    doneBox.classList.add('show');
+    doneBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+})();
 </script>
 </body>
 </html>
