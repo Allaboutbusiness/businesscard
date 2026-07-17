@@ -1,4 +1,4 @@
-import { SUB_SIGNALS, MAJOR_SIGNALS, AGNOSTIC_SIGNALS, AGENCY_NOISE, SUB_TO_MAJOR, INDUSTRY_SUB_EXCLUSION, INDUSTRY_MAJOR_CAUTION, parseIndustry, } from './industries.js';
+import { SUB_SIGNALS, MAJOR_SIGNALS, AGNOSTIC_SIGNALS, AGENCY_NOISE, SUB_TO_MAJOR, INDUSTRY_SUB_EXCLUSION, INDUSTRY_MAJOR_CAUTION, parseIndustry, } from './industries.js?v=20260718';
 export const REGION_KW = {
     '서울': ['서울'], '경기': ['경기'], '인천': ['인천'], '강원': ['강원'],
     '충북': ['충북', '충청북도'], '충남': ['충남', '충청남도'],
