@@ -235,7 +235,7 @@
 </div>
 
 <script type="module">
-import { extractEndDate, hasBracketRegionMismatch, scoreForTrial, stripHtml } from './pgm/matching.js';
+import { extractEndDate, hasRegionMismatch, scoreForTrial, compareScored, stripHtml } from './pgm/matching.js';
 import { INDUSTRY_TREE, INDUSTRY_CATEGORIES, INDUSTRY_SUB_EXCLUSION, INDUSTRY_MAJOR_CAUTION } from './pgm/industries.js';
 
 const REGIONS = ['서울','경기','인천','강원','충북','충남','대전','세종','전북','전남','광주','경북','경남','대구','울산','부산','제주'];
@@ -247,24 +247,18 @@ const $ = (s) => document.querySelector(s);
 const today = () => new Date().toISOString().slice(0, 10);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 
-/* ── 공고 API ── */
-async function fetchPage(page) {
-  const res = await fetch(`/api/programs?page=${page}`);
+/* ── 공고 API: 진행중 전 공고(약 1,400건)를 한 번에 받아 세션 캐시 ── */
+let _allCache = null;
+async function getAllPrograms(onLoading) {
+  if (_allCache) return _allCache;
+  if (onLoading) onLoading();
+  const res = await fetch('/api/programs?pageUnit=2000&page=1');
   const ct = res.headers.get('content-type') || '';
   if (!ct.includes('application/json')) throw new Error(`서버 오류 (${res.status}) — 잠시 후 다시 시도해주세요`);
   const body = await res.json();
   if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
-  return body?.jsonArray ?? [];
-}
-async function fetchPages(n, onProgress) {
-  const out = [];
-  for (let p = 1; p <= n; p++) {
-    if (onProgress) onProgress(p, n);
-    const items = await fetchPage(p);
-    out.push(...items);
-    if (items.length < 20) break;
-  }
-  return out;
+  _allCache = body?.jsonArray ?? [];
+  return _allCache;
 }
 
 /* ── 카드 렌더 ── */
@@ -322,7 +316,7 @@ async function doSearch() {
   $('#searchHead').hidden = true; $('#searchCards').innerHTML = '';
   msg.hidden = false; msg.className = 'msg'; msg.textContent = '공고 로딩 중...';
   try {
-    const all = await fetchPages(5, (p, n) => { msg.textContent = `공고 로딩 중... (${p}/${n})`; });
+    const all = await getAllPrograms(() => { msg.textContent = '전체 공고 불러오는 중...'; });
     let list = all.map((p) => scoreKw(p, kw)).filter((p) => p.score > 0).sort((a, b) => b.score - a.score);
     if ($('#onlyActive').checked) {
       const t = today();
@@ -406,18 +400,18 @@ $('#runMatch').addEventListener('click', async () => {
   const msg = $('#aiMsg'); $('#aiHead').hidden = true; $('#aiCards').innerHTML = '';
   msg.hidden = false; msg.className = 'msg'; msg.textContent = 'AI가 공고를 분석하는 중...';
   try {
-    const all = await fetchPages(3, (p, n) => { msg.textContent = `AI가 공고를 분석하는 중... (${p}/${n})`; });
+    const all = await getAllPrograms(() => { msg.textContent = '전체 공고 분석 중...'; });
     const t = today();
     const active = all.filter((p) => {
       const e = extractEndDate(p.reqstBeginEndDe);
       if (e && e < t) return false;
-      if (region && hasBracketRegionMismatch(p.pblancNm, region)) return false;
+      if (region && hasRegionMismatch(p, region)) return false;
       return true;
     });
     const scored = active
       .map((p) => scoreForTrial(p, major, sub, '', kws, region))
       .filter((p) => p.score > 0)
-      .sort((a, b) => b.score - a.score)
+      .sort(compareScored)
       .slice(0, 15);
     aiList = scored;
     if (!scored.length) { msg.textContent = '조건에 맞는 진행 중인 공고를 찾지 못했습니다. 업종이나 조건을 바꿔 다시 시도해 보세요.'; return; }

@@ -14,6 +14,10 @@ module.exports = async (req, res) => {
   const q = req.query || {};
   const page = String(q.page || '1');
   const keyword = String(q.keyword || '');
+  // pageUnit: 클라이언트가 전 공고(약 1,443건)를 한 번에 받도록 허용. 안전 상한 2000.
+  let pageUnit = parseInt(q.pageUnit, 10);
+  if (!Number.isFinite(pageUnit) || pageUnit < 1) pageUnit = 20;
+  if (pageUnit > 2000) pageUnit = 2000;
 
   const apiKey = process.env.BIZINFO_API_KEY || process.env.NEXT_PUBLIC_BIZINFO_API_KEY;
   if (!apiKey) {
@@ -23,7 +27,7 @@ module.exports = async (req, res) => {
   const params = new URLSearchParams({
     crtfcKey: apiKey,
     dataType: 'json',
-    pageUnit: '20',
+    pageUnit: String(pageUnit),
     pageIndex: page,
   });
   if (keyword) params.set('searchKeyword', keyword);
@@ -53,7 +57,7 @@ module.exports = async (req, res) => {
       }
 
       /* 성공 → CDN 캐시(1시간) + 만료 후 24시간은 stale 서빙하며 백그라운드 갱신 */
-      res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
+      res.setHeader('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
       return res.status(200).json(data);
     } catch (e) {
       lastError = e;
