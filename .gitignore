@@ -1,0 +1,17 @@
+# ─── 환경변수·시크릿 (절대 커밋 금지) ───
+.env
+.env.*
+!.env.example
+*.pem
+*-key.json
+client_secret*.json
+
+# ─── 의존성·빌드 ───
+node_modules/
+.vercel/
+.next/
+
+# ─── OS·에디터 ───
+.DS_Store
+Thumbs.db
+*.log
