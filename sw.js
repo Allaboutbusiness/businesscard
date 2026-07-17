@@ -1,14 +1,9 @@
-const CACHE_NAME = 'namecard-v2';
+const CACHE_NAME = 'namecard-v4';
+/* 앱 셸만 프리캐시(존재하지 않는 파일 금지 — addAll 실패 방지). 큰 이미지는 fetch 시 온디맨드 캐시 */
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/bg.jpg',
-  '/photo.jpg',
-  '/card.jpg',
-  '/logo.png',
-  '/case1.jpg',
-  '/case2.jpg',
   '/icon-192.png',
   '/icon-512.png'
 ];

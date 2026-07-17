@@ -3,13 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>김진기 | 사외 CFO | 오너스 경영연구소</title>
+  <title>오너스경영연구소 전문 컨설팅 그룹 | 정책자금·절세·사외 CFO 컨설팅</title>
+  <meta name="description" content="(주)오너스경영연구소 전문 컨설팅 그룹 — 정책자금·투자·R&amp;D·상속/증여·법인 절세를 변호사·회계사·변리사·세무사·경영지도사가 통합 컨설팅합니다. 사외 CFO 김진기. 3회 무료 상담." />
+  <link rel="canonical" href="https://businesscard-steel.vercel.app/" />
+  <meta name="robots" content="index, follow" />
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#0D9A8C" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="김진기 CFO" />
+  <meta name="apple-mobile-web-app-title" content="오너스경영연구소" />
+  <!-- 파비콘 -->
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" href="/icon-192.png" />
   <link rel="apple-touch-icon" href="/icon-192.png" />
+  <!-- Open Graph / 소셜 공유 미리보기 -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="오너스경영연구소 전문 컨설팅 그룹" />
+  <meta property="og:title" content="오너스경영연구소 전문 컨설팅 그룹 | 정책자금·절세 통합 컨설팅" />
+  <meta property="og:description" content="정책자금·투자·R&amp;D·상속/증여·법인 절세를 각 분야 전문가가 통합 컨설팅. 사외 CFO 김진기. 3회 무료 상담." />
+  <meta property="og:url" content="https://businesscard-steel.vercel.app/" />
+  <meta property="og:image" content="https://businesscard-steel.vercel.app/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="ko_KR" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="오너스경영연구소 전문 컨설팅 그룹" />
+  <meta name="twitter:description" content="정책자금·절세·사외 CFO 통합 컨설팅. 3회 무료 상담." />
+  <meta name="twitter:image" content="https://businesscard-steel.vercel.app/og-image.jpg" />
+  <!-- 폰트 preconnect (로딩 가속) -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;900&display=swap" rel="stylesheet"/>
   <style>
@@ -144,6 +168,7 @@
     /* 모바일: 텍스트 메뉴를 드롭다운으로 */
     @media (max-width: 767px) {
       .nav-toggle { display: flex; }
+      .nav-brand { font-size: 13px; letter-spacing: -.5px; }
       .nav-links {
         position: absolute; top: 100%; left: 0; right: 0;
         flex-direction: column; align-items: stretch; gap: 0;
@@ -809,17 +834,72 @@
     .ap-done .ph{margin-top:16px;font-size:16px;font-weight:700;color:var(--teal-l)}
     @media(max-width:880px){ .ap-wrap{grid-template-columns:1fr;gap:34px} }
     @media(max-width:560px){ .ap-sec{padding:62px 15px 116px} .ap-grid{grid-template-columns:1fr} .ap-formcard{padding:22px 17px} }
+/* ════════════════════════════════
+       전문가 그룹 (TEAM) — CASES 위, 다크 테마 통일
+    ════════════════════════════════ */
+    .team-sec { background: #0f1310; padding: 72px 22px 84px; }
+    .team-head { font-size: clamp(24px, 5vw, 34px); font-weight: 800; color: #fff; letter-spacing: -.6px; line-height: 1.35; margin-bottom: 12px; word-break: keep-all; }
+    .team-sub { font-size: 14px; color: rgba(245,243,237,.6); line-height: 1.7; word-break: keep-all; }
+    .team-block { margin-top: 52px; }
+    .team-label { font-size: 12px; font-weight: 800; letter-spacing: 2px; color: var(--teal-l); margin-bottom: 8px; }
+    .team-title { font-size: clamp(20px, 3.6vw, 26px); font-weight: 800; color: #fff; letter-spacing: -.4px; line-height: 1.4; margin-bottom: 10px; word-break: keep-all; }
+    .team-desc { font-size: 13.5px; color: rgba(245,243,237,.58); line-height: 1.7; max-width: 940px; margin-bottom: 24px; word-break: keep-all; }
+    .team-grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
+    @media (min-width: 620px) { .team-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 900px) { .team-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; } }
+    .member { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.09); border-radius: 16px; padding: 18px; transition: border-color .25s, transform .25s; }
+    .member:hover { border-color: rgba(20,184,166,.45); transform: translateY(-3px); }
+    .member-photo { aspect-ratio: 3 / 4; border-radius: 12px; margin-bottom: 16px; background: linear-gradient(160deg, #232830 0%, #12161d 100%); border: 1px dashed rgba(255,255,255,.14); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+    .member-photo svg { width: 46px; height: 46px; opacity: .32; }
+    .member-photo span { font-size: 12px; color: rgba(255,255,255,.34); letter-spacing: .5px; }
+    .member-role { font-size: 11px; font-weight: 700; color: var(--teal-l); letter-spacing: .5px; margin-bottom: 5px; }
+    .member-name { font-size: 19px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+    .member-name.ph { color: rgba(255,255,255,.4); }
+    .member-sub { font-size: 12.5px; font-weight: 700; color: rgba(245,243,237,.76); line-height: 1.5; margin-bottom: 10px; }
+    .member-desc { font-size: 12.5px; color: rgba(245,243,237,.5); line-height: 1.7; word-break: keep-all; }
+    @media (min-width: 640px) { .team-sec { padding: 84px 40px 96px; } }
+    @media (min-width: 1024px) { .team-sec { padding-left: 60px; padding-right: 60px; } }
+    .member-photo.filled{display:block;border:none;background:none;padding:0;overflow:hidden}
+    .member-photo.filled img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+    /* ── 출시 보완: 접근성·반응형·모션·인쇄 ── */
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto}
+      .hero-video{display:none}
+      .fade-up{opacity:1!important;transform:none!important}
+      *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+    }
+    @supports (min-height:100svh){ .hero{min-height:100svh} }
+    @media (hover:none),(pointer:coarse){
+      .dip .reveal{max-height:none;opacity:1;margin-top:22px}
+      .dip .peek{display:none}
+    }
+    .dip .half:focus-within .reveal{max-height:560px;opacity:1;margin-top:22px}
+    .dip .half:focus-visible,.case-hd:focus-visible{outline:2px solid var(--teal-l);outline-offset:3px}
+    .nav-toggle{width:44px;height:44px}
+    .site-header{padding-left:max(22px,env(safe-area-inset-left));padding-right:max(22px,env(safe-area-inset-right))}
+    .float-cta{bottom:calc(20px + env(safe-area-inset-bottom))}
+    @media print{
+      .fixed-bg,.fixed-bg-overlay,.hero-video,.hero-video-overlay,.float-cta,.site-header,.nav-toggle{display:none!important}
+      body{background:#fff!important}
+      section,footer,.hero,.company-intro,.stats-sec,.team-sec,.cases-sec,.cta-sec,.ap-sec,.dip{background:#fff!important}
+      *{color:#111!important;text-shadow:none!important;box-shadow:none!important}
+    }
   </style>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"ProfessionalService","name":"(주)오너스경영연구소 전문 컨설팅 그룹","alternateName":"오너스경영연구소","description":"정책자금·투자·R&D·상속/증여·법인 절세 통합 컨설팅","url":"https://businesscard-steel.vercel.app/","telephone":"+82-10-2565-7155","email":"jinki.kimmm@gmail.com","foundingDate":"2021-09-01","address":{"@type":"PostalAddress","streetAddress":"국회대로50길 20","addressLocality":"영등포구","addressRegion":"서울","addressCountry":"KR"},"areaServed":"KR","knowsAbout":["정책자금","기업인증","법인 절세","가업승계","R&D 지원사업","투자유치"]}
+  </script>
+  <noscript><style>.fade-up{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
 
 <!-- ════ 상단 고정 헤더 ════ -->
 <header class="site-header" id="siteHeader">
-  <a class="nav-brand" href="#heroSection"><span class="brand-mark"></span>김진기 사외 CFO</a>
+  <a class="nav-brand" href="#heroSection">(주)오너스경영연구소 전문 컨설팅 그룹</a>
   <nav class="nav-links" id="navLinks">
     <a class="nav-link" href="#company">회사소개</a>
     <a class="nav-link" href="#contact">연락처</a>
     <a class="nav-link" href="#services">컨설팅</a>
+    <a class="nav-link" href="#team">전문가</a>
     <a class="nav-link" href="#cases">사례</a>
     <button class="nav-share" id="navShare" type="button" onclick="copyPageUrl(this)" aria-label="페이지 링크 복사">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
@@ -840,41 +920,42 @@
 <!-- ════ HERO ════ -->
 <section class="hero" id="heroSection">
   <video class="hero-video" autoplay muted loop playsinline poster="bg.jpg">
-    <source src="hero-bg.mp4" type="video/mp4">
+    <source src="hero-bg.mp4?v716" type="video/mp4">
   </video>
   <div class="hero-video-overlay"></div>
  <div class="hero-inner">
 
   <!-- 우측 상단: photo.jpg + 약력 (우측정렬) -->
   <div class="hero-profile">
-    <img class="hero-photo vd" src="photo_crop.png" alt="김진기" />
+    <img class="hero-photo vd" src="photo_crop.png?v716" alt="김진기 사외 CFO" fetchpriority="high" decoding="async" />
     <div class="hero-career">
       <div class="hero-career-item">서울시립대학교 졸업</div>
       <div class="hero-career-item">대한민국 육군 중위 전역</div>
-      <div class="hero-career-item">제조 유통 전문 컨설턴트</div>
+      <div class="hero-career-item">제조·유통 전문 컨설턴트</div>
     </div>
   </div>
 
   <!-- 하단 메인 -->
   <div class="hero-main">
-    <div class="hero-name-row">
+    <h1 class="hero-name-row">
       <span class="hero-name">김진기</span>
       <span class="hero-cfo">사외 CFO</span>
-    </div>
+    </h1>
     <div class="hero-tagline">
       자금부터 절세까지,<br>기업의 모든 돈 문제를 해결합니다
     </div>
     <div class="hero-tags">
       <span class="hero-tag">정책자금</span>
-      <span class="hero-tag">기업인증</span>
-      <span class="hero-tag">중소기업 특별 절세</span>
+      <span class="hero-tag">투자</span>
+      <span class="hero-tag">R&amp;D</span>
+      <span class="hero-tag">상속·증여</span>
     </div>
     <a class="hero-cta-btn" href="#apply">
-      <span>3회 무료 상담신청 바로가기</span><span>→</span>
+      <span>3회 무료 상담 신청 바로가기</span><span>→</span>
     </a>
     <a class="hero-cta-btn-inv"
        href="https://jiwonsaup-git-main-allaboutbusiness-projects.vercel.app/programs"
-       target="_blank" rel="noopener">
+       target="_blank" rel="noopener noreferrer">
       <span>정부지원사업 AI 매칭(무료) 바로가기</span><span>→</span>
     </a>
   </div>
@@ -893,11 +974,11 @@
       <div class="ci-row"><dt>회사주소</dt><dd>서울시 영등포구 국회대로 50길 20</dd></div>
       <div class="ci-row"><dt>임직원수</dt><dd class="amber">전문 컨설턴트 50명 (변호사, 회계사, 변리사, 세무사, 경영지도사 등)</dd></div>
       <div class="ci-row"><dt>주요 사업</dt><dd><span class="hl">경영 컨설팅</span> : 정책자금, 기업인증, 가업승계 등<br><span class="hl">기업 보육</span> : AC/VC 투자 및 연계형 지원사업(TIPS, LIPS 등), R&amp;D 지원사업, 기업 밸류에이션 설계</dd></div>
-      <div class="ci-row"><dt>주요 사례</dt><dd>법인 보험을 활용한 법인자금 개인화·상속·증여<br>복지몰 구축, 사내근로복지기금<br>경정청구, 벤처인증 등 절세 액 100억원 이상</dd></div>
+      <div class="ci-row"><dt>주요 사례</dt><dd>법인 보험을 활용한 법인자금 개인화·상속·증여<br>복지몰 구축, 사내근로복지기금<br>경정청구, 벤처인증 등 절세액 100억원 이상</dd></div>
     </dl>
     </div>
     <div class="ci-photo">
-      <img class="ci-photo-sharp" src="az-corp.png" alt="주식회사 오너스경영연구소 사옥" />
+      <img loading="lazy" decoding="async" class="ci-photo-sharp" src="az-corp.png?v716" alt="주식회사 오너스경영연구소 사옥" />
     </div>
   </div>
 </section>
@@ -930,7 +1011,7 @@
 
 <!-- ════ 명함 (contact bar 바로 아래) ════ -->
 <div class="card-band">
-  <img src="card.jpg" alt="김진기 명함" />
+  <img loading="lazy" decoding="async" src="card.jpg?v716" alt="김진기 명함" />
 </div>
 
 <!-- ════ STATS ════ -->
@@ -963,7 +1044,7 @@
   </div>
   <div class="split">
     <div class="half h-fund">
-      <img src="case1.jpg" alt="자금 솔루션"/>
+      <img loading="lazy" decoding="async" src="case1.jpg?v716" alt="자금 솔루션"/>
       <span class="scrim"></span><span class="edge"></span>
       <span class="num">01</span>
       <div class="dbody">
@@ -982,7 +1063,7 @@
       <span class="peek">＋ 5가지 자금 솔루션 보기</span>
     </div>
     <div class="half h-tax">
-      <img src="case2.jpg" alt="절세 솔루션"/>
+      <img loading="lazy" decoding="async" src="case2.jpg?v716" alt="절세 솔루션"/>
       <span class="scrim"></span><span class="edge"></span>
       <span class="num">02</span>
       <div class="dbody">
@@ -1003,11 +1084,100 @@
   </div>
 </section>
 
+<!-- ════ 전문가 그룹 (TEAM) ════ -->
+<section class="team-sec" id="team">
+ <div class="wrap">
+  <div class="sec-eyebrow ew-teal">PROFESSIONALS</div>
+  <h2 class="team-head">최고의 전문성, 하나의 팀</h2>
+  <p class="team-sub">각 분야 최고의 전문가들이 하나의 팀이 되어 기업의 성장을 함께 설계합니다.</p>
+
+    <div class="team-block">
+      <div class="team-label">TEAM 01</div>
+      <h3 class="team-title">정책자금 전문팀</h3>
+      <p class="team-desc">경영지도사와 경영컨설턴트가 재무제표 평가·분석을 기반으로 기업에 최적화된 정책자금 조달과 사후 운영을 책임집니다.</p>
+      <div class="team-grid">
+        <div class="member">
+          <div class="member-photo filled"><img loading="lazy" decoding="async" src="team-jokiyeol.jpg?v716" alt="조기열"></div>
+          <div class="member-role">경영지도사</div>
+          <div class="member-name">조기열</div>
+          <div class="member-sub">재무제표 평가 · 분석 · 정책자금 상담 지원 총괄</div>
+          <p class="member-desc">정책자금 전문팀을 총괄하며, 기업의 재무 상태를 정밀 진단해 최적의 자금 조달 전략을 설계합니다.</p>
+        </div>
+        <div class="member">
+          <div class="member-photo filled"><img loading="lazy" decoding="async" src="team-jinki.jpg?v716" alt="김진기"></div>
+          <div class="member-role">사외 CFO</div>
+          <div class="member-name">김진기</div>
+          <div class="member-sub">기업 진단 · 자금 조달 로드맵 수립 · 실무 컨설팅</div>
+          <p class="member-desc">기업의 성장 단계별 자금 수요를 분석하여 정책자금 신청 전략과 심사 대응을 밀착 지원합니다.</p>
+        </div>
+        <div class="member">
+          <div class="member-photo filled"><img loading="lazy" decoding="async" src="team-yuwooseon.jpg?v716" alt="유우선"></div>
+          <div class="member-role">수석 경영컨설턴트</div>
+          <div class="member-name">유우선</div>
+          <div class="member-sub">정책자금 총괄 운영 관리 담당</div>
+          <p class="member-desc">정책자금 집행 후 사후 관리와 운영 전반을 총괄하여 기업의 자금 활용 효율을 극대화합니다.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="team-block">
+      <div class="team-label">TEAM 02</div>
+      <h3 class="team-title">정책지원금(투자·R&amp;D) 전문팀</h3>
+      <p class="team-desc">AC/VC 투자 연계와 TIPS·LIPS 등 정부지원사업, R&amp;D 과제 기획부터 선정·수행까지 성장 단계에 맞춰 지원합니다.</p>
+      <div class="team-grid">
+        <div class="member">
+          <div class="member-photo filled"><img loading="lazy" decoding="async" src="team-ryuyeju.jpg?v716" alt="류예주"></div>
+          <div class="member-role">AC 대표</div>
+          <div class="member-name">류예주</div>
+          <div class="member-sub">기업의 투자 유치 및 정부지원사업 총괄 운영 관리 담당</div>
+          <p class="member-desc">기업의 성장 단계에 맞는 투자 전략 및 유치, 정부지원사업 전반의 컨설팅을 진행합니다.</p>
+        </div>
+        <div class="member">
+          <div class="member-photo filled"><img loading="lazy" decoding="async" src="team-leeseungwon.jpg?v716" alt="이승원"></div>
+          <div class="member-role">행정사</div>
+          <div class="member-name">이승원</div>
+          <div class="member-sub">인증 · 사업화 · R&amp;D 지원금 상담 운영 총괄</div>
+          <p class="member-desc">벤처·이노비즈 등 기업 인증과 사업화·R&amp;D 정책지원금 조달까지 행정 전 과정을 직접 책임지고 운영합니다.</p>
+        </div>
+        <div class="member">
+          <div class="member-photo filled"><img loading="lazy" decoding="async" src="team-anjisu.jpg?v717" alt="안지수"></div>
+          <div class="member-role">변리사</div>
+          <div class="member-name">안지수</div>
+          <div class="member-sub">특허 · 지식재산권 지원 관리 총괄</div>
+          <p class="member-desc">핵심 기술을 국내외 특허로 권리화하고 IP 포트폴리오 전 주기를 총괄 관리합니다.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="team-block">
+      <div class="team-label">TEAM 03</div>
+      <h3 class="team-title">기업자문 전문팀</h3>
+      <p class="team-desc">세무·법무·인증 등 각 분야 전문가가 기업 경영 전반을 자문하여 리스크를 관리하고 기업 가치를 높입니다.</p>
+      <div class="team-grid">
+        <div class="member">
+          <div class="member-photo filled"><img loading="lazy" decoding="async" src="team-chaeyonghyun.jpg?v716" alt="채용현"></div>
+          <div class="member-role">변호사 · 세무사 · 변리사</div>
+          <div class="member-name">채용현</div>
+          <div class="member-sub">법률 · 세무 · IP · 등기 · 추심 · 상속 분쟁 · 자산관리</div>
+          <p class="member-desc">조세자문, 조세불복, 세무조사, 상속·기업자문, 지식재산권 자문까지 법률과 세무 영역을 함께 검토하는 통합형 전문가입니다.</p>
+        </div>
+        <div class="member">
+          <div class="member-photo filled"><img loading="lazy" decoding="async" src="team-songgihoon.jpg?v716" alt="송기훈"></div>
+          <div class="member-role">회계사</div>
+          <div class="member-name">송기훈</div>
+          <div class="member-sub">회계 및 조세 전문, 세무기장</div>
+          <p class="member-desc">국내 최상위 조세전문가로서 체계적인 세무기장부터 고난도 회계·조세 솔루션까지 한 번에 해결합니다.</p>
+        </div>
+      </div>
+    </div>
+ </div>
+</section>
+
 <!-- ════ CASES ════ -->
 <section class="cases-sec" id="cases">
  <div class="wrap">
   <div class="sec-eyebrow ew-teal">CASES</div>
-  <div class="sec-title-light fade-up">실제 컨설팅 사례</div>
+  <h2 class="sec-title-light fade-up">실제 컨설팅 사례</h2>
 
   <div class="case-list">
 
@@ -1194,7 +1364,7 @@
 <section class="cta-sec">
   <div class="cta-glow"></div>
  <div class="wrap">
-  <img class="cta-logo" src="logo.png" alt="오너스 경영연구소" />
+  <img loading="lazy" decoding="async" class="cta-logo" src="logo.png?v716" alt="오너스경영연구소" />
   <div class="cta-title fade-up">
     돈(錢)에 관한 모든 것,<br>
     함께 이야기 나눌<br>
@@ -1214,7 +1384,7 @@
       <div class="ap-info">
         <div class="ap-card"><div class="k">전화 상담</div><div class="v"><a href="tel:010-2565-7155">010-2565-7155</a></div></div>
         <div class="ap-card"><div class="k">이메일</div><div class="v"><a href="mailto:jinki.kimmm@gmail.com">jinki.kimmm@gmail.com</a></div></div>
-        <div class="ap-card"><div class="k">담당</div><div class="v">김진기 · 사외 CFO<br>오너스 경영연구소</div></div>
+        <div class="ap-card"><div class="k">담당</div><div class="v">김진기 · 사외 CFO<br>오너스경영연구소</div></div>
       </div>
     </div>
 
@@ -1316,9 +1486,9 @@
 
           <input type="hidden" name="entry.1340519393" value="">
 
-          <div class="ap-err" id="apErr"></div>
+          <div class="ap-err" id="apErr" role="alert" aria-live="assertive"></div>
 
-          <label class="ap-consent"><input type="checkbox" id="apAgree"><span>개인정보(성함·연락처·업체정보)의 수집·이용에 동의합니다. 수집된 정보는 상담 목적으로만 이용되며, 목적 달성 후 파기됩니다.</span></label>
+          <label class="ap-consent"><input type="checkbox" id="apAgree"><span>[필수] 성함·연락처·업체명·사업소재지·업종·매출/직원규모·상담유형 등 상담 신청 정보의 수집·이용에 동의합니다. 수집 정보는 상담 목적으로만 이용되며 구글폼·구글시트(Google, 미국)에 저장·처리위탁됩니다. 자세한 내용은 <a href="/privacy.html" target="_blank" rel="noopener noreferrer" style="color:var(--teal-l)">개인정보처리방침</a> 참조. 동의를 거부할 수 있으나 거부 시 상담 신청이 제한됩니다.</span></label>
 
           <button type="submit" class="ap-submit" id="apSubmit">전문가 상담 신청하기 →</button>
         </div>
@@ -1338,14 +1508,15 @@
 <footer class="footer">
  <div class="wrap">
   <div class="footer-btns">
-    <a class="footer-btn fbtn-home" href="https://ownersmri.com/" target="_blank" rel="noopener">
-      오너스 경영연구소 홈페이지
+    <a class="footer-btn fbtn-home" href="https://ownersmri.com/" target="_blank" rel="noopener noreferrer">
+      오너스경영연구소 홈페이지
     </a>
-    <a class="footer-btn fbtn-yt" href="https://www.youtube.com/@ownersmri" target="_blank" rel="noopener">
+    <a class="footer-btn fbtn-yt" href="https://www.youtube.com/@ownersmri" target="_blank" rel="noopener noreferrer">
       유튜브 채널 바로가기
     </a>
   </div>
-  <div class="footer-copy">© 2025 오너스 경영연구소 · 김진기 · 010-2565-7155</div>
+  <div class="footer-copy">© 2026 (주)오너스경영연구소 전문 컨설팅 그룹 · 김진기 · 010-2565-7155 · <a href="/privacy.html" style="color:rgba(245,243,237,.5);text-decoration:underline">개인정보처리방침</a></div>
+  <div class="footer-copy" style="margin-top:8px;font-size:10.5px;line-height:1.6">※ 게시된 상담 사례·성과 수치는 특정 기업의 결과이며 모든 기업에 동일하게 적용되지 않습니다.</div>
  </div>
 </footer>
 
@@ -1373,10 +1544,18 @@
     });
   })();
 
-  /* ── 아코디언 ── */
+  /* ── 아코디언 (키보드 접근 지원) ── */
   function toggleCase(id) {
-    document.getElementById(id).classList.toggle('open');
+    var el = document.getElementById(id);
+    var open = el.classList.toggle('open');
+    el.setAttribute('aria-expanded', open ? 'true' : 'false');
   }
+  document.querySelectorAll('.case-card').forEach(function(c){
+    c.setAttribute('role','button'); c.setAttribute('tabindex','0'); c.setAttribute('aria-expanded','false');
+    c.addEventListener('keydown', function(ev){
+      if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); toggleCase(c.id); }
+    });
+  });
 
   /* ── 공유하기: 페이지 URL 클립보드 복사 + "복사됨!" 피드백 ── */
   function copyPageUrl(btn) {
@@ -1431,8 +1610,10 @@
     var statsIo = new IntersectionObserver(function(entries) {
       if (entries[0].isIntersecting && !statsStarted) {
         statsStarted = true;
+        var _rm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
         document.querySelectorAll('.count').forEach(function(el) {
-          countUp(el, parseInt(el.dataset.target, 10));
+          var _t = parseInt(el.dataset.target, 10);
+          if (_rm) { el.textContent = _t; } else { countUp(el, _t); }
         });
         statsIo.disconnect();
       }
@@ -1440,14 +1621,18 @@
     statsIo.observe(statsEl);
   }
 
-  /* ── 플로팅 CTA ── */
+  /* ── 플로팅 CTA: 히어로 벗어나면 표시, 상담폼 도달 시 숨김 ── */
   var heroEl  = document.getElementById('heroSection');
   var floatEl = document.getElementById('floatCta');
+  var applyEl = document.getElementById('apply');
   if (heroEl && floatEl) {
-    new IntersectionObserver(function(entries) {
-      floatEl.classList.toggle('show', !entries[0].isIntersecting);
-    }, { threshold: 0.05 }).observe(heroEl);
+    var heroOut = false, applyIn = false;
+    var updFloat = function(){ floatEl.classList.toggle('show', heroOut && !applyIn); };
+    new IntersectionObserver(function(e){ heroOut = !e[0].isIntersecting; updFloat(); }, { threshold: 0.05 }).observe(heroEl);
+    if (applyEl) new IntersectionObserver(function(e){ applyIn = e[0].isIntersecting; updFloat(); }, { threshold: 0.12 }).observe(applyEl);
   }
+  /* ── 모션 최소화 선호 시: 배경영상 정지 ── */
+  try { if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) { var _v=document.querySelector('.hero-video'); if(_v){_v.pause();_v.removeAttribute('autoplay');} } } catch(e){}
 
   /* ── Service Worker 등록 ── */
   if ('serviceWorker' in navigator) {
