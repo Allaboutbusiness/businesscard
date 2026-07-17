@@ -2,8 +2,11 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
+    { "source": "/index-team-v2", "destination": "/", "permanent": true },
     { "source": "/index-team-v2.html", "destination": "/", "permanent": true },
+    { "source": "/index-team", "destination": "/", "permanent": true },
     { "source": "/index-team.html", "destination": "/", "permanent": true },
+    { "source": "/team", "destination": "/", "permanent": true },
     { "source": "/team.html", "destination": "/", "permanent": true }
   ],
   "headers": [
