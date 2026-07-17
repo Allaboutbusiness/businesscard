@@ -235,7 +235,7 @@
 </div>
 
 <script type="module">
-import { extractEndDate, hasRegionMismatch, scoreForTrial, compareScored, stripHtml } from './pgm/matching.js';
+import { extractEndDate, hasBracketRegionMismatch, scoreForTrial, stripHtml } from './pgm/matching.js';
 import { INDUSTRY_TREE, INDUSTRY_CATEGORIES, INDUSTRY_SUB_EXCLUSION, INDUSTRY_MAJOR_CAUTION } from './pgm/industries.js';
 
 const REGIONS = ['서울','경기','인천','강원','충북','충남','대전','세종','전북','전남','광주','경북','경남','대구','울산','부산','제주'];
@@ -411,13 +411,13 @@ $('#runMatch').addEventListener('click', async () => {
     const active = all.filter((p) => {
       const e = extractEndDate(p.reqstBeginEndDe);
       if (e && e < t) return false;
-      if (region && hasRegionMismatch(p, region)) return false;
+      if (region && hasBracketRegionMismatch(p.pblancNm, region)) return false;
       return true;
     });
     const scored = active
       .map((p) => scoreForTrial(p, major, sub, '', kws, region))
       .filter((p) => p.score > 0)
-      .sort(compareScored)
+      .sort((a, b) => b.score - a.score)
       .slice(0, 15);
     aiList = scored;
     if (!scored.length) { msg.textContent = '조건에 맞는 진행 중인 공고를 찾지 못했습니다. 업종이나 조건을 바꿔 다시 시도해 보세요.'; return; }
