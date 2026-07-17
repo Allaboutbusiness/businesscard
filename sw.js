@@ -1,8 +1,7 @@
-const CACHE_NAME = 'namecard-v4';
-/* 앱 셸만 프리캐시(존재하지 않는 파일 금지 — addAll 실패 방지). 큰 이미지는 fetch 시 온디맨드 캐시 */
+const CACHE_NAME = 'namecard-v5';
+/* 앱 셸만 프리캐시. cleanUrls로 /index.html은 308 리다이렉트되므로 '/'만 캐시(redirected 응답 방지) */
 const STATIC_ASSETS = [
   '/',
-  '/index.html',
   '/manifest.json',
   '/icon-192.png',
   '/icon-512.png'
@@ -41,7 +40,7 @@ self.addEventListener('fetch', event => {
           caches.open(CACHE_NAME).then(c => c.put(event.request, clone));
           return res;
         })
-        .catch(() => caches.match('/index.html'))
+        .catch(() => caches.match('/'))
     );
     return;
   }
