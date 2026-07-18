@@ -307,7 +307,7 @@
     var card = el('<div class="jk-card"><h4>접수 정보</h4>' + rowsHtml + regHtml + consultHtml + '</div>');
     node(card);
     card.querySelectorAll('[data-edit]').forEach(function (b) { b.onclick = function () { editField(b.getAttribute('data-edit')); }; });
-    card.querySelectorAll('[data-region]').forEach(function (b) { b.onclick = function () { answers.region = b.getAttribute('data-region'); renderConfirmCard(); maybeShowContact(); }; });
+    card.querySelectorAll('[data-region]').forEach(function (b) { b.onclick = function () { answers.region = b.getAttribute('data-region'); renderConfirmCard(); }; });
     card.querySelectorAll('[data-cidx]').forEach(function (b) { b.onclick = function () {
       var idx = +b.getAttribute('data-cidx'); if (picked.consult[idx]) delete picked.consult[idx]; else picked.consult[idx] = true;
       b.classList.toggle('jk-strong'); b.classList.toggle('jk-ghost');
@@ -344,6 +344,17 @@
     if (!reduce) { try { telI.focus(); } catch (e) {} }
   }
 
+  // 대화 전체를 담당자용 대화록으로 — 접수 시 hidden 필드에 실려 구글시트로 전달
+  function buildTranscript() {
+    if (!logEl) return '';
+    var rows = logEl.querySelectorAll('.jk-row'), lines = [];
+    for (var i = 0; i < rows.length; i++) {
+      var m = rows[i].querySelector('.jk-msg'); if (!m) continue;
+      var txt = (m.textContent || '').replace(/\s+/g, ' ').trim(); if (!txt) continue;
+      lines.push((rows[i].className.indexOf('jk-user') > -1 ? '고객: ' : 'AI: ') + txt);
+    }
+    return lines.join('\n');
+  }
   function buildHidden() {
     var consultKo = Object.keys(picked.consult).map(function (i) { return CONSULT_LABELS[i]; });
     var it = answers._interest && INTERESTS[answers._interest];
@@ -369,7 +380,14 @@
     var boxes = apForm.querySelectorAll('input[name="entry.1210990703"]');
     Object.keys(picked.consult).forEach(function (i) { if (boxes[i]) boxes[i].checked = true; });
     if (!Object.keys(picked.consult).length && boxes[0]) boxes[0].checked = true;
-    var hid = F('entry.1340519393'); if (hid) hid.value = (hid.value ? hid.value + ' | ' : '') + buildHidden();
+    var hid = F('entry.1340519393');
+    if (hid) {
+      var base = (hid.value ? hid.value + ' | ' : '') + buildHidden();
+      var tr = buildTranscript();
+      var full = tr ? (base + '\n\n[대화 전체]\n' + tr) : base;
+      if (full.length > 1800) full = full.slice(0, 1800) + ' …(이하 생략)';
+      hid.value = full;
+    }
     if (apAgree) apAgree.checked = true;
     window.__chatDriven = true; submitted = true; setProgress(1);
     try { apForm.requestSubmit ? apForm.requestSubmit() : apForm.submit(); } catch (e) { try { apForm.submit(); } catch (_) {} }
@@ -422,6 +440,7 @@
     panel = el('<div class="jk-panel" role="dialog" aria-label="AI챗봇 상담" hidden>' +
       '<div class="jk-head"><div class="jk-head-logo"><img src="' + LOGO + '" alt=""></div>' +
       '<div class="jk-head-name"><b>AI챗봇</b><span>온라인 상담</span></div>' +
+      '<button class="jk-head-btn" id="jkRestart" aria-label="처음부터 새로 시작" title="처음부터">↺</button>' +
       '<button class="jk-head-btn" id="jkMin" aria-label="최소화">–</button>' +
       '<button class="jk-head-btn" id="jkClose" aria-label="닫기">×</button></div>' +
       '<div class="jk-progress"><div class="jk-progress-fill"></div></div>' +
@@ -430,6 +449,17 @@
     logEl = panel.querySelector('.jk-log'); inputEl = panel.querySelector('.jk-input'); progFill = panel.querySelector('.jk-progress-fill');
     panel.querySelector('#jkClose').onclick = closePanel;
     panel.querySelector('#jkMin').onclick = closePanel;
+    panel.querySelector('#jkRestart').onclick = restartChat;
+  }
+  // 처음부터 새로 시작 — 대화·상태 전부 초기화 후 재시작
+  function restartChat() {
+    answers = {}; picked = { consult: {} }; contact = { tel:'', name:'', company:'' };
+    submitted = false; exitIntercepted = false; window.__chatDriven = false;
+    if (window.__jkOkTimer) { clearTimeout(window.__jkOkTimer); window.__jkOkTimer = null; }
+    if (logEl) logEl.innerHTML = '';
+    if (inputEl) inputEl.innerHTML = '';
+    setProgress(0);
+    startConversation();
   }
   function buildLauncher() {
     launcher = el('<button class="jk-launcher" aria-label="AI챗봇 상담 열기">' +
