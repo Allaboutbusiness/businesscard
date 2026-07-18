@@ -899,6 +899,7 @@
   {"@context":"https://schema.org","@type":"ProfessionalService","name":"(주)오너스경영연구소 전문 컨설팅 그룹","alternateName":"오너스경영연구소","description":"정책자금·투자·R&D·상속/증여·법인 절세 통합 컨설팅","url":"https://businesscard-steel.vercel.app/","telephone":"+82-1668-5033","email":"jinki.kimmm@gmail.com","foundingDate":"2021-09-01","address":{"@type":"PostalAddress","streetAddress":"국회대로50길 20","addressLocality":"영등포구","addressRegion":"서울","addressCountry":"KR"},"areaServed":"KR","knowsAbout":["정책자금","기업인증","법인 절세","가업승계","R&D 지원사업","투자유치"]}
   </script>
   <noscript><style>.fade-up{opacity:1!important;transform:none!important}</style></noscript>
+  <link rel="stylesheet" href="/chatbot.css?v=20260718">
 </head>
 <body>
 
@@ -1704,11 +1705,18 @@
   /* iframe 로드 = 구글 접수 완료 → 성공 화면 전환 */
   sink.addEventListener('load', function(){
     if (!sent) return;          /* 최초 빈 로드는 무시 */
+    /* 챗봇 등 다른 진입점이 구독할 수 있게 성공 이벤트 발행(가드된 지점) */
+    try { document.dispatchEvent(new CustomEvent('apSubmitOk')); } catch (_) {}
     form.style.display = 'none';
     doneBox.classList.add('show');
-    doneBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    /* 챗봇 주도 제출이면 스크롤 억제(사용자는 톡 안에 잔류) */
+    if (!window.__chatDriven) doneBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
 })();
 </script>
+
+<!-- ════ 상담유도 챗봇 (clean-room · Type A 비노출) ════ -->
+<script src="/diag-rules.js?v=20260718" defer></script>
+<script src="/chatbot.js?v=20260718" defer></script>
 </body>
 </html>
