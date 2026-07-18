@@ -1,6 +1,12 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "rewrites": [
+    { "source": "/post/:id", "destination": "/api/render-post?id=:id" },
+    { "source": "/notice", "destination": "/api/render-list?category=notice" },
+    { "source": "/posts", "destination": "/api/render-list?category=post" },
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" }
+  ],
   "redirects": [
     { "source": "/index-team-v2", "destination": "/", "permanent": true },
     { "source": "/index-team", "destination": "/", "permanent": true },
