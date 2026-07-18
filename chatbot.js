@@ -11,7 +11,7 @@
   if (window.__jkChatInit) return; window.__jkChatInit = true;
 
   var AP_OK_EVENT = 'apSubmitOk';
-  var LOGO = '/logogo.png';
+  var LOGO = '/logogo.png?v=20260718d';  // ?v= 필수: 이전 404가 브라우저에 캐시돼 있어 쿼리로 우회
   var TEL = '1668-5033';
   var PRIVACY = '/privacy';
   var reduce = false;
