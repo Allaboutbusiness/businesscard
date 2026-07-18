@@ -148,29 +148,30 @@
     return value;
   }
 
-  /* ── 진단 드라이버(마커 기반 되돌아가기) ── */
-  function runDiagnosis() {
+  /* ── 스텝 드라이버(마커 기반 되돌아가기 · 진행바 범위 지원) ── */
+  function runSteps(list, onDone, pFrom, pTo) {
+    pFrom = pFrom || 0; pTo = pTo || 0;
     var i = 0, marks = [];
-    setProgress(0);
     function step() {
-      if (i >= STEPS.length) { return showResult(); }
-      var s = STEPS[i];
+      if (i >= list.length) { return onDone(); }
+      var s = list[i];
       marks[i] = logMark();
       var intro = s.q + (s.sub ? '<br><span style="color:#8391a0;font-size:12px">' + s.sub + '</span>' : '');
       say(intro).then(function () {
         showQuick(s.opts, function (v) {
           userSay(labelOf(s, v));
           answers[s.id] = v;
-          setProgress((i + 1) / STEPS.length);
+          if (pTo > pFrom) setProgress(pFrom + ((i + 1) / list.length) * (pTo - pFrom));
           clearInput();
           var r = s.react && s.react(v);
           var done = function () { i++; step(); };
           if (r) say(r, 260).then(done); else done();
-        }, { back: i > 0 ? function () { i--; logTruncate(marks[i]); setProgress(i / STEPS.length); step(); } : null });
+        }, { back: i > 0 ? function () { i--; logTruncate(marks[i]); step(); } : null });
       });
     }
     step();
   }
+  function runDiagnosis() { runSteps(STEPS, showResult, 0.15, 0.6); }
   function setProgress(p) { if (progFill) progFill.style.width = Math.round(Math.max(0, Math.min(1, p)) * 100) + '%'; }
 
   /* ── 3막: Type B 티저 결과 (clean-room) ── */
@@ -290,19 +291,24 @@
       showQuick([
         { label:'무료 상담 신청할게요', value:'apply', strong:true },
         { label:'📞 통화로 바로 상담 ' + TEL, tel:true, href:'tel:' + TEL }
-      ], function () { clearInput(); startHandoff(); }, { type:false });
+      ], function () { clearInput(); startHandoff([0, 1]); }, { type:false });
     });
   }
 
-  /* ── 4막: 핸드오프 ── */
-  function defaultConsult() {
-    picked.consult = {}; picked.consult[0] = true; picked.consult[1] = true; picked.consult[2] = true; // 정책자금·정부지원사업·기업인증
+  /* ── 4막: 핸드오프 (관심사/진단 공통) ── */
+  var QUALIFY_IDS = ['sector', 'bizType', 'revenue', 'employees'];
+  function runQualify(onDone) {
+    var need = QUALIFY_IDS.filter(function (id) { return !answers[id]; })
+      .map(function (id) { for (var i = 0; i < STEPS.length; i++) if (STEPS[i].id === id) return STEPS[i]; }).filter(Boolean);
+    if (!need.length) return onDone();
+    say('접수 전에 딱 몇 개만 확인할게요. 😊').then(function () { runSteps(need, onDone, 0.55, 0.8); });
   }
-  function startHandoff() {
-    setProgress(0.82);
-    defaultConsult();
-    say('좋아요. 이대로 맞나 한 번만 봐주세요.').then(function () {
-      renderConfirmCard();
+  function startHandoff(consultIndices) {
+    picked.consult = {};
+    (consultIndices || [0]).forEach(function (idx) { picked.consult[idx] = true; });
+    runQualify(function () {
+      setProgress(0.82);
+      say('좋아요. 이대로 맞나 한 번만 봐주세요.').then(function () { renderConfirmCard(); });
     });
   }
 
@@ -406,7 +412,9 @@
 
   function buildHidden() {
     var consultKo = Object.keys(picked.consult).map(function (i) { return CONSULT_LABELS[i]; });
-    var parts = ['[챗봇진단]',
+    var it = answers._interest && INTERESTS[answers._interest];
+    var parts = ['[챗봇]',
+      it ? '문의:' + it.label.replace(/\s*\(.*\)/, '') : '문의:진단',
       '업종:' + (SECTOR_KO[answers.sector] || ''),
       '직원:' + (EMP_FORM[answers.employees] || ''),
       '매출:' + (REV_FORM[answers.revenue] || ''),
@@ -487,28 +495,133 @@
     showQuick([
       { label:'무료 상담 신청할게요', value:'apply', strong:true },
       { label:'📞 통화 ' + TEL, tel:true, href:'tel:' + TEL }
-    ], function () { clearInput(); startHandoff(); }, { type:false });
+    ], function () { clearInput(); startHandoff([0, 1]); }, { type:false });
   }
 
-  /* ── 시작 인사 ── */
+  /* ── 관심사 분기 설정 (녹음본으로 대사 보완 예정) ──
+   * info 문구는 Type B(마스킹 프로그램명)까지만. 정식명·기관실명·금리·한도 금지. */
+  var INTERESTS = {
+    policy: { label:'정책자금 (사업 자금)', consult:[0],
+      narrow:{ q:'지금 어떤 상황이세요?', opts:[
+        {label:'운영자금이 필요해요', value:'run'},{label:'창업·예비단계예요', value:'startup'},
+        {label:'시설·설비 투자', value:'facility'},{label:'이미 알아보는 중', value:'already'}]},
+      menu:{ q:'어떤 게 제일 궁금하세요?', opts:[
+        {label:'① 어떤 자금이 열리나', value:'what'},{label:'② 부결이 걱정돼요', value:'reject'},
+        {label:'③ 준비 서류', value:'docs'},{label:'④ 금리·한도', value:'rate'}]},
+      info:{
+        what:['정책자금은 크게 <b>융자</b>랑 <b>보증</b> 두 갈래예요.',
+              '운영자금이면 ‘경영지원자금’·‘스마트자금’ 계열, 창업 초기면 ‘창업자금’·‘청년창업우대보증’ 쪽을 봐요.',
+              '어떤 게 대표님한테 열리는지는 업종·매출 보고 딱 골라드려요.'],
+        reject:['부결은 대부분 자격이 아니라 <b>순서·서류</b>에서 나거든요.',
+                '재무제표에서 업종이 다르게 잡혔거나, 계획서 순서가 안 맞으면 그 자리에서 갈려요.',
+                '그 부분은 서류 보고 미리 잡아드릴 수 있어요.'],
+        docs:['서류 자체는 생각보다 간단해요.',
+              '문제는 ‘무엇을 먼저 갖추느냐’ 순서거든요. 그게 선정률을 바꿔요.',
+              '대표님 상황 보고 딱 필요한 것만 정리해드릴게요.'],
+        rate:['금리·한도는 자금 종류랑 심사 등급마다 달라서요.',
+              '여기서 숫자로 못 박으면 오히려 손해예요. 그건 통화로 정확히 알려드릴게요.']}},
+    support: { label:'정부지원사업 (무상·바우처)', consult:[1],
+      narrow:{ q:'어떤 지원을 원하세요?', opts:[
+        {label:'무상 지원금(창업)', value:'grant'},{label:'R&D·기술개발', value:'rd'},
+        {label:'바우처(마케팅·수출)', value:'voucher'},{label:'잘 모르겠어요', value:'unsure'}]},
+      menu:{ q:'조금만 더 좁혀볼게요.', opts:[
+        {label:'① 뭐가 열리나', value:'what'},{label:'② 선정 잘 되려면', value:'win'},{label:'③ 신청 시기', value:'when'}]},
+      info:{
+        what:['창업 단계면 ‘예창(예비창업패키지)’·‘초창(초기창업패키지)’·‘창도(창업도약)’ 라인이 있고요.',
+              'R&D면 ‘디딤돌’·‘팁스(TIPS)’, 마케팅·수출이면 ‘수출지원금’·‘제조지원금’·‘AI지원금’ 바우처가 있어요.',
+              '대표님 업력·업종에 맞는 걸로 골라드릴게요.'],
+        win:['무상지원은 <b>사업계획서</b>가 8할이에요.',
+             '같은 조건이어도 계획서 설계에서 선정이 갈리거든요.',
+             '그 부분을 같이 잡으면 확률이 확 올라가요.'],
+        when:['이건 공고 <b>타이밍</b>이 제일 중요해요.',
+              '연초·분기 초에 몰려 열리고, 놓치면 다음 회차까지 기다려야 하거든요.',
+              '지금 임박한 게 있는지 봐드릴게요.']}},
+    invest: { label:'투자 유치·연계', consult:[0,1],
+      narrow:{ q:'투자 쪽은 어떤 상황이세요?', opts:[
+        {label:'투자를 받고 싶어요', value:'raise'},{label:'이미 투자받았어요', value:'got'},
+        {label:'투자+정책자금 같이', value:'both'},{label:'잘 모르겠어요', value:'unsure'}]},
+      menu:{ q:'어떤 게 궁금하세요?', opts:[
+        {label:'① 투자 연계로 열리는 것', value:'link'},{label:'② 투자 유치 준비', value:'prep'},{label:'③ R&D 연계(팁스)', value:'tips'}]},
+      info:{
+        link:['투자는 유치부터 연계까지 같이 봐요.',
+              '투자를 받으면 ‘투자매칭융자’·‘투자연계보증’처럼 자금이 <b>더</b> 열리는 연계 상품이 있거든요.',
+              '투자랑 정책자금을 엮으면 조달 규모가 커져요.'],
+        prep:['투자 유치는 <b>IR 자료</b>랑 재무 구조가 핵심이에요.',
+              '숫자랑 스토리가 안 맞으면 미팅에서 갈리거든요.',
+              'IR부터 연계 자금까지 같이 설계해드려요.'],
+        tips:['R&D로 가시면 ‘팁스(TIPS)’ 같은 투자연계 지원이 있어요.',
+              '민간 투자랑 정부 R&D가 같이 붙는 구조라 준비가 좀 달라요.',
+              '대표님 단계 보고 맞는 루트로 잡아드릴게요.']}},
+    tax: { label:'절세·상속·증여', consult:[4],
+      narrow:{ q:'어떤 쪽이 고민이세요?', opts:[
+        {label:'세금이 너무 많아요', value:'heavy'},{label:'가업 상속·증여', value:'succession'},
+        {label:'법인 자금을 개인으로', value:'personal'},{label:'가지급금 정리', value:'loan'}]},
+      menu:null,
+      info:{
+        heavy:['세금은 <b>구조</b>를 먼저 봐요.','매출 구간마다 아낄 수 있는 방식이 다르거든요.','재무제표 보고 대표님한테 맞는 절세 순서를 잡아드릴게요.'],
+        succession:['상속·증여는 <b>미리</b> 설계하면 세금이 크게 갈려요.','몇 년 앞서 준비하느냐에 따라 차이가 크거든요.','시점부터 같이 잡는 게 핵심이에요.'],
+        personal:['법인 자금을 대표님 개인으로 넘기는 <b>합법적인 순서</b>가 있어요.','급여·배당·퇴직금을 어떻게 엮느냐로 세금이 달라지거든요.','구조를 보고 설계해드릴게요.'],
+        loan:['가지급금은 오래 두면 <b>이자·세금</b>이 계속 붙어요.','정리 순서를 잘못 잡으면 오히려 세금이 늘거든요.','대표님 상황 보고 정리 로드맵을 짜드릴게요.']}},
+    corp: { label:'법인전환·노무·법률', consult:[3],
+      narrow:{ q:'어떤 쪽이세요?', opts:[
+        {label:'법인 전환 고민', value:'convert'},{label:'노무·4대보험·인건비', value:'labor'},{label:'계약·법적 분쟁', value:'legal'}]},
+      menu:null,
+      info:{
+        convert:['법인 전환은 <b>매출 구간</b>마다 유불리가 갈려요.','너무 이르면 비용만 늘고, 늦으면 세금을 더 내거든요.','대표님 매출이면 지금이 맞는지 따져드릴게요.'],
+        labor:['노무는 인건비 <b>지원금</b>이랑 같이 봐야 이득이에요.','채용 계획만 잘 맞춰도 받는 게 있거든요.','4대보험·인건비 구조까지 같이 정리해드려요.'],
+        legal:['계약·분쟁은 <b>초기 대응</b>이 제일 중요해요.','상황부터 듣고, 필요하면 변호사·법무사까지 연결해드릴게요.']}}
+  };
+
+  /* ── 시작 인사 + 관심사 선택 ── */
   function startConversation() {
-    if (logEl.children.length) return; // 이미 시작됨(재오픈)
-    say('대표님, 혹시 작년에 받을 수 있던 자금, 그냥 넘기신 건 아니시겠죠?', reduce ? 0 : 500).then(function () {
-      showQuick([
-        { label:'짚어주세요', value:'go', strong:true },
-        { label:'그냥 궁금한 게 있어요', value:'ask', ghost:true }
-      ], function (v) {
-        userSay(v === 'go' ? '짚어주세요' : '그냥 궁금한 게 있어요'); clearInput();
-        if (v === 'ask') {
-          say('정책자금은 예산 한정 선착순이라, 타이밍이 8할이거든요.').then(function () {
-            showQuick([{ label:'그럼 정확히 짚어볼게요', value:'go', strong:true }], function () { clearInput(); introThenDiagnose(); }, { type:false });
-          });
-        } else { introThenDiagnose(); }
-      }, { type:false });
+    if (logEl.children.length) return; // 재오픈이면 이어감
+    say('안녕하세요, 온라인 상담 도우미예요. 😊', reduce ? 0 : 450).then(function () {
+      return say('어떤 게 제일 궁금하세요? 눌러서 골라주시면 바로 짚어드릴게요.');
+    }).then(showInterestMenu);
+  }
+  function showInterestMenu() {
+    showQuick([
+      { label:'정책자금 (사업 자금)', value:'policy', strong:true },
+      { label:'정부지원사업 (무상·바우처)', value:'support' },
+      { label:'투자 유치·연계', value:'invest' },
+      { label:'절세·상속·증여', value:'tax' },
+      { label:'법인전환·노무·법률', value:'corp' },
+      { label:'뭐가 필요한지 모르겠어요', value:'diagnose', ghost:true }
+    ], function (v, o) {
+      userSay(o.label); clearInput(); setProgress(0.15);
+      if (v === 'diagnose') { say('네, 몇 개만 눌러주시면 딱 맞는 걸로 짚어드릴게요. 😊').then(runDiagnosis); }
+      else runInterest(v);
     });
   }
-  function introThenDiagnose() {
-    say('복잡한 건 안 여쭤봐요. 톡톡 눌러만 주시면 지금 놓치는 갈래부터 짚어드릴게요.').then(runDiagnosis);
+  function askOne(q) {
+    return new Promise(function (resolve) {
+      say(q.q).then(function () {
+        showQuick(q.opts, function (v, o) { userSay(o.label); clearInput(); resolve(v); });
+      });
+    });
+  }
+  function sayAll(arr) {
+    return (arr || []).reduce(function (p, b) { return p.then(function () { return say(b); }); }, Promise.resolve());
+  }
+  function runInterest(id) {
+    var it = INTERESTS[id]; if (!it) return;
+    answers._interest = id;
+    say(it.label.replace(/\s*\(.*\)/, '') + ' 쪽이시군요. 😊').then(function () {
+      return askOne(it.narrow);
+    }).then(function (nv) {
+      answers._narrow = nv;
+      if (it.menu) return askOne(it.menu).then(function (mk) { return (it.info[mk] || it.info[nv]); });
+      return it.info[nv];
+    }).then(function (bubbles) {
+      return sayAll(bubbles || ['말씀 주신 것만으로도 방향이 보여요.']);
+    }).then(function () {
+      return say('정확한 건 대표님 조건 몇 개만 보면 딱 짚어드려요. 무료로 봐드릴게요. 😊');
+    }).then(function () {
+      showQuick([
+        { label:'내 조건으로 정확히 상담받기', value:'go', strong:true },
+        { label:'📞 통화로 바로 상담 ' + TEL, tel:true, href:'tel:' + TEL }
+      ], function () { clearInput(); startHandoff(it.consult); }, { type:false });
+    });
   }
 
   /* ── 패널 열기/닫기 ── */
