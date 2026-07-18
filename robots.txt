@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://businesscard-steel.vercel.app/sitemap.xml
+Sitemap: https://ownerskr.com/sitemap.xml
