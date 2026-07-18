@@ -1,0 +1,64 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>글쓰기</title>
+<meta name="robots" content="noindex">
+<style>body{font-family:-apple-system,Pretendard,sans-serif;max-width:760px;margin:0 auto;padding:24px 18px;color:#111}
+h1{font-size:20px}label{display:block;margin:14px 0 4px;font-weight:600;font-size:14px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #ddd;border-radius:8px;font-size:15px;font-family:inherit;box-sizing:border-box}
+textarea{min-height:340px;line-height:1.6}button{padding:11px 18px;background:#0D9A8C;color:#fff;border:0;border-radius:8px;font-weight:700;cursor:pointer}
+.row{display:flex;gap:10px;align-items:center;margin-top:14px}.msg{font-size:13px;color:#0a7}.err{color:#c00}
+.mine li{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #eee;font-size:14px;list-style:none}
+.mine ul{padding:0}.mine a{color:#0D9A8C;text-decoration:none}.del{background:#eee;color:#900;border:0;border-radius:6px;padding:4px 8px;cursor:pointer;font-size:12px}
+.top{display:flex;justify-content:space-between;align-items:center}.cover{max-width:180px;border-radius:8px;margin-top:8px;display:block}</style></head>
+<body>
+<div class="top"><h1>글쓰기</h1><a href="#" id="logout" style="font-size:13px;color:#889">로그아웃</a></div>
+<label>분류</label>
+<select id="cat"><option value="post">게시글</option><option value="notice">공지사항</option></select>
+<label>제목</label><input id="title" placeholder="제목">
+<label>대표사진(선택)</label><input id="cover" type="file" accept="image/*"><img class="cover" id="coverPrev" style="display:none">
+<label>본문(마크다운. 사진은 아래 버튼으로 삽입)</label>
+<textarea id="body" placeholder="## 소제목&#10;내용...&#10;사진은 아래 '본문에 사진 삽입' 버튼 사용"></textarea>
+<div class="row"><input id="inlineImg" type="file" accept="image/*" style="flex:1"><button type="button" id="insertImg">본문에 사진 삽입</button></div>
+<div class="row"><button type="button" id="publish">발행</button><span class="msg" id="msg"></span></div>
+<h2 style="font-size:16px;margin-top:34px">최근 글</h2><ul class="mine" id="mine"></ul>
+<script>
+async function guard(){var r=await fetch('/api/me').then(function(x){return x.json()}).catch(function(){return{}});if(!r.loggedIn)location.href='/login';}
+guard();
+async function uploadFile(file){
+  var b64=await new Promise(function(res){var fr=new FileReader();fr.onload=function(){res(fr.result)};fr.readAsDataURL(file)});
+  var r=await fetch('/api/upload',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({filename:file.name,dataBase64:b64})});
+  if(!r.ok){var e=await r.json().catch(function(){return{}});throw new Error(e.error||'업로드 실패')}
+  return (await r.json()).url;
+}
+document.getElementById('insertImg').onclick=async function(){
+  var f=document.getElementById('inlineImg').files[0];if(!f)return;
+  try{var url=await uploadFile(f);var ta=document.getElementById('body');ta.value+='\n\n!['+f.name+']('+url+')\n';}
+  catch(e){alert(e.message)}
+};
+var coverUrl='';
+document.getElementById('cover').onchange=async function(){
+  var f=this.files[0];if(!f)return;try{coverUrl=await uploadFile(f);var im=document.getElementById('coverPrev');im.src=coverUrl;im.style.display='block';}catch(e){alert(e.message)}
+};
+document.getElementById('publish').onclick=async function(){
+  var msg=document.getElementById('msg');msg.className='msg';msg.textContent='발행 중…';
+  var r=await fetch('/api/posts',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({category:document.getElementById('cat').value,title:document.getElementById('title').value,
+      body:document.getElementById('body').value,coverImage:coverUrl||null})});
+  var d=await r.json().catch(function(){return{}});
+  if(r.ok){msg.textContent='발행 완료 → ';var a=document.createElement('a');a.href=d.url;a.textContent=d.url;a.target='_blank';msg.appendChild(a);
+    document.getElementById('title').value='';document.getElementById('body').value='';coverUrl='';document.getElementById('coverPrev').style.display='none';loadMine();}
+  else{msg.className='msg err';msg.textContent=d.error||'실패';}
+};
+async function loadMine(){
+  var d=await fetch('/api/posts?limit=20').then(function(x){return x.json()}).catch(function(){return{posts:[]}});
+  document.getElementById('mine').innerHTML=(d.posts||[]).map(function(p){
+    var title=String(p.title).replace(/[<>&]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];});
+    return '<li><a href="/post/'+p.id+'" target="_blank">['+(p.category==='notice'?'공지':'글')+'] '+title+'</a><button class="del" data-id="'+p.id+'">삭제</button></li>';
+  }).join('');
+  document.querySelectorAll('.del').forEach(function(b){b.onclick=async function(){
+    if(!confirm('삭제할까요?'))return;await fetch('/api/posts/'+b.dataset.id,{method:'DELETE'});loadMine();
+  }});
+}
+loadMine();
+document.getElementById('logout').onclick=async function(e){e.preventDefault();await fetch('/api/logout',{method:'POST'});location.href='/';};
+</script></body></html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>관리자 로그인</title>
+<meta name="robots" content="noindex">
+<style>body{font-family:-apple-system,Pretendard,sans-serif;display:grid;place-items:center;min-height:100vh;margin:0;background:#f7f8f8}
+.card{background:#fff;padding:28px;border-radius:14px;box-shadow:0 6px 30px rgba(0,0,0,.08);width:300px}
+h1{font-size:18px;margin:0 0 16px}input{width:100%;padding:11px;margin:6px 0;border:1px solid #ddd;border-radius:8px;font-size:15px;box-sizing:border-box}
+button{width:100%;padding:12px;margin-top:8px;background:#0D9A8C;color:#fff;border:0;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer}
+.err{color:#c00;font-size:13px;min-height:18px;margin-top:6px}a{color:#0D9A8C;font-size:13px}</style></head>
+<body><form class="card" id="f">
+<h1>관리자 로그인</h1>
+<input id="u" placeholder="아이디" autocomplete="username">
+<input id="p" type="password" placeholder="비밀번호" autocomplete="current-password">
+<button type="submit">로그인</button><div class="err" id="e"></div>
+<div style="text-align:center;margin-top:8px"><a href="/">← 홈으로</a></div>
+</form><script>
+document.getElementById('f').addEventListener('submit',async function(ev){
+  ev.preventDefault();var e=document.getElementById('e');e.textContent='';
+  var r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({username:document.getElementById('u').value,password:document.getElementById('p').value})});
+  if(r.ok){location.href='/write';}else{var d=await r.json().catch(function(){return{}});e.textContent=d.error||'로그인 실패';}
+});</script></body></html>

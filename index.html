@@ -928,6 +928,8 @@
   <a class="nav-brand" href="#heroSection">(주)오너스경영연구소 전문 컨설팅 그룹</a>
   <nav class="nav-links" id="navLinks">
     <a class="nav-link" href="#company">회사소개</a>
+    <a class="nav-link" href="/notice">공지사항</a>
+    <a class="nav-link" href="/posts">게시글</a>
     <a class="nav-link" href="#contact">연락처</a>
     <a class="nav-link" href="#services">컨설팅</a>
     <a class="nav-link" href="#team">전문가</a>
@@ -937,6 +939,7 @@
       <span>공유하기</span>
     </button>
     <a class="nav-cta" href="#apply">상담문의</a>
+    <a class="nav-link" href="/login" style="font-size:12px;opacity:.55">관리자</a>
   </nav>
   <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기" aria-expanded="false">
     <span></span><span></span><span></span>
@@ -1532,6 +1535,43 @@
     </div>
   </div>
 </section>
+
+<!-- ════ 소식(공지사항·게시글) ════ -->
+<section id="news" class="news-sec">
+  <div class="news-wrap">
+    <h2 class="news-title">소식</h2>
+    <ul id="newsList" class="news-list"><li class="news-empty">불러오는 중…</li></ul>
+    <div class="news-more"><a href="/notice">공지사항</a> · <a href="/posts">게시글 전체 →</a></div>
+  </div>
+</section>
+<style>
+.news-sec{padding:60px 20px;background:#fafbfb;border-top:1px solid #eef1f1}
+.news-wrap{max-width:720px;margin:0 auto}
+.news-title{font-size:22px;font-weight:800;text-align:center;margin-bottom:22px;color:#111}
+.news-list{list-style:none;margin:0;padding:0}
+.news-list li{border-bottom:1px solid #e9edec}
+.news-list a{display:block;padding:15px 4px;text-decoration:none;color:#111;font-size:15px}
+.news-list a:hover{color:#0D9A8C}
+.news-badge{display:inline-block;font-size:11px;color:#fff;background:#0D9A8C;border-radius:4px;padding:1px 7px;margin-right:8px;vertical-align:1px}
+.news-date{color:#8a9797;font-size:12px;float:right;margin-top:2px}
+.news-empty{color:#8a9797;padding:26px 4px;text-align:center}
+.news-more{text-align:center;margin-top:20px}
+.news-more a{color:#0D9A8C;text-decoration:none;font-size:14px;font-weight:600}
+</style>
+<script>
+(function(){
+  var el=document.getElementById('newsList'); if(!el) return;
+  fetch('/api/posts?limit=5').then(function(r){return r.json()}).then(function(d){
+    var ps=(d&&d.posts)||[]; if(!ps.length){el.innerHTML='<li class="news-empty">아직 등록된 소식이 없습니다.</li>';return;}
+    el.innerHTML=ps.map(function(p){
+      var cat=p.category==='notice'?'공지':'글';
+      var dt=new Date(p.created_at); var ds=dt.getFullYear()+'.'+String(dt.getMonth()+1).padStart(2,'0')+'.'+String(dt.getDate()).padStart(2,'0');
+      var title=String(p.title).replace(/[<>&]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];});
+      return '<li><a href="/post/'+p.id+'"><span class="news-badge">'+cat+'</span>'+title+'<span class="news-date">'+ds+'</span></a></li>';
+    }).join('');
+  }).catch(function(){el.innerHTML='<li class="news-empty">소식을 불러오지 못했습니다.</li>';});
+})();
+</script>
 
 <!-- ════ FOOTER ════ -->
 <footer class="footer">
