@@ -90,6 +90,7 @@
 ```
 3. 성공 시 `{ "id": 123, "url": "https://ownerskr.com/post/123" }` → 즉시 사이트·사이트맵 반영.
 - 대표님이 그 PC Claude Desktop에 넣을 **호출 예제(curl/파이썬 스니펫)** 를 산출물로 제공.
+- **연동 방식 확정**: 그 PC는 이미 파이썬 파이프라인(blog_automation: 생성→네이버/Threads 발행)으로 자동발행 중. **기존 로직은 그대로 두고, 발행 마지막에 "ownerskr 사이트 업로더"(위 2스텝 POST) 하나만 추가**하는 드롭인 모듈로 제공(`uploaders/ownerskr_uploader.py` 형태). "결만 살짝" 바꿔 새 사이트에도 동시 발행.
 
 ## 9. SEO
 - 글·목록 페이지 SSR + `<title>`·description·og·canonical·JSON-LD(Article) 자동.
