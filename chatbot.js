@@ -508,11 +508,7 @@
     });
   }
   function introThenDiagnose() {
-    say('사외 CFO 김진기입니다.').then(function () {
-      return say('이 대화, 제가 직접 세팅해둔 자동 진단이에요. 대충 답 나가는 거 싫어서 제 기준 그대로 심어놨거든요.');
-    }).then(function () {
-      return say('복잡한 거 안 물어요. 톡톡 눌러만 주시면 지금 놓치는 갈래부터 짚어드릴게요.');
-    }).then(runDiagnosis);
+    say('복잡한 건 안 여쭤봐요. 톡톡 눌러만 주시면 지금 놓치는 갈래부터 짚어드릴게요.').then(runDiagnosis);
   }
 
   /* ── 패널 열기/닫기 ── */
@@ -535,10 +531,10 @@
   }
 
   function buildPanel() {
-    panel = el('<div class="jk-panel" role="dialog" aria-label="김진기 사외 CFO 상담" hidden>' +
+    panel = el('<div class="jk-panel" role="dialog" aria-label="AI챗봇 상담" hidden>' +
       '<div class="jk-head">' +
       '<div class="jk-head-logo"><img src="' + LOGO + '" alt=""></div>' +
-      '<div class="jk-head-name"><b>김진기 · 사외 CFO</b><span>자동 진단</span></div>' +
+      '<div class="jk-head-name"><b>AI챗봇</b><span>온라인 상담</span></div>' +
       '<button class="jk-head-btn" id="jkMin" aria-label="최소화">–</button>' +
       '<button class="jk-head-btn" id="jkClose" aria-label="닫기">×</button>' +
       '</div>' +
@@ -555,9 +551,9 @@
 
   /* ── 런처 + 티저 ── */
   function buildLauncher() {
-    launcher = el('<button class="jk-launcher" aria-label="김진기 자동 상담 열기 — 무료 상담 3회">' +
+    launcher = el('<button class="jk-launcher" aria-label="AI챗봇 상담 열기">' +
       '<span class="jk-launcher-logo"><img src="' + LOGO + '" alt=""></span>' +
-      '<span class="jk-launcher-label"><b>무료 상담 3회</b><span>김진기 · 사외 CFO</span></span>' +
+      '<span class="jk-launcher-label"><b>AI챗봇</b><span>무엇이든 물어보세요</span></span>' +
       '</button>');
     var seen = false; try { seen = localStorage.getItem('jk_seen') === '1'; } catch (e) {}
     if (!seen) launcher.appendChild(el('<span class="jk-launcher-dot"><span class="jk-sr">읽지 않은 메시지 1개</span></span>'));
