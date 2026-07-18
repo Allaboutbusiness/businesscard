@@ -338,6 +338,16 @@
       box-shadow: 0 4px 24px rgba(13,154,140,.4);
       margin-top: 12px;
     }
+    /* 전체(회원) 서비스 진입 — 무료 매칭 CTA 하위의 보조 링크 (히어로 좌측정렬에 맞춤) */
+    .hero-member-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 16px;
+      color: rgba(255,255,255,.72); text-decoration: none;
+      font-size: 13.5px; font-weight: 600; word-break: keep-all;
+      border-bottom: 1px solid rgba(255,255,255,.3); padding-bottom: 2px;
+      transition: color .15s, border-color .15s;
+    }
+    .hero-member-link:hover { color: #fff; border-color: rgba(255,255,255,.75); }
 
     /* ════════════════════════════════
        2. CONTACT BAR — 투명 (히어로 이미지 투과)
@@ -955,6 +965,9 @@
     </a>
     <a class="hero-cta-btn-inv" href="/programs">
       <span>정부지원사업 AI 매칭(무료) 바로가기</span><span>→</span>
+    </a>
+    <a class="hero-member-link" href="https://owners-jk-gfp.vercel.app/" target="_blank" rel="noopener">
+      회원 서비스(고객관리·자동 매칭 알림) 로그인 →
     </a>
   </div>
  </div>
