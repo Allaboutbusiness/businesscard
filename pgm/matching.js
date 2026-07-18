@@ -1,4 +1,4 @@
-import { SUB_SIGNALS, MAJOR_SIGNALS, AGNOSTIC_SIGNALS, AGENCY_NOISE, SUB_TO_MAJOR, INDUSTRY_SUB_EXCLUSION, INDUSTRY_MAJOR_CAUTION, parseIndustry, } from './industries.js?v=20260718';
+import { SUB_SIGNALS, MAJOR_SIGNALS, AGNOSTIC_SIGNALS, AGENCY_NOISE, SUB_TO_MAJOR, INDUSTRY_SUB_EXCLUSION, INDUSTRY_MAJOR_CAUTION, parseIndustry, } from './industries.js?v=20260718b';
 export const REGION_KW = {
     '서울': ['서울'], '경기': ['경기'], '인천': ['인천'], '강원': ['강원'],
     '충북': ['충북', '충청북도'], '충남': ['충남', '충청남도'],
@@ -280,6 +280,11 @@ export function detectAgencyRegion(p) {
             if (name.startsWith(token))
                 return region;
         }
+        // 도/광역시 접두가 없으면 도시명 접두도 확인 ('창원산업진흥원'→경남, '구미전자정보기술원'→경북)
+        for (const [city, region] of CITY_AGENCY_TOKENS) {
+            if (name.startsWith(city))
+                return region;
+        }
     }
     return null;
 }
@@ -333,6 +338,74 @@ export function detectTitleRegions(title) {
     }
     return found;
 }
+// ─── 주요 도시 → 광역시/도 매핑 ───────────────────────────────────────────────
+// BizInfo는 거의 모든 공고 해시태그에 15개 안팎의 지역을 기본 태깅(노이즈)하므로,
+// 실제 지역은 제목의 도시명("창원시","구미시")과 주관기관명("경북테크노파크")이 더 정확하다.
+// 도시명은 일반명사와 충돌할 수 있어(양산=대량양산·구미=歐美·진주=眞珠·공주=公主 등)
+// 두 갈래로 쓴다: 기관명 startsWith(신뢰도 높음)엔 전체 목록, 제목 평문 스캔엔 충돌 낮은 부분집합.
+const CITY_TO_REGION = {
+    '수원': '경기', '성남': '경기', '용인': '경기', '부천': '경기', '안산': '경기', '평택': '경기', '시흥': '경기', '파주': '경기', '김포': '경기', '군포': '경기', '오산': '경기', '안양': '경기', '의정부': '경기', '남양주': '경기',
+    '춘천': '강원', '원주': '강원', '강릉': '강원', '속초': '강원', '삼척': '강원',
+    '청주': '충북', '충주': '충북', '제천': '충북',
+    '천안': '충남', '아산': '충남', '서산': '충남', '당진': '충남', '논산': '충남', '공주': '충남',
+    '전주': '전북', '익산': '전북', '군산': '전북', '김제': '전북', '정읍': '전북', '남원': '전북',
+    '여수': '전남', '순천': '전남', '목포': '전남', '광양': '전남', '나주': '전남',
+    '포항': '경북', '구미': '경북', '경주': '경북', '경산': '경북', '안동': '경북', '김천': '경북', '영천': '경북', '칠곡': '경북',
+    '창원': '경남', '김해': '경남', '진주': '경남', '거제': '경남', '통영': '경남', '사천': '경남', '밀양': '경남', '양산': '경남',
+};
+// 제목 평문 스캔에서 제외할 '일반명사 충돌' 도시(기관명 접두 매칭엔 계속 사용)
+const CITY_TITLE_UNSAFE = new Set(['양산', '구미', '진주', '공주', '경주', '사천', '서산', '원주', '수원']);
+const CITY_AGENCY_TOKENS = Object.entries(CITY_TO_REGION).sort((a, b) => b[0].length - a[0].length);
+const CITY_TITLE_TOKENS = CITY_AGENCY_TOKENS.filter(([c]) => !CITY_TITLE_UNSAFE.has(c));
+/** 제목 평문에서 도시명(경계+선택적 '시' 규칙)으로 지역 추출 */
+export function detectCityRegions(title) {
+    const found = new Set();
+    if (!title)
+        return found;
+    const text = title.replace(/\[[^\]]*\]/g, ' ');
+    for (const [city, region] of CITY_TITLE_TOKENS) {
+        if (found.has(region))
+            continue;
+        let idx = text.indexOf(city);
+        while (idx !== -1) {
+            const before = text[idx - 1];
+            if (!isHangulOrAlpha(before)) {
+                const rest = text.slice(idx + city.length);
+                const afterSi = rest.startsWith('시') ? rest.slice(1) : rest;
+                const okSi = rest.startsWith('시') && (!afterSi[0] || !/[가-힣a-zA-Z0-9]/.test(afterSi[0]));
+                const okBoundary = !rest[0] || !/[가-힣a-zA-Z0-9]/.test(rest[0]);
+                if (okSi || okBoundary) {
+                    found.add(region);
+                    break;
+                }
+            }
+            idx = text.indexOf(city, idx + 1);
+        }
+    }
+    return found;
+}
+/** 제목 대괄호 태그에서 지역명 집합 추출 (수도권/비수도권/전국은 별도 처리) */
+export function detectBracketRegions(title) {
+    const found = new Set();
+    if (!title)
+        return found;
+    const tags = [...title.matchAll(/\[([^\]]+)\]/g)].map(m => m[1]);
+    for (const tag of tags) {
+        for (const [region, tokens] of Object.entries(REGION_KW)) {
+            if (tokens.some(t => tag.includes(t)))
+                found.add(region);
+        }
+    }
+    return found;
+}
+/** 명시적 전국 신호(해시태그 '전국' 토큰 · 대괄호 [전국] · 제목 '전국') */
+export function hasExplicitNationwide(p) {
+    const title = p.pblancNm || '';
+    if (title.includes('전국'))
+        return true;
+    const tokens = (p.hashtags || '').split(/[,\sㆍ·/()]+/).map(t => t.trim());
+    return tokens.includes('전국');
+}
 /** 제목 대괄호에서 수도권/비수도권 스코프만 추출 ('metro' | 'nonMetro' | null) */
 function bracketMetroScope(title) {
     if (!title)
@@ -355,37 +428,54 @@ export function hasRegionMismatch(p, selectedRegion) {
     if (!selectedRegion)
         return false;
     const { regions: hashtagRegions, nationwide, metroOnly, nonMetro } = detectRegions(p.hashtags);
-    // 해시태그 지역 + 주관기관 지역을 합쳐 판정(전국 공고는 nationwide가 우선이라 영향 없음)
-    const regions = new Set(hashtagRegions);
-    const agencyRegion = detectAgencyRegion(p);
-    if (agencyRegion)
-        regions.add(agencyRegion);
     const isMetro = METRO_REGIONS.has(selectedRegion);
-    // ── 수도권/비수도권 스코프(제목 대괄호 + 해시태그 마커)는 지역 나열 수보다 우선 ──────
-    // (예: '[비수도권]' 공고가 해시태그에 비수도권 14~15개 지역을 전부 나열해도 수도권 사용자에겐 제외)
+    // ── 1) 수도권/비수도권 스코프(제목 대괄호 + 해시태그 마커) 최우선 ────────────────
     const bracketScope = bracketMetroScope(p.pblancNm);
     const wantsNonMetro = nonMetro || bracketScope === 'nonMetro';
     const wantsMetroOnly = metroOnly || bracketScope === 'metro';
     if (wantsNonMetro && isMetro)
         return true; // 비수도권 전용 × 수도권 사용자
-    if (wantsMetroOnly && !isMetro && !regions.has(selectedRegion))
+    if (wantsMetroOnly && !isMetro && !hashtagRegions.has(selectedRegion))
         return true; // 수도권 전용 × 비수도권 사용자
-    // ── 보존 우선 ──────────────────────────────────────────────────────────────
-    if (regions.has(selectedRegion))
-        return false; // 해시태그가 사용자 지역 명시(다지역 공고 포함)
+    const explicitNationwide = hasExplicitNationwide(p);
+    // ── 2) 제목 대괄호 지역([서울]·[경기])은 가장 명시적 신호 ──────────────────────
+    const bracketRegions = detectBracketRegions(p.pblancNm);
+    if (bracketRegions.size > 0) {
+        if (bracketRegions.has(selectedRegion))
+            return false; // [서울…] 사용자 지역 포함
+        if (!explicitNationwide)
+            return true; // [경기]·[부산] 등 타지역 전용
+    }
+    // ── 3) 제목 평문(도/도시명) + 주관기관 지역 = authoritative ──────────────────────
+    // BizInfo 해시태그는 대부분 15개 안팎 지역을 기본 태깅한 노이즈라 신뢰하지 않는다.
+    // 제목·기관이 특정 지역을 가리키면 (명시적 전국이 아닌 한) 그 지역 전용 공고로 확정.
+    const authRegions = new Set([
+        ...detectTitleRegions(p.pblancNm),
+        ...detectCityRegions(p.pblancNm),
+    ]);
+    const agencyRegion = detectAgencyRegion(p);
+    if (agencyRegion)
+        authRegions.add(agencyRegion);
+    if (authRegions.size > 0) {
+        if (authRegions.has(selectedRegion))
+            return false; // 제목/기관이 사용자 지역
+        if (explicitNationwide)
+            return false; // 지역 기관이 운영하나 명시적 전국 대상
+        // 제목/기관이 타지역 → 제외(노이즈 해시태그 무시).
+        // [의도된 트레이드오프] '대구창조경제혁신센터'가 운영하는 전국 공고(모두의 챌린지 등)처럼
+        // 운영기관만 지역명이고 실제론 전국인 극소수 공고는 숨겨진다. 사용자 선택(엄격)에 따름:
+        // 지역센터 운영 프로그램 대다수가 실제 지역 전용이라, 누수 0을 위해 이 소수 오배제를 감수.
+        return true;
+    }
+    // ── 4) authoritative 신호 없음 → 해시태그 폴백(노이즈 관대) ───────────────────────
     if (wantsMetroOnly && isMetro)
         return false; // 수도권 공고 × 수도권 사용자
     if (nationwide)
-        return false; // 전국(8개 이상 나열 또는 '전국')
-    // ── 제외 신호 ──────────────────────────────────────────────────────────────
-    if (hasBracketRegionMismatch(p.pblancNm, selectedRegion))
-        return true; // 제목 [특정지역] 타지역
-    if (regions.size > 0)
+        return false; // 전국('전국' 또는 16개 이상 나열)
+    if (hashtagRegions.has(selectedRegion))
+        return false; // 해시태그가 사용자 지역 명시
+    if (hashtagRegions.size > 0)
         return true; // 특정 타 지역(들)만 명시, 사용자 지역 없음
-    // ── 해시태그·기관명 신호가 전무한 공고(KISED·나라장터)는 제목 평문 지역으로 판정 ──
-    const titleRegions = detectTitleRegions(p.pblancNm);
-    if (titleRegions.size > 0 && !titleRegions.has(selectedRegion))
-        return true;
     return false; // 지역 신호 전무 → 전국 간주, 보존
 }
 export function scoreForTrial(p, majorIndustryRaw, subIndustry, selectedSize, selectedKws, selectedRegion) {

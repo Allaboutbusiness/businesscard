@@ -19,7 +19,8 @@ module.exports = async (req, res) => {
   if (!Number.isFinite(pageUnit) || pageUnit < 1) pageUnit = 20;
   if (pageUnit > 2000) pageUnit = 2000;
 
-  const apiKey = process.env.BIZINFO_API_KEY || process.env.NEXT_PUBLIC_BIZINFO_API_KEY;
+  // 서버 전용 시크릿. (NEXT_PUBLIC_ 접두 폴백은 브라우저 노출 위험이 있어 제거함)
+  const apiKey = process.env.BIZINFO_API_KEY;
   if (!apiKey) {
     return res.status(500).json({ error: 'BIZINFO_API_KEY 환경변수가 설정되지 않았습니다' });
   }
@@ -56,9 +57,20 @@ module.exports = async (req, res) => {
         return res.status(500).json({ error: 'API 응답 파싱 실패', raw: text.slice(0, 200) });
       }
 
-      /* 성공 → CDN 캐시(1시간) + 만료 후 24시간은 stale 서빙하며 백그라운드 갱신 */
+      /* 완전성 텔레메트리: 반환 건수가 pageUnit 상한에 근접하면 잘림 위험 경고.
+         (공고가 pageUnit(최대 2000)을 넘어서면 뒷건이 조용히 누락되고 페이로드가
+         Vercel 서버리스 응답 한계(~4.5MB)에 근접하므로 데이터 증가를 추적한다) */
+      const arr = Array.isArray(data.jsonArray) ? data.jsonArray : [];
+      const totCnt = Number(arr[0]?.totCnt) || arr.length;
+      if (totCnt > pageUnit || arr.length >= pageUnit) {
+        console.warn(`[bizinfo] 잘림 가능성: totCnt=${totCnt} 반환=${arr.length} pageUnit=${pageUnit}`);
+      }
+
+      /* 성공 → CDN 캐시(1시간) + 만료 후 24시간은 stale 서빙하며 백그라운드 갱신.
+         원본 text를 그대로 전송해 ~3.3MB 페이로드 재직렬화(JSON.stringify) 비용을 없앤다. */
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
       res.setHeader('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
-      return res.status(200).json(data);
+      return res.status(200).send(text);
     } catch (e) {
       lastError = e;
       if (attempt < 2) await sleep(1000 * (attempt + 1));
