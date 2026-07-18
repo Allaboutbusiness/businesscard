@@ -141,24 +141,92 @@
   }
 
   /* ── 관심사 분기 (녹취 화법 반영 · Type B 안전판) ── */
-  // 업력 질문(공통) — 관심사 선택 후 먼저 물어봄
-  var AGE_STEP = { id:'businessAge', q:'먼저, 사업 시작하신 지는 얼마나 되셨어요?', opts:[
-    {label:'예비창업 (아직 전)', value:'pre'},{label:'1년 미만', value:'lt1'},{label:'1~3년', value:'y13'},{label:'3~7년', value:'y37'},{label:'7년 이상', value:'y7p'}] };
-  // 업력별 맞춤 한 마디(주제 무관 · 앞에 붙임)
+  // 업력 질문(공통 스텝) — 업력별 맞춤 정보(info)
   var AGE_HOOK = {
     pre:'이제 막 시작 단계시면, 처음 세팅을 어떻게 잡느냐가 나중을 다 좌우하거든요.',
-    lt1:'1년 차시면 지금부터 준비하는 게 딱 좋은 시기예요.',
-    y13:'3년 언더는 사실 선택지가 제일 넓은 구간이거든요.',
-    y37:'이 시기부터는 초기 혜택은 슬슬 닫히는 대신, 성장 단계에 맞는 게 열려요.',
-    y7p:'업력이 이 정도 쌓이시면, 볼 수 있는 폭이 또 달라지거든요.' };
-  // 관심사별: 어떤 업무를 어떤 전문가가 어떻게(역할만, 실명 없음)
+    lt1:'1년 차시면 지금부터 준비하는 게 딱 좋은 시기예요. 초기 전용으로 열리는 게 꽤 있거든요.',
+    y13:'3년 언더는 사실 선택지가 제일 넓은 구간이거든요. 창업 초기 지원이 지금 다 열려 있어요.',
+    y37:'이 시기부턴 초기 혜택은 슬슬 닫히는 대신, 성장 자금이나 R&D·투자 연계 쪽이 열려요.',
+    y7p:'업력이 이 정도 쌓이시면 자금 조달보다 절세·가업승계나 기업가치 쪽까지 같이 보는 게 실익이 커요.' };
+  var AGE_STEP = { id:'businessAge', store:'businessAge', q:'먼저, 사업 시작하신 지는 얼마나 되셨어요?',
+    opts:[{label:'예비창업 (아직 전)',value:'pre'},{label:'1년 미만',value:'lt1'},{label:'1~3년',value:'y13'},{label:'3~7년',value:'y37'},{label:'7년 이상',value:'y7p'}],
+    info: AGE_HOOK };
+  // 관심사별: intro(클릭1) → 업력(2) → q2(3) → q3(4) → summary+상담(5). 매 클릭 정보 제공, 역할만(실명 X).
   var INTERESTS = {
-    policy:   { label:'정책자금', consult:[0], expert:'정책자금은 경영지도사가 재무제표를 정밀 진단해서, 신청부터 심사 대응, 받은 뒤 운영관리까지 밀착으로 봐드려요.' },
-    support:  { label:'정부지원사업', consult:[1], expert:'지원사업은 행정사가 인증·R&D 지원금 조달을 맡고, 필요하면 변리사가 특허·IP까지 같이 잡아드려요.' },
-    invest:   { label:'투자 유치·연계', consult:[0,1], expert:'투자는 현직 AC 대표가 성장 단계에 맞는 전략·유치부터 정부지원 연계까지 직접 봐드려요.' },
-    tax:      { label:'절세·상속·증여', consult:[4], expert:'세금 쪽은 회계사랑 변호사·세무사가 세무기장·조세·상속까지 원스톱으로 풀어드려요.' },
-    corp:     { label:'법인전환·노무·법률', consult:[3], expert:'법인 쪽은 변호사·세무사가 전환·정관·등기·세무까지 한 번에 진단해드려요.' },
-    diagnose: { label:'뭘 받을 수 있는지 모르겠어요', consult:[0,1], expert:'이런 건 경영지도사·회계사·변리사·변호사가 한 팀으로 붙어서, 지금 되는 것과 준비할 것을 나눠드려요.' }
+    policy: { label:'정책자금', consult:[0],
+      intro:'정책자금은 크게 융자(대출)랑 보증으로 나뉘는데, 업력이랑 목적에 따라 받을 수 있는 게 확 달라져요.',
+      steps:[ AGE_STEP,
+        { q:'지금 자금은 어떤 쪽이 필요하세요?', opts:[{label:'운영자금 (돌아가는 돈)',value:'run'},{label:'공장·설비 투자',value:'fac'},{label:'기존 대출 갈아타기',value:'refi'}],
+          info:{ run:'운영자금은 ‘경영지원자금’·‘스마트자금’ 계열이 열려 있어요. 매출이 적어도 조건만 맞추면 되는 경우가 많거든요.',
+                 fac:'시설자금은 접근이 완전히 달라져요. 공장·설비면 한도가 크게 잡히는 대신 서류가 조금 더 붙어요.',
+                 refi:'금리가 세게 나왔다면 더 낮은 정책자금으로 갈아탈 여지가 있어요. 주거래랑 조건만 보면 가능한지 금방 나오거든요.' } },
+        { q:'혹시 세금 밀렸거나 대출 연체 이력, 있으세요?', opts:[{label:'없어요, 정상이에요',value:'none'},{label:'조금 있어요',value:'some'}],
+          info:{ none:'정상이시면 보증 계열까지 같이 열려서 선택지가 더 넓어요.',
+                 some:'그런 게 있어도 보는 자금이 따로 있어요. 순서만 잘 잡으면 되니 걱정 안 하셔도 돼요.' } } ],
+      summary:'대표님 상황이면 방향은 대충 잡혔어요. 정확한 한도랑 금리는 경영지도사가 재무제표 보고 딱 짚어드리는데, 상담 한번 받아보실래요?' },
+    support: { label:'정부지원사업', consult:[1],
+      intro:'정부지원사업은 무상 지원금이랑 R&D, 바우처로 나뉘는데, 업력에 따라 열리는 게 완전히 달라요.',
+      steps:[ AGE_STEP,
+        { q:'어떤 지원이 제일 끌리세요?', opts:[{label:'무상 지원금 (창업)',value:'grant'},{label:'R&D·기술개발',value:'rd'},{label:'바우처 (마케팅·수출)',value:'vou'}],
+          info:{ grant:'창업 단계면 ‘예창’·‘초창’·‘창도’ 라인이 있어요. 사업계획서 설계가 선정의 8할이거든요.',
+                 rd:'R&D면 ‘디딤돌’·‘팁스(TIPS)’ 쪽인데, 특허나 연구소를 미리 세팅해두면 훨씬 수월해요.',
+                 vou:'마케팅·수출이면 ‘수출지원금’·‘제조지원금’·‘AI지원금’ 바우처가 있어요. 비교적 손이 덜 가는 편이에요.' } },
+        { q:'특허나 기업부설연구소, 혹시 갖고 계세요?', opts:[{label:'있어요',value:'have'},{label:'없어요',value:'none'},{label:'준비 중이에요',value:'prep'}],
+          info:{ have:'그거 있으면 가점이 붙어서 선정률이 확 올라가요.',
+                 none:'없어도 괜찮아요. 특허 하나 정도는 변리사가 금방 잡아드리거든요.',
+                 prep:'준비 중이시면 타이밍만 잘 맞추면 돼요. 순서가 중요하거든요.' } } ],
+      summary:'대표님이면 지금 준비할 게 뭔지 감이 잡혀요. 인증·R&D 조달은 행정사가, 특허는 변리사가 맡아드리는데, 상담 한번 받아보실래요?' },
+    invest: { label:'투자 유치·연계', consult:[0,1],
+      intro:'투자는 유치 자체보다 언제·어떻게 받느냐가 훨씬 중요해요. 잘못 받으면 오히려 발목 잡히거든요.',
+      steps:[ AGE_STEP,
+        { q:'투자는 어떤 상황이세요?', opts:[{label:'자금이 급해서 받아야 해요',value:'urgent'},{label:'미리 밸류만 잡아두고 싶어요',value:'value'},{label:'인증·실적용으로 필요해요',value:'cert'}],
+          info:{ urgent:'솔직히 급할 때 받는 게 제일 불리해요. 급한 자금은 융자로 풀고, 투자는 여유 있을 때 받는 게 나아요.',
+                 value:'밸류는 지금 시점에 딱 잡아두는 게 깔끔해요. 나중 라운드에 미루면 그때마다 흔들리거든요.',
+                 cert:'인증·실적용이면 소액 투자로도 벤처인증 요건이 채워지는 길이 있어요. 개인 말고 조합·AC로 받는 게 안전하고요.' } },
+        { q:'지금 주주 구성은 어떻게 되세요?', opts:[{label:'대표 혼자',value:'solo'},{label:'공동대표·가족',value:'fam'},{label:'외부 지분 있음',value:'ext'}],
+          info:{ solo:'혼자면 깔끔해서 좋아요. 투자받을 때 협상이 제일 편하거든요.',
+                 fam:'가족·공동이면 지분 정리를 미리 해두는 게 나중에 편해요. 볼륨 커지기 전에요.',
+                 ext:'외부 지분이 있으면 나중에 큰 투자 들어올 때 걸리는 경우가 많아요. 지금 정리 방향을 잡아두는 게 좋아요.' } } ],
+      summary:'대표님 단계면 지금 받을 때인지 받아두기만 할 때인지 판단이 서요. 이건 현직 AC 대표가 직접 봐드리는데, 상담 한번 받아보실래요?' },
+    tax: { label:'절세·상속·증여', consult:[4],
+      intro:'법인은 돈이 벌려도 통장이랑 서류가 따로 놀거든요. 이걸 미리 정리하느냐가 세금을 크게 가르죠.',
+      steps:[ AGE_STEP,
+        { q:'어떤 게 제일 고민이세요?', opts:[{label:'세금이 너무 많이 나가요',value:'heavy'},{label:'법인 돈을 개인으로',value:'per'},{label:'자녀에게 물려주기',value:'suc'}],
+          info:{ heavy:'세금은 구조를 먼저 봐요. 매출 구간마다 아낄 수 있는 방식이 다르거든요.',
+                 per:'법인 돈을 대표님 개인으로 넘기는 합법적인 순서가 있어요. 급여·배당·퇴직금을 어떻게 엮느냐로 갈리거든요.',
+                 suc:'상속·증여는 미리 설계할수록 세금이 확 줄어요. 몇 년 앞서 준비하는 게 핵심이에요.' } },
+        { q:'지금 법인이세요, 개인사업자세요?', opts:[{label:'법인',value:'corp'},{label:'개인사업자',value:'indiv'},{label:'둘 다 있어요',value:'both'}],
+          info:{ corp:'법인이면 쌓이는 이익을 미리 빼두는 설계가 특히 중요해요.',
+                 indiv:'개인이시면 법인 전환 타이밍부터 같이 보는 게 절세엔 더 유리할 수 있어요.',
+                 both:'둘 다 있으면 나중에 합치는 그림까지 미리 그려두면 세금이 훨씬 줄어요.' } } ],
+      summary:'대표님이면 어떤 순서로 푸는 게 유리한지 그림이 나와요. 이건 회계사랑 변호사·세무사가 원스톱으로 봐드리는데, 상담 한번 받아보실래요?' },
+    corp: { label:'법인전환·노무·법률', consult:[3],
+      intro:'기업은 만들 때가 제일 중요해요. 처음 세팅을 잘 해두면 나중에 고치는 비용이 안 들거든요.',
+      steps:[ AGE_STEP,
+        { q:'어느 상황에 가까우세요?', opts:[{label:'개인→법인 전환 고민',value:'conv'},{label:'새 법인 하나 더',value:'new'},{label:'정관·업종 손봐야 해요',value:'fix'}],
+          info:{ conv:'법인 전환은 매출 구간마다 유불리가 갈려요. 너무 이르면 비용만 늘거든요.',
+                 new:'새로 내실 거면 대표 구성이랑 지분부터 잡는 게 순서예요. 나중에 바꾸기 어렵거든요.',
+                 fix:'이미 법인이면 정관·업종을 정부 과제 받기 좋게 미리 손보는 게 좋아요.' } },
+        { q:'나중에 투자나 정부 R&D 받을 생각도 있으세요?', opts:[{label:'네, 계획 있어요',value:'yes'},{label:'아직 모르겠어요',value:'maybe'},{label:'아니요',value:'no'}],
+          info:{ yes:'그럼 정관을 처음부터 그 요건에 맞게 짜야 돼요. 나중에 고치면 돈이 또 들거든요.',
+                 maybe:'혹시 몰라도 정관은 여지를 열어두게 잡는 게 안전해요.',
+                 no:'그래도 업종이랑 기본 세팅만 잘 잡아두면 나중이 편해요.' } } ],
+      summary:'대표님이면 지금 어떻게 세팅할지 방향이 잡혀요. 전환·정관·등기·세무는 변호사·세무사가 한 번에 봐드리는데, 상담 한번 받아보실래요?' },
+    diagnose: { label:'뭘 받을 수 있는지 모르겠어요', consult:[0,1],
+      intro:'괜찮아요, 처음엔 다 그러세요. 몇 개만 눌러주시면 지금 되는 것부터 짚어드릴게요.',
+      steps:[ AGE_STEP,
+        { q:'사업은 어느 쪽에 가까우세요?', store:'sector', opts:[{label:'제조·가공',value:'mfg'},{label:'도소매',value:'retail'},{label:'IT·SW',value:'it'},{label:'서비스',value:'svc'},{label:'건설',value:'con'},{label:'기타',value:'etc'}],
+          info:{ mfg:'제조는 사실 받을 게 제일 많은 업종이에요. 업종 분류만 잘 잡아도 열리는 게 늘어요.',
+                 retail:'유통만 하시면 제조를 살짝 얹는 것만으로 지원이 확 늘어나는 경우가 많아요.',
+                 it:'IT·기술 쪽은 기술·인증으로 열리는 지원이 따로 있어요.',
+                 svc:'서비스업도 업종에 맞게 열리는 지원이 있어요.',
+                 con:'건설은 세부 분야에 따라 갈리는데, 뿌리 쪽이면 열리는 게 많아요.',
+                 etc:'우선 큰 틀부터 보면 방향이 잡혀요.' } },
+        { q:'지금 제일 급한 건 어느 쪽이세요?', opts:[{label:'당장 자금이 급해요',value:'money'},{label:'세금·구조가 걱정돼요',value:'tax'},{label:'그냥 뭐가 있는지 궁금해요',value:'cur'}],
+          info:{ money:'자금이 급하면 정책자금 융자부터 보는 게 빨라요. 조건만 맞으면 바로 나오거든요.',
+                 tax:'세금·구조가 걱정이면 절세랑 법인 세팅부터 정리하는 게 실익이 커요.',
+                 cur:'뭐가 있는지부터면, 업력이랑 업종만으로도 지금 되는 것과 준비할 것을 나눠드릴 수 있어요.' } } ],
+      summary:'대표님 상황이면 지금 되는 것과 준비할 것이 갈려요. 경영지도사·회계사·변리사·변호사가 한 팀으로 붙어서 봐드리는데, 상담 한번 받아보실래요?' }
   };
 
   /* ── 시작 인사 + 관심사 선택 ── */
@@ -171,30 +239,37 @@
     showQuick(order.map(function (k) { return { label: INTERESTS[k].label, value: k, strong: k === 'policy', ghost: k === 'diagnose' }; }),
       function (v, o) { userSay(o.label); clearInput(); setProgress(0.2); runInterest(v); });
   }
+  // 클릭1(관심사) → intro 정보 → 스텝별(업력·q2·q3) 질문+정보 → 마지막 클릭에서 상담 유도
   function runInterest(id) {
     var it = INTERESTS[id]; if (!it) return;
     answers._interest = id;
-    // 1) 업력 먼저 물어봄
-    say(AGE_STEP.q).then(function () {
-      showQuick(AGE_STEP.opts, function (v, o) {
-        userSay(o.label); answers.businessAge = v; clearInput(); setProgress(0.42);
-        // 2) 업력에 맞는, 필요할 것 같은 상담 내용 알려줌
-        say(AGE_HOOK[v] + ' ' + it.expert).then(function () {
-          // 3) 이 내용으로 상담받을지 물어봄
-          return say('이 내용으로 전문가 상담 한번 받아보실래요?');
-        }).then(function () {
-          showQuick([
-            { label:'네, 받아볼게요', value:'go', strong:true },
-            { label:'통화로 바로 상담 ' + TEL, tel:true, href:'tel:' + TEL },
-            { label:'좀 더 볼게요', value:'more', ghost:true }
-          ], function (cv) {
-            clearInput();
-            // 4) 상담으로 연결
-            if (cv === 'more') say('네, 편하게 더 둘러보세요.').then(showInterestMenu);
-            else startHandoff(it.consult);
-          }, { type:false });
-        });
+    say(it.intro).then(function () { runInfoStep(it, 0); });
+  }
+  function runInfoStep(it, i) {
+    if (i >= it.steps.length) {
+      setProgress(0.68);
+      say(it.summary).then(function () {
+        showQuick([
+          { label:'네, 받아볼게요', value:'go', strong:true },
+          { label:'통화로 바로 상담 ' + TEL, tel:true, href:'tel:' + TEL },
+          { label:'좀 더 볼게요', value:'more', ghost:true }
+        ], function (cv) {
+          clearInput();
+          if (cv === 'more') say('네, 편하게 더 둘러보세요.').then(showInterestMenu);
+          else startHandoff(it.consult);
+        }, { type:false });
       });
+      return;
+    }
+    var s = it.steps[i];
+    say(s.q).then(function () {
+      showQuick(s.opts, function (v, o) {
+        userSay(o.label);
+        if (s.store) answers[s.store] = v;
+        clearInput(); setProgress(0.2 + (i + 1) * 0.13);
+        var info = (s.info && (s.info[v] || s.info._)) || '';
+        (info ? say(info) : Promise.resolve()).then(function () { runInfoStep(it, i + 1); });
+      }, { back: i > 0 ? null : null });
     });
   }
 
