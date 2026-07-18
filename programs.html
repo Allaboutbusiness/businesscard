@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <link rel="manifest" href="/manifest.json" />
   <title>정부지원사업 AI 매칭 | 오너스경영연구소 전문 컨설팅 그룹</title>
   <meta name="description" content="진행 중인 정부지원사업을 키워드로 검색하고, 업종·지역을 고르면 AI가 내 사업에 맞는 공고를 분석해 추천합니다. 회원가입 없이 무료." />
   <link rel="canonical" href="https://businesscard-steel.vercel.app/programs" />
@@ -137,10 +138,29 @@
 </head>
 <body>
 
+<!-- 모바일 세로 고정 (가로 회전 시 안내 오버레이) -->
+<div id="rotateLock" aria-hidden="true">
+  <svg class="rl-ico" viewBox="0 0 24 24" width="58" height="58" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="7.5" y="2.5" width="9" height="19" rx="2.3"/><line x1="10.6" y1="18.7" x2="13.4" y2="18.7"/></svg>
+  <p class="rl-t">세로 화면으로 봐주세요</p>
+  <p class="rl-s">이 페이지는 세로 모드에 맞춰져 있어요.</p>
+</div>
+<style>
+  #rotateLock{display:none}
+  #rotateLock .rl-ico{color:#14b8a6;animation:rlRock 1.9s ease-in-out infinite;transform-origin:center}
+  #rotateLock .rl-t{margin:0;font-size:18px;font-weight:800;letter-spacing:-.2px;color:#fff}
+  #rotateLock .rl-s{margin:0;font-size:13px;opacity:.6}
+  @keyframes rlRock{0%,58%,100%{transform:rotate(0)}26%{transform:rotate(-88deg)}}
+  @media only screen and (orientation:landscape) and (max-height:500px) and (pointer:coarse){
+    #rotateLock{display:flex;position:fixed;inset:0;z-index:2147483647;flex-direction:column;align-items:center;justify-content:center;gap:13px;text-align:center;padding:24px;background:#0d1117;color:#f5f3ed;-webkit-font-smoothing:antialiased}
+    html,body{overflow:hidden!important}
+  }
+</style>
+<script>try{if(screen.orientation&&screen.orientation.lock)screen.orientation.lock('portrait').catch(function(){});}catch(e){}</script>
+
 <header class="hd">
   <a class="brand" href="/">← (주)오너스경영연구소 전문 컨설팅 그룹</a>
   <div class="r">
-    <a class="btn btn-ghost" href="/#services">컨설팅</a>
+    <a class="btn btn-ghost" href="/">홈페이지</a>
     <a class="btn btn-cta" href="/#apply">상담문의</a>
   </div>
 </header>

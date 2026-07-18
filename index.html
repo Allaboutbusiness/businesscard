@@ -903,6 +903,25 @@
 </head>
 <body>
 
+<!-- 모바일 세로 고정 (가로 회전 시 안내 오버레이) -->
+<div id="rotateLock" aria-hidden="true">
+  <svg class="rl-ico" viewBox="0 0 24 24" width="58" height="58" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="7.5" y="2.5" width="9" height="19" rx="2.3"/><line x1="10.6" y1="18.7" x2="13.4" y2="18.7"/></svg>
+  <p class="rl-t">세로 화면으로 봐주세요</p>
+  <p class="rl-s">이 페이지는 세로 모드에 맞춰져 있어요.</p>
+</div>
+<style>
+  #rotateLock{display:none}
+  #rotateLock .rl-ico{color:#14b8a6;animation:rlRock 1.9s ease-in-out infinite;transform-origin:center}
+  #rotateLock .rl-t{margin:0;font-size:18px;font-weight:800;letter-spacing:-.2px}
+  #rotateLock .rl-s{margin:0;font-size:13px;opacity:.6}
+  @keyframes rlRock{0%,58%,100%{transform:rotate(0)}26%{transform:rotate(-88deg)}}
+  @media only screen and (orientation:landscape) and (max-height:500px) and (pointer:coarse){
+    #rotateLock{display:flex;position:fixed;inset:0;z-index:2147483647;flex-direction:column;align-items:center;justify-content:center;gap:13px;text-align:center;padding:24px;background:#0d1117;color:#f5f3ed;-webkit-font-smoothing:antialiased}
+    html,body{overflow:hidden!important}
+  }
+</style>
+<script>try{if(screen.orientation&&screen.orientation.lock)screen.orientation.lock('portrait').catch(function(){});}catch(e){}</script>
+
 <!-- ════ 상단 고정 헤더 ════ -->
 <header class="site-header" id="siteHeader">
   <a class="nav-brand" href="#heroSection">(주)오너스경영연구소 전문 컨설팅 그룹</a>
@@ -966,9 +985,6 @@
     </a>
     <a class="hero-cta-btn-inv" href="/programs">
       <span>정부지원사업 AI 매칭(무료) 바로가기</span><span>→</span>
-    </a>
-    <a class="hero-member-link" href="https://owners-jk-gfp.vercel.app/" target="_blank" rel="noopener">
-      회원 서비스(고객관리·자동 매칭 알림) 로그인 →
     </a>
   </div>
  </div>

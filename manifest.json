@@ -4,7 +4,7 @@
   "description": "정책자금·절세·사외 CFO 통합 컨설팅 — 김진기",
   "start_url": "/",
   "display": "standalone",
-  "orientation": "any",
+  "orientation": "portrait",
   "theme_color": "#0D9A8C",
   "background_color": "#111210",
   "lang": "ko",
