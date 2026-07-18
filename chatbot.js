@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────────────────────────────────
- * chatbot.js — AI챗봇 (김진기 팀장 화법 반영 · 관심사 선택형)
+ * chatbot.js — AI챗봇 (실제 상담 화법 반영 · 관심사 선택형 · 전문가 상담 유도)
  * 화법: 대표님 호칭·저희 낮춤 · ~거든요/~더라고요/~하시면 돼요 · 반론 뒤집기
  *       · 헤지(100%는 없다) · 익명 사례 · 이모지 없음 · 한 턴=한 말풍선(2~3문장).
  * ★공개 금지선: 심사지위로 유리함 암시·내부 수익구조·특정 고객/브랜드·정식 정책명/요율/상한
@@ -147,36 +147,36 @@
         {label:'대출 금리가 높아 갈아타고 싶어요', value:'refi'},
         {label:'공장·시설에 목돈이 필요해요', value:'facility'},
         {label:'뭘 받을 수 있는지부터 모르겠어요', value:'unsure'}]},
-      info:'지금 쓰는 대출이 금리가 세게 나왔다면, 조건에 따라 더 낮은 정책자금으로 갈아탈 여지가 있는 경우가 많아요. 시설자금이면 접근이 또 완전히 달라지고요. 대표님 부채랑 주거래·금리만 몇 개 보면 어느 쪽이 유리한지 방향 잡아드릴게요.' },
+      info:'지금 쓰는 대출이 금리가 세게 나왔다면, 조건에 따라 더 낮은 정책자금으로 갈아탈 여지가 있는 경우가 많아요. 이런 건 경영지도사가 재무제표를 정밀 진단해서 대표님한테 맞는 조달 전략을 짜고, 신청부터 심사 대응, 받은 뒤 운영관리까지 밀착으로 봐드리거든요. 부채랑 금리 조건만 보면 방향이 잡히니, 전문가 상담 한 번 받아보시는 걸 추천드려요.' },
     support: { label:'정부지원사업', consult:[1],
       narrow:{ q:'지원사업은 업력이 진짜 중요하거든요. 대표님은 지금 어디쯤이세요?', opts:[
         {label:'사업 3년 아직 안 됐어요', value:'lt3'},
         {label:'3년 넘었어요', value:'gt3'},
         {label:'곧 새 법인 낼 생각이에요', value:'new'}]},
-      info:'사실 3년 언더인 기업이 받을 게 제일 많아요. 창업패키지 계열이 그때 열리거든요. 여기에 연구소나 특허, 인증을 미리 준비해두면 다음 해에 R&D나 투자 연계 지원으로 자연스럽게 이어지는데, 순서만 잘 잡으면 크게 어렵지 않아요.' },
+      info:'3년 언더인 기업이 사실 받을 게 제일 많아요. 창업패키지 계열이 그때 열리는데, 저희는 행정사가 인증부터 사업화·R&D 지원금 조달까지 행정 전 과정을 책임지고, 필요하면 변리사가 특허·IP까지 같이 잡아드리거든요. 대표님 업력·업종 보고 로드맵을 짜야 하니, 전문가 상담으로 짚어보시는 게 좋아요.' },
     invest: { label:'투자 유치·연계', consult:[0,1],
       narrow:{ q:'투자는 목적부터 봐야 돼요. 대표님은 어느 쪽이세요?', opts:[
         {label:'자금이 급해서 투자를 받아야 해요', value:'urgent'},
         {label:'미리 밸류만 잡아두고 싶어요', value:'value'},
         {label:'인증·실적용으로 투자가 필요해요', value:'cert'}]},
-      info:'솔직히 투자는 돈이 급할 때 받는 게 제일 불리해요. 조건도 나빠지고요. 밸류는 지금 시점에 딱 잡는 게 깔끔하고, 개인이 직접 주주로 들어오는 것보다 조합으로 받는 게 나중에 훨씬 안전하거든요. 지금 받을 때인지 받아두기만 할 때인지, 그 판단부터 같이 잡아드릴게요.' },
+      info:'솔직히 투자는 돈이 급할 때 받는 게 제일 불리하고, 밸류는 지금 시점에 딱 잡아두는 게 깔끔해요. 저희는 현직 AC 대표가 성장 단계에 맞는 투자 전략이랑 유치, 그리고 투자를 정부지원사업까지 연계하는 걸 직접 봐드리거든요. 지금 받을 때인지 받아두기만 할 때인지는 전문가랑 같이 잡는 게 안전하니, 상담 한 번 받아보세요.' },
     tax: { label:'절세·상속·증여', consult:[4],
       narrow:{ q:'이쪽은 고민 지점이 사람마다 달라요. 대표님은 어디에 가까우세요?', opts:[
         {label:'법인에 돈은 쌓이는데 못 빼요', value:'trapped'},
         {label:'자녀에게 넘기는 걸 생각 중이에요', value:'succession'},
         {label:'세금이 너무 많이 나가요', value:'heavy'}]},
-      info:'남는 이익이 통장엔 안 보이는데 서류엔 계속 쌓이거든요. 그게 나중에 오히려 불리하게 작용해요. 이걸 합법적인 틀 안에서 미리 정리해두면 퇴직금·상여·자녀 증여로 훨씬 매끄럽게 풀리는데, 대표님 이익이랑 자녀분 나이·지분까지 봐야 순서가 나와요. (구체 세무 실행은 제휴 세무사와 함께 진행돼요.)' },
+      info:'남는 이익이 통장엔 안 보이는데 서류엔 계속 쌓여서 나중에 오히려 불리하게 작용하거든요. 이런 건 회계사가 세무기장부터 고난도 조세까지 잡고, 상속·증여나 분쟁이 얽히면 변호사·세무사가 법률·세무를 함께 검토해서 원스톱으로 풀어드려요. 대표님 이익이랑 자녀분 나이·지분 보고 설계해야 하니, 전문가 상담을 받아보시는 걸 추천드려요.' },
     corp: { label:'법인전환·노무·법률', consult:[3],
       narrow:{ q:'법인 쪽은 지금 뭘 세팅하느냐가 나중을 다 좌우해요. 대표님은 어느 상황이세요?', opts:[
         {label:'개인사업자인데 법인 전환 고민이에요', value:'convert'},
         {label:'새 법인을 하나 더 낼 생각이에요', value:'new'},
         {label:'이미 법인인데 정관·업종을 손봐야 해요', value:'fix'}]},
-      info:'기업은 만들 때가 제일 중요하거든요. 나중에 투자나 정부 과제를 받으려면 정관을 다시 고쳐야 하는데, 처음부터 잘 세팅하면 그 비용이 안 들어요. 업종을 어떻게 잡느냐로 받을 수 있는 혜택도 달라지고요. 지금 구조만 알려주시면 어떻게 잡아야 나중이 편한지 짚어드릴게요.' },
+      info:'기업은 만들 때가 제일 중요해요. 나중에 투자나 정부 과제를 받으려면 정관을 다시 고쳐야 하는데, 저희는 변호사·세무사가 법인 전환부터 정관·등기·세무까지 한 번에 진단해서 풀어드리거든요. 지금 구조 보고 어떻게 잡아야 나중이 편한지 전문가가 짚어드리니, 상담 한 번 받아보세요.' },
     diagnose: { label:'뭘 받을 수 있는지 모르겠어요', consult:[0,1], narrowStore:'sector',
       narrow:{ q:'처음엔 다 그러세요, 정상이에요. 먼저 대표님 사업은 어느 쪽에 가까우세요?', opts:[
         {label:'제조·가공', value:'mfg'},{label:'도소매', value:'retail'},{label:'IT·SW', value:'it'},
         {label:'서비스', value:'svc'},{label:'건설', value:'con'},{label:'기타', value:'etc'}]},
-      info:'이거 하나로도 받을 수 있는 게 꽤 갈리거든요. 유통만 하시다가 제조를 얹으면 열리는 지원이 확 늘고요. 100% 된다는 건 아니지만, 몇 가지만 더 들으면 지금 되는 것과 준비할 것으로 정리해드릴게요.' }
+      info:'이거 하나로도 받을 수 있는 게 꽤 갈리고, 유통만 하시다 제조를 얹으면 열리는 지원이 확 늘어요. 저희는 재무제표부터 정밀 진단해서 지금 되는 것과 준비할 것을 나눠드리는데, 경영지도사·회계사·변리사·변호사가 한 팀으로 붙거든요. 100% 된다는 건 아니지만 몇 가지만 더 들으면 방향이 잡히니, 전문가 상담으로 이어가보세요.' }
   };
 
   /* ── 시작 인사 + 관심사 선택 ── */
@@ -197,7 +197,7 @@
         userSay(o.label); answers[it.narrowStore || '_narrow'] = v; clearInput(); setProgress(0.4);
         say(it.info).then(function () {
           showQuick([
-            { label:'내 조건으로 상담받기', value:'go', strong:true },
+            { label:'전문가 상담 받아보기', value:'go', strong:true },
             { label:'통화로 바로 상담 ' + TEL, tel:true, href:'tel:' + TEL }
           ], function () { clearInput(); startHandoff(it.consult); }, { type:false });
         });
@@ -214,7 +214,7 @@
       .map(function (id) { for (var i = 0; i < STEPS.length; i++) if (STEPS[i].id === id) return STEPS[i]; }).filter(Boolean);
     var toCard = function () { setProgress(0.82); say('이대로 접수할게요. 한 번만 확인해 주세요.').then(renderConfirmCard); };
     if (!need.length) return toCard();
-    say('그럼 딱 몇 가지만 확인할게요.').then(function () { runSteps(need, toCard, 0.55, 0.8); });
+    say('전문가 상담 연결 전에 딱 몇 가지만 확인할게요.').then(function () { runSteps(need, toCard, 0.55, 0.8); });
   }
 
   function renderConfirmCard() {
@@ -256,7 +256,7 @@
   function maybeShowContact() {
     if (!answers.region) return;
     if (document.getElementById('jkMini')) return;
-    say('연락처만 남겨주시면 제가 직접 보고 하루 이틀 안에 연락드릴게요. 무료고, 상담 목적 외엔 안 써요. (<a href="' + PRIVACY + '" target="_blank" rel="noopener">처리방침</a>)')
+    say('연락처만 남겨주시면 담당 전문가가 직접 보고 하루 이틀 안에 연락드려요. 무료고, 상담 목적 외엔 안 써요. (<a href="' + PRIVACY + '" target="_blank" rel="noopener">처리방침</a>)')
       .then(renderMiniForm);
   }
   function renderMiniForm() {
@@ -309,7 +309,7 @@
   }
   function onSubmitOk() {
     if (window.__jkOkTimer) { clearTimeout(window.__jkOkTimer); window.__jkOkTimer = null; }
-    say('접수됐습니다, 대표님. 제가 직접 보고 하루 이틀 안에 연락드릴게요.', 300).then(function () {
+    say('접수됐습니다, 대표님. 담당 전문가가 보고 하루 이틀 안에 연락드릴게요.', 300).then(function () {
       clearInput();
       inputEl.appendChild(el('<div class="jk-back"><button type="button">닫기</button></div>'));
       inputEl.querySelector('button').onclick = closePanel;
@@ -322,10 +322,10 @@
     var t = text.replace(/\s/g, '');
     if (/무료|공짜|비용|얼마|가격/.test(t)) return say('상담은 무료예요. 부담 없이 남겨주시면 돼요.').then(afterDeflect);
     if (/시간|얼마나걸|소요|오래/.test(t)) return say('통화 5분이면 방향은 나와요.').then(afterDeflect);
-    if (/언제|연락|전화올|콜/.test(t)) return say('제가 하루 이틀 안에 직접 연락드려요.').then(afterDeflect);
+    if (/언제|연락|전화올|콜/.test(t)) return say('담당 전문가가 하루 이틀 안에 연락드려요.').then(afterDeflect);
     if (/개인정보|정보저장|어디저장|보관/.test(t)) return say('구글폼·구글시트에 저장돼요. 자세한 건 <a href="' + PRIVACY + '" target="_blank" rel="noopener">처리방침</a>에서 보시면 돼요.').then(afterDeflect);
-    if (/어떻게|방법|작성법|절차|서류|준비물|필요서류/.test(t)) return say('그건 순서가 있어서, 대표님 서류 보고 제가 직접 짚어드려야 정확하거든요.').then(afterDeflect);
-    say('그건 대표님 상황부터 봐야 정확하게 짚어드릴 수 있어요. 지금 접수해두시면 그 건부터 챙길게요.').then(afterDeflect);
+    if (/어떻게|방법|작성법|절차|서류|준비물|필요서류/.test(t)) return say('그건 순서가 있어서, 담당 전문가가 서류 보고 짚어드려야 정확하거든요.').then(afterDeflect);
+    say('그건 대표님 상황부터 봐야 정확하게 짚어드릴 수 있어요. 지금 접수해두시면 담당 전문가가 그 건부터 챙겨드려요.').then(afterDeflect);
   }
   function afterDeflect() {
     showQuick([{ label:'무료 상담 신청', value:'apply', strong:true }, { label:'통화 ' + TEL, tel:true, href:'tel:' + TEL }],
