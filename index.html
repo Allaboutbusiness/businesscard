@@ -137,19 +137,21 @@
       box-shadow: 0 4px 16px rgba(13,154,140,.4); transition: filter .2s;
     }
     .nav-cta:hover { filter: brightness(1.08); }
-    /* 공유하기 버튼 (URL 클립보드 복사) */
-    .nav-share {
+    /* 공유하기 버튼 + 공지사항·게시글 칩 (공통 pill 스타일) */
+    .nav-share, .nav-pill {
       display: inline-flex; align-items: center; gap: 7px;
-      font-size: 14px; font-weight: 700; color: #fff;
+      font-size: 14px; font-weight: 700; color: #fff; text-decoration: none;
       background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.22);
       padding: 9px 15px; border-radius: 10px; cursor: pointer;
       white-space: nowrap; font-family: inherit;
       text-shadow: 0 1px 6px rgba(0,0,0,.4);
       transition: background .2s, border-color .2s, color .2s;
     }
-    .nav-share:hover { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.4); }
+    .nav-share:hover, .nav-pill:hover { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.4); color: #fff; }
     .nav-share.copied { background: var(--teal); border-color: var(--teal); text-shadow: none; }
-    .nav-share svg { width: 15px; height: 15px; flex-shrink: 0; }
+    .nav-share svg, .nav-pill svg { width: 15px; height: 15px; flex-shrink: 0; }
+    /* 공지사항·게시글 칩 묶음: 데스크톱은 nav flex에 그대로 흐르고, 모바일은 2열 */
+    .nav-pills { display: contents; }
 
     /* 햄버거 버튼 (모바일) */
     .nav-toggle {
@@ -187,6 +189,9 @@
       }
       .nav-cta { margin-top: 14px; text-align: center; padding: 15px; font-size: 15px; }
       .nav-share { margin-top: 12px; width: 100%; justify-content: center; padding: 14px; font-size: 15px; text-shadow: none; }
+      /* 공지사항·게시글 칩: 모바일은 2열 그리드로 나란히 */
+      .nav-pills { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+      .nav-pill { width: 100%; justify-content: center; padding: 14px 10px; font-size: 15px; text-shadow: none; }
     }
 
     /* ════════════════════════════════
@@ -928,12 +933,20 @@
   <a class="nav-brand" href="#heroSection">(주)오너스경영연구소 전문 컨설팅 그룹</a>
   <nav class="nav-links" id="navLinks">
     <a class="nav-link" href="#company">회사소개</a>
-    <a class="nav-link" href="/notice">공지사항</a>
-    <a class="nav-link" href="/posts">게시글</a>
     <a class="nav-link" href="#contact">연락처</a>
     <a class="nav-link" href="#services">컨설팅</a>
     <a class="nav-link" href="#team">전문가</a>
     <a class="nav-link" href="#cases">사례</a>
+    <span class="nav-pills">
+      <a class="nav-pill" href="/notice" aria-label="공지사항">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+        <span>공지사항</span>
+      </a>
+      <a class="nav-pill" href="/posts" aria-label="게시글">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+        <span>게시글</span>
+      </a>
+    </span>
     <button class="nav-share" id="navShare" type="button" onclick="copyPageUrl(this)" aria-label="페이지 링크 복사">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
       <span>공유하기</span>
