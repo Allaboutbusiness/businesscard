@@ -1,20 +1,45 @@
-// GET /api/posts/:id (공개)  DELETE (세션)  PATCH {status} (세션)
-const { getPost, deletePost, setStatus } = require('../../lib/db');
+// GET /api/posts/:id (공개; 로그인 시 숨김글도)  DELETE (세션)  PATCH (세션): 상태토글 또는 전체수정
+const { getPost, getPostAny, deletePost, setStatus, updatePost } = require('../../lib/db');
 const { isLoggedIn } = require('../../lib/auth');
 
 module.exports = async (req, res) => {
   const id = parseInt(req.query.id, 10);
   if (!id) return res.status(400).json({ error: 'bad id' });
+
   if (req.method === 'GET') {
-    const p = await getPost(id);
+    // 로그인 상태면 숨김 글도 반환(편집 프리필용)
+    const p = isLoggedIn(req) ? await getPostAny(id) : await getPost(id);
     return p ? res.json({ post: p }) : res.status(404).json({ error: 'not found' });
   }
+
   if (!isLoggedIn(req)) return res.status(401).json({ error: 'unauthorized' });
+
   if (req.method === 'DELETE') { await deletePost(id); return res.json({ ok: true }); }
+
   if (req.method === 'PATCH') {
-    const s = (req.body || {}).status;
-    if (s !== 'published' && s !== 'hidden') return res.status(400).json({ error: 'status' });
-    await setStatus(id, s); return res.json({ ok: true });
+    const b = req.body || {};
+    // (a) 공개/숨김 상태 토글
+    if (b.status !== undefined) {
+      if (b.status !== 'published' && b.status !== 'hidden') return res.status(400).json({ error: 'status' });
+      await setStatus(id, b.status);
+      return res.json({ ok: true });
+    }
+    // (b) 제목·본문·분류·대표사진 전체 수정
+    const category = b.category === 'notice' ? 'notice' : 'post';
+    if (!b.title || !String(b.title).trim()) return res.status(400).json({ error: '제목 필요' });
+    if (!b.body || !String(b.body).trim()) return res.status(400).json({ error: '본문 필요' });
+    const cur = await getPostAny(id);
+    if (!cur) return res.status(404).json({ error: 'not found' });
+    try {
+      await updatePost(id, {
+        category,
+        title: String(b.title).slice(0, 300),
+        body: String(b.body),
+        cover_image: b.coverImage || null,
+      });
+      return res.json({ ok: true, url: `https://ownerskr.com/post/${id}` });
+    } catch (e) { return res.status(500).json({ error: String(e.message || e) }); }
   }
+
   res.status(405).json({ error: 'method' });
 };
