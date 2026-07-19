@@ -403,16 +403,45 @@
     });
   }
 
-  /* ── 자유 텍스트(로컬 규칙 · Type A 미노출) ── */
+  /* ── 자유 텍스트: 상담 메타질문은 즉답(0토큰), 그 외 도메인 질문은 Gemini RAG(/api/chat) ── */
+  var FALLBACK_MSG = '그건 대표님 상황부터 봐야 정확하게 짚어드릴 수 있어요. 지금 접수해두시면 담당 전문가가 그 건부터 챙겨드려요.';
   function handleFreeText(text) {
     userSay(text);
     var t = text.replace(/\s/g, '');
-    if (/무료|공짜|비용|얼마|가격/.test(t)) return say('상담은 무료예요. 부담 없이 남겨주시면 돼요.').then(afterDeflect);
-    if (/시간|얼마나걸|소요|오래/.test(t)) return say('통화 5분이면 방향은 나와요.').then(afterDeflect);
-    if (/언제|연락|전화올|콜/.test(t)) return say('담당 전문가가 하루 이틀 안에 연락드려요.').then(afterDeflect);
-    if (/개인정보|정보저장|어디저장|보관/.test(t)) return say('구글폼·구글시트에 저장돼요. 자세한 건 <a href="' + PRIVACY + '" target="_blank" rel="noopener">처리방침</a>에서 보시면 돼요.').then(afterDeflect);
-    if (/어떻게|방법|작성법|절차|서류|준비물|필요서류/.test(t)) return say('그건 순서가 있어서, 담당 전문가가 서류 보고 짚어드려야 정확하거든요.').then(afterDeflect);
-    say('그건 대표님 상황부터 봐야 정확하게 짚어드릴 수 있어요. 지금 접수해두시면 담당 전문가가 그 건부터 챙겨드려요.').then(afterDeflect);
+    // 상담 자체에 대한 메타 질문만 즉답 — 도메인 질문(정책자금 얼마 등)은 걸리지 않게 좁게
+    if (/상담(은|이)?(무료|공짜|비용|수수료|얼마)|(무료|공짜)(상담|인가|예요|인가요)|수수료/.test(t))
+      return say('상담은 무료예요. 부담 없이 남겨주시면 돼요.').then(afterDeflect);
+    if (/상담.*(시간|얼마나|오래)|얼마나(걸|오래)|상담시간/.test(t))
+      return say('통화 5분이면 방향은 나와요.').then(afterDeflect);
+    if (/(언제|며칠).*(연락|전화)|연락.*(언제|며칠)|콜.*(언제|며칠)/.test(t))
+      return say('담당 전문가가 하루 이틀 안에 연락드려요.').then(afterDeflect);
+    if (/개인정보|정보저장|어디저장|보관|처리방침/.test(t))
+      return say('구글폼·구글시트에 저장돼요. 자세한 건 <a href="' + PRIVACY + '" target="_blank" rel="noopener">처리방침</a>에서 보시면 돼요.').then(afterDeflect);
+    // 그 외 → AI 분석(내 지식베이스 기반) 후 상담 유도
+    askAI(text);
+  }
+  // 봇 말풍선 즉시 출력(모델 응답 텍스트는 이스케이프)
+  function botText(txt) {
+    var html = esc(txt).replace(/\n+/g, '<br>');
+    logEl.appendChild(el('<div class="jk-row jk-bot"><div class="jk-ava"><img src="' + LOGO + '" alt=""></div>' +
+      '<div class="jk-msg">' + html + '</div></div>'));
+    scrollDown();
+  }
+  function askAI(text) {
+    var typing = node(typingNode());              // 응답 대기 타이핑 표시
+    var done = false;
+    var finish = function (reply) {
+      if (done) return; done = true;
+      if (typing && typing.parentNode) logEl.removeChild(typing);
+      if (reply && reply.trim()) botText(reply); else botText(FALLBACK_MSG);
+      afterDeflect();
+    };
+    var timer = setTimeout(function () { finish(''); }, 12000); // 12초 타임아웃 → 폴백
+    fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: String(text).slice(0, 400) }) })
+      .then(function (r) { return r.json(); })
+      .then(function (d) { clearTimeout(timer); finish(d && d.reply); })
+      .catch(function () { clearTimeout(timer); finish(''); });
   }
   function afterDeflect() {
     showQuick([{ label:'무료 상담 신청', value:'apply', strong:true }, { label:'통화 ' + TEL, tel:true, href:'tel:' + TEL }],
