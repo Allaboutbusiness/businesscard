@@ -1,4 +1,4 @@
-const CACHE_NAME = 'namecard-v5';
+const CACHE_NAME = 'namecard-v6';
 /* 앱 셸만 프리캐시. cleanUrls로 /index.html은 308 리다이렉트되므로 '/'만 캐시(redirected 응답 방지) */
 const STATIC_ASSETS = [
   '/',
@@ -30,6 +30,10 @@ self.addEventListener('fetch', event => {
 
   /* 외부 도메인(Google Forms 등)은 네트워크 직접 요청 */
   if (url.origin !== self.location.origin) return;
+
+  /* API(/api/*)는 절대 캐시하지 않음 — 로그인상태·글목록 등 항상 최신값 필요.
+     (과거 cache-first가 /api/me를 캐시해 로그아웃 후에도 로그인상태로 보이던 버그 수정) */
+  if (url.pathname.startsWith('/api/')) return;
 
   /* HTML 네비게이션: 네트워크 우선, 실패 시 캐시 */
   if (event.request.mode === 'navigate') {
