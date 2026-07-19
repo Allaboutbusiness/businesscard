@@ -90,10 +90,15 @@
     }
     if (opts.type !== false) addTypeToggle();
   }
+  // 항상 보이는 자유입력 컴포저(클로드 입력창 스타일, 회색 플레이스홀더 '직접 입력하기')
   function addTypeToggle() {
-    var t = el('<div class="jk-typetoggle"><button type="button">직접 입력하기</button></div>');
-    t.firstChild.onclick = function () { showTypebar('궁금한 걸 편하게 적어주세요', function (v) { handleFreeText(v); }); };
-    inputEl.appendChild(t);
+    var bar = el('<div class="jk-compose"><input type="text" placeholder="직접 입력하기" aria-label="직접 입력하기" enterkeyhint="send">' +
+      '<button type="button" class="jk-send" aria-label="보내기">↑</button></div>');
+    var input = bar.querySelector('input'), send = bar.querySelector('.jk-send');
+    function go() { var v = input.value.trim(); if (!v) return; input.value = ''; handleFreeText(v); }
+    send.onclick = go;
+    input.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); go(); } });
+    inputEl.appendChild(bar);
   }
   function showTypebar(placeholder, onSend, autofocus, inputmode) {
     var bar = el('<div class="jk-typebar"><input type="text" placeholder="' + esc(placeholder) + '"' +
@@ -444,8 +449,9 @@
       .catch(function () { clearTimeout(timer); finish(''); });
   }
   function afterDeflect() {
+    // 상담 버튼 + 자유입력창 함께 노출(계속 질문 가능하도록)
     showQuick([{ label:'무료 상담 신청', value:'apply', strong:true }, { label:'통화 ' + TEL, tel:true, href:'tel:' + TEL }],
-      function () { clearInput(); startHandoff([0, 1]); }, { type:false });
+      function () { clearInput(); startHandoff([0, 1]); });
   }
 
   /* ── 패널/런처 ── */
