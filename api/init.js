@@ -13,12 +13,12 @@ async function ragBuild(res) {
   await initKbSchema();
   await kbClear();
   const B = 90; // 배치 임베딩(콜당 최대 개수)
-  let inserted = 0, embedErrors = 0;
+  let inserted = 0, embedErrors = 0, firstError = '';
   for (let i = 0; i < corpus.length; i += B) {
     const batch = corpus.slice(i, i + B);
     let vecs = [];
     try { vecs = await embedBatch(batch.map((r) => r.text), 'RETRIEVAL_DOCUMENT'); }
-    catch (e) { embedErrors += batch.length; continue; }
+    catch (e) { embedErrors += batch.length; if (!firstError) firstError = String((e && e.message) || e).slice(0, 400); continue; }
     for (let j = 0; j < batch.length; j++) {
       if (!vecs[j] || !vecs[j].length) { embedErrors++; continue; }
       await kbInsert({
@@ -29,7 +29,7 @@ async function ragBuild(res) {
       inserted++;
     }
   }
-  return res.json({ ok: true, corpus: corpus.length, inserted, embedErrors, total: await kbCount() });
+  return res.json({ ok: true, corpus: corpus.length, inserted, embedErrors, firstError, total: await kbCount() });
 }
 
 module.exports = async (req, res) => {
