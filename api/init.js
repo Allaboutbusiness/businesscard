@@ -38,13 +38,6 @@ module.exports = async (req, res) => {
     return res.status(403).json({ error: 'forbidden' });
   }
   try {
-    if ((req.query.action || '') === 'models') {
-      const key = process.env.GEMINI_API_KEY || '';
-      const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models?pageSize=1000&key=' + key);
-      const j = await r.json();
-      const models = (j.models || []).map((m) => ({ name: m.name, methods: m.supportedGenerationMethods }));
-      return res.json({ status: r.status, embed: models.filter((m) => (m.methods || []).some((x) => /embed/i.test(x))), gen: models.filter((m) => (m.methods || []).includes('generateContent')).map((m) => m.name) });
-    }
     if ((req.query.action || '') === 'rag-build') return await ragBuild(res);
     await initSchema();
     return res.json({ ok: true });

@@ -42,7 +42,6 @@ module.exports = async (req, res) => {
     return res.json({ reply: answer, deflect: true, grounded: chunks.length });
   } catch (e) {
     // Gemini 오류 → 빈 reply로 폴백(클라이언트가 기존 안내로 대체)
-    const dbg = (req.query && req.query.debug) ? String((e && e.message) || e).slice(0, 400) : undefined;
-    return res.json({ reply: '', deflect: true, error: 'gen', errMsg: dbg });
+    return res.json({ reply: '', deflect: true, error: 'gen' });
   }
 };
