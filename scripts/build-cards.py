@@ -198,17 +198,22 @@ def bake(name, m):
     for s in soup.find_all("script", src=True):
         if "card.js" in s["src"]: s.decompose()
 
-    out = os.path.join(CARDDIR, f"{name}.html")
+    out = os.path.join(CARDDIR, f"{m['eng']}.html")   # 영문 파일명(Vercel 한글파일명 인코딩 이슈 회피)
     open(out, "w", encoding="utf-8").write(str(soup))
     return out
 
 
 def main():
+    import json
+    rewrites = []
     for name, m in MEMBERS.items():
         make_banner(name, m, os.path.join(REPO, f"og-{m['eng']}.jpg"))
-        out = bake(name, m)
-        print(f"  {name:5} → card/{name}.html + og-{m['eng']}.jpg")
+        bake(name, m)
+        rewrites.append({"source": f"/card/{name}", "destination": f"/card/{m['eng']}.html"})
+        print(f"  {name:5} → card/{m['eng']}.html + og-{m['eng']}.jpg")
     print(f"완료: {len(MEMBERS)}명")
+    print("\n=== vercel.json rewrites(한글 URL -> 영문 파일): rewrites 배열에 추가 ===")
+    print(json.dumps(rewrites, ensure_ascii=True, indent=2))
 
 
 if __name__ == "__main__":
