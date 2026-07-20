@@ -118,7 +118,7 @@ def frag(soup, html):
 
 def bake(name, m):
     soup = BeautifulSoup(open(INDEX, encoding="utf-8").read(), "html.parser")
-    url = f"{BASE}/card/{name}"
+    url = f"{BASE}/card/{m['eng']}"   # 영문 URL(Vercel 한글 라우팅 불가 → 영문 slug)
     ogimg = f"{BASE}/og-{m['eng']}.jpg"
     title = f"{name} {m['role']} | 오너스경영연구소 전문 컨설팅 그룹"
 

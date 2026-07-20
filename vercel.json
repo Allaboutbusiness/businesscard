@@ -3,38 +3,6 @@
   "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/card/%EC%A1%B0%EA%B8%B0%EC%97%B4",
-      "destination": "/card/jokiyeol.html"
-    },
-    {
-      "source": "/card/%EC%9C%A0%EC%9A%B0%EC%84%A0",
-      "destination": "/card/yuwooseon.html"
-    },
-    {
-      "source": "/card/%EB%A5%98%EC%98%88%EC%A3%BC",
-      "destination": "/card/ryuyeju.html"
-    },
-    {
-      "source": "/card/%EC%9D%B4%EC%8A%B9%EC%9B%90",
-      "destination": "/card/leeseungwon.html"
-    },
-    {
-      "source": "/card/%EC%95%88%EC%A7%80%EC%88%98",
-      "destination": "/card/anjisu.html"
-    },
-    {
-      "source": "/card/%EC%B1%84%EC%9A%A9%ED%98%84",
-      "destination": "/card/chaeyonghyun.html"
-    },
-    {
-      "source": "/card/%EC%86%A1%EA%B8%B0%ED%9B%88",
-      "destination": "/card/songgihoon.html"
-    },
-    {
-      "source": "/card/%EA%B9%80%EC%A7%84%EA%B8%B0",
-      "destination": "/card/jinki.html"
-    },
-    {
       "source": "/post/:id",
       "destination": "/api/render-post?id=:id"
     },
