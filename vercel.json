@@ -2,7 +2,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/card/:slug", "destination": "/index.html" },
+    { "source": "/card/:slug", "destination": "/" },
     { "source": "/post/:id", "destination": "/api/render-post?id=:id" },
     { "source": "/notice", "destination": "/api/render-list?category=notice" },
     { "source": "/posts", "destination": "/api/render-list?category=post" },
