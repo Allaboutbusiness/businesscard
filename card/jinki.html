@@ -355,6 +355,17 @@
       transition: color .15s, border-color .15s;
     }
     .hero-member-link:hover { color: #fff; border-color: rgba(255,255,255,.75); }
+    /* 정기 CFO 파트너십(구독) 진입 — 무료 CTA 하위 보조 링크 */
+    .hero-cfo-link {
+      display: inline-flex; align-items: center;
+      margin-top: 16px;
+      color: rgba(255,255,255,.82); text-decoration: none;
+      font-size: 13.5px; font-weight: 600; word-break: keep-all; line-height: 1.4;
+      border-bottom: 1px solid rgba(20,184,166,.55); padding-bottom: 2px;
+      transition: color .15s, border-color .15s;
+    }
+    .hero-cfo-link b { color: var(--teal-l); font-weight: 800; }
+    .hero-cfo-link:hover { color: #fff; border-color: var(--teal-l); }
 
     /* ════════════════════════════════
        2. CONTACT BAR — 투명 (히어로 이미지 투과)
@@ -950,6 +961,7 @@
 <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg>
 <span>공유하기</span>
 </button>
+<a class="nav-link" href="/cfo">정기 CFO</a>
 <a class="nav-cta" href="#apply">상담문의</a>
 <a class="nav-link" href="/login" style="font-size:12px;opacity:.55">관리자</a>
 </nav>
@@ -986,6 +998,7 @@
 <a class="hero-cta-btn-inv" href="/programs">
 <span>정부지원사업 AI 매칭(무료) 바로가기</span><span>→</span>
 </a>
+<a class="hero-cfo-link" href="/cfo">또는, 매달 곁에서 함께하는 <b>정기 CFO 파트너십</b> 알아보기 →</a>
 </div>
 </div>
 </section>
@@ -1497,8 +1510,17 @@
 <div class="ap-done" id="apDone">
 <div class="chk"><svg fill="none" height="30" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewbox="0 0 24 24" width="30"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
 <h3>신청이 정상 접수되었습니다</h3>
-<p>담당자가 확인 후 순차적으로 연락드리겠습니다.<br/>빠른 상담을 원하시면 아래로 전화 주세요.</p>
-<div class="ph"><a href="tel:1668-5033" style="color:inherit;text-decoration:none">📞 1668-5033</a></div>
+<p>담당 CFO가 <b style="color:#e9f1ef">영업일 24시간 내</b> 연락드립니다.<br/>무료 3회 진단은 이렇게 진행됩니다.</p>
+<div style="text-align:left;max-width:340px;margin:20px auto 0;display:flex;flex-direction:column;gap:11px">
+<div style="display:flex;gap:11px;align-items:center"><span style="flex:none;width:24px;height:24px;border-radius:50%;background:var(--teal);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center">1</span><span style="font-size:14px;color:#cfe0db;font-weight:600">현황·리스크 진단</span></div>
+<div style="display:flex;gap:11px;align-items:center"><span style="flex:none;width:24px;height:24px;border-radius:50%;background:var(--teal);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center">2</span><span style="font-size:14px;color:#cfe0db;font-weight:600">지금 받을 수 있는 자금·절세 목록</span></div>
+<div style="display:flex;gap:11px;align-items:center"><span style="flex:none;width:24px;height:24px;border-radius:50%;background:var(--teal);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center">3</span><span style="font-size:14px;color:#cfe0db;font-weight:600">실행 계획 + 매달 관리 설계</span></div>
+</div>
+<p style="font-size:13px;color:#9db3ad;margin-top:16px">3회 진단은 전부 무료입니다. 3회차에서 <b style="color:var(--teal-l)">정기 CFO 파트너십</b>을 함께 정합니다.</p>
+<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px">
+<a href="tel:1668-5033" style="background:var(--teal);color:#fff;font-weight:700;font-size:14px;padding:12px 20px;border-radius:50px;text-decoration:none">📞 지금 통화 1668-5033</a>
+<a href="/cfo" style="border:1px solid rgba(20,184,166,.55);color:var(--teal-l);font-weight:700;font-size:14px;padding:12px 20px;border-radius:50px;text-decoration:none">3회 이후 어떻게 이어지나 →</a>
+</div>
 </div>
 </div>
 </div>

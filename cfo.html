@@ -454,6 +454,8 @@ cs.forEach(function(c){c.addEventListener('change',up)});})();
 /* 폼 제출(기존 구글폼 iframe 방식 재사용) */
 (function(){var form=document.getElementById('cfoForm');if(!form)return;
 var sink=document.getElementById('cfoSink'),err=document.getElementById('cfoErr'),done=document.getElementById('cfoDone'),btn=document.getElementById('cfoSubmit'),agree=document.getElementById('cfoAgree'),sent=false;
+/* 유입코드(?code=) 자동 채움 — 있으면 [사외CFO랜딩] 기본값 대신 유입/담당자 코드로 귀속 */
+try{var _c=new URLSearchParams(location.search).get('code');if(_c){var _h=form.querySelector('input[name="entry.1340519393"]');if(_h)_h.value=_c;}}catch(e){}
 form.addEventListener('submit',function(e){
   err.style.display='none';err.textContent='';
   var miss=[];form.querySelectorAll('[data-req]').forEach(function(el){if(!String(el.value||'').trim())miss.push(el)});

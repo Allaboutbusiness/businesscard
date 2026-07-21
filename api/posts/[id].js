@@ -1,6 +1,7 @@
 // GET /api/posts/:id (공개; 로그인 시 숨김글도)  DELETE (세션)  PATCH (세션): 상태토글 또는 전체수정
 const { getPost, getPostAny, deletePost, setStatus, updatePost } = require('../../lib/db');
 const { isLoggedIn } = require('../../lib/auth');
+const { indexPost, unindexPost } = require('../../lib/kb-sync');
 
 module.exports = async (req, res) => {
   const id = parseInt(req.query.id, 10);
@@ -14,7 +15,11 @@ module.exports = async (req, res) => {
 
   if (!isLoggedIn(req)) return res.status(401).json({ error: 'unauthorized' });
 
-  if (req.method === 'DELETE') { await deletePost(id); return res.json({ ok: true }); }
+  if (req.method === 'DELETE') {
+    await deletePost(id);
+    try { await unindexPost(id); } catch (_) {}  // 챗봇 지식에서도 제거
+    return res.json({ ok: true });
+  }
 
   if (req.method === 'PATCH') {
     const b = req.body || {};
@@ -22,6 +27,11 @@ module.exports = async (req, res) => {
     if (b.status !== undefined) {
       if (b.status !== 'published' && b.status !== 'hidden') return res.status(400).json({ error: 'status' });
       await setStatus(id, b.status);
+      // 숨김이면 챗봇 지식에서 빼고, 공개면 다시 넣는다
+      try {
+        if (b.status === 'hidden') await unindexPost(id);
+        else { const cur = await getPostAny(id); if (cur) await indexPost({ id, title: cur.title, body: cur.body }); }
+      } catch (_) {}
       return res.json({ ok: true });
     }
     // (b) 제목·본문·분류·대표사진 전체 수정
@@ -37,6 +47,9 @@ module.exports = async (req, res) => {
         body: String(b.body),
         cover_image: b.coverImage || null,
       });
+      // 수정 반영 → RAG 재색인
+      try { await indexPost({ id, title: String(b.title), body: String(b.body) }); }
+      catch (e) { console.warn('kb index(update) 실패:', String((e && e.message) || e)); }
       return res.json({ ok: true, url: `https://ownerskr.com/post/${id}` });
     } catch (e) { return res.status(500).json({ error: String(e.message || e) }); }
   }

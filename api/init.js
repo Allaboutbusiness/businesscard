@@ -3,8 +3,9 @@
 //   ?action=rag-build: 코퍼스 임베딩 → pgvector(kb_chunks) 적재(멱등, 재실행 가능)
 const path = require('path');
 const fs = require('fs');
-const { initSchema, initKbSchema, kbClear, kbInsert, kbCount } = require('../lib/db');
+const { initSchema, initKbSchema, kbClear, kbInsert, kbCount, postsForKb } = require('../lib/db');
 const { embedBatch, toVectorLiteral } = require('../lib/rag');
+const { postText } = require('../lib/kb-sync');
 
 async function ragBuild(res) {
   const p = path.join(__dirname, '..', 'data', 'rag-corpus.json');
@@ -29,7 +30,22 @@ async function ragBuild(res) {
       inserted++;
     }
   }
-  return res.json({ ok: true, corpus: corpus.length, inserted, embedErrors, firstError, total: await kbCount() });
+  // 발행된 게시글(자동발행 공고 포함)도 RAG에 함께 적재 — kbClear로 지워졌으므로 재삽입
+  let posts = [];
+  try { posts = await postsForKb(); } catch (_) {}
+  for (let i = 0; i < posts.length; i += B) {
+    const batch = posts.slice(i, i + B);
+    let vecs = [];
+    try { vecs = await embedBatch(batch.map((p) => postText(p.title, p.body)), 'RETRIEVAL_DOCUMENT'); }
+    catch (e) { embedErrors += batch.length; if (!firstError) firstError = String((e && e.message) || e).slice(0, 400); continue; }
+    for (let j = 0; j < batch.length; j++) {
+      if (!vecs[j] || !vecs[j].length) { embedErrors++; continue; }
+      await kbInsert({ category: 'post', topic: batch[j].title, text: postText(batch[j].title, batch[j].body),
+        source: `/post/${batch[j].id}`, vecLiteral: toVectorLiteral(vecs[j]) });
+      inserted++;
+    }
+  }
+  return res.json({ ok: true, corpus: corpus.length, posts: posts.length, inserted, embedErrors, firstError, total: await kbCount() });
 }
 
 module.exports = async (req, res) => {

@@ -2,7 +2,9 @@
 const { allPublished } = require('../lib/db');
 module.exports = async (req, res) => {
   const base = 'https://ownerskr.com';
-  const staticUrls = [['/', '1.0'], ['/programs', '0.8'], ['/notice', '0.6'], ['/posts', '0.7']];
+  const cardSlugs = ['jinki', 'anjisu', 'chaeyonghyun', 'jokiyeol', 'leeseungwon', 'ryuyeju', 'songgihoon', 'yuwooseon'];
+  const staticUrls = [['/', '1.0'], ['/programs', '0.8'], ['/cfo', '0.8'], ['/notice', '0.6'], ['/posts', '0.7']]
+    .concat(cardSlugs.map((s) => ['/card/' + s, '0.5']));
   let rows = [];
   try { rows = await allPublished(); } catch (_) {}
   const urls = staticUrls.map(([u, p]) => `<url><loc>${base}${u}</loc><priority>${p}</priority></url>`)
