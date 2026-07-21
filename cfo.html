@@ -1,0 +1,467 @@
+<!-- /cfo — 사외 CFO 정기 파트너십 랜딩 (전환 최적화 · 기존 index.html 미수정 · 신규 URL 테스트베드)
+     오퍼 사다리(무료 진단→정기 파트너→풀 CFO)를 전면 노출. 폼은 기존 구글폼 재사용.
+     [측정] GA4/메타 픽셀은 아래 주석 자리에 ID만 넣으면 활성화(Week 1-2 측정 인프라). -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>사외 CFO 정기 파트너십 | 오너스경영연구소 — 매달 곁에 있는 재무 파트너</title>
+<meta name="description" content="정책자금·절세·인증·투자를 그때그때가 아니라 1년 내내 설계·관리하는 사외 CFO 정기 파트너십. 무료 3회 진단으로 시작하세요.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0a0b09">
+<link rel="canonical" href="https://ownerskr.com/cfo">
+<meta property="og:type" content="website">
+<meta property="og:title" content="사외 CFO 정기 파트너십 | 매달 곁에 있는 재무 파트너">
+<meta property="og:description" content="돈 문제는 한 번으로 끝나지 않습니다. 정책자금·절세·인증·투자를 1년 내내 관리하는 사외 CFO. 무료 3회 진단으로 시작.">
+<meta property="og:url" content="https://ownerskr.com/cfo">
+<meta property="og:image" content="https://ownerskr.com/og-image.jpg">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;900&family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
+<!-- ===== [측정 인프라 자리] GA4 / 메타 픽셀 — ID 넣으면 활성 =====
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-XXXXXXX');</script>
+<script>!function(f,b,e,v,n,t,s){...메타 픽셀...}();fbq('init','PIXEL_ID');fbq('track','PageView');</script>
+================================================================ -->
+
+<style>
+:root{--teal:#0D9A8C;--teal-l:#14B8A6;--amber:#F59E0B;--cream:#F5F3ED;--maxw:1180px}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif;color:var(--cream);background:#0a0b09;-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.5}
+a{color:inherit;text-decoration:none}
+.fixed-bg{position:fixed;inset:0;z-index:-2;background:url('/bg.jpg') center top/cover no-repeat}
+.fixed-bg-ov{position:fixed;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(6,8,6,.78),rgba(7,9,7,.9) 60%,rgba(8,10,8,.96))}
+.wrap{width:100%;max-width:var(--maxw);margin-inline:auto;padding:0 22px}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:2.5px;color:var(--teal-l);margin-bottom:14px}
+.arch{font-family:'Archivo',sans-serif}
+
+/* 헤더 */
+.hd{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:14px 22px;background:rgba(10,12,11,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.07)}
+.hd-brand{font-size:15px;font-weight:800;color:#fff;white-space:nowrap}
+.hd-nav{display:flex;align-items:center;gap:18px}
+.hd-nav a.tx{font-size:14px;font-weight:600;color:rgba(255,255,255,.8)}
+.hd-nav a.tx:hover{color:var(--teal-l)}
+.hd-cta{font-size:13px;font-weight:800;color:#fff;background:var(--teal);padding:9px 16px;border-radius:10px;box-shadow:0 4px 16px rgba(13,154,140,.4)}
+@media(max-width:640px){.hd-nav a.tx{display:none}.hd-brand{font-size:12.5px}}
+
+/* 히어로 */
+.hero{min-height:100vh;display:flex;align-items:center;padding:120px 22px 70px;position:relative}
+.hero-in{max-width:var(--maxw);margin:0 auto;width:100%}
+.hero h1{font-size:clamp(32px,6.2vw,60px);font-weight:900;line-height:1.18;letter-spacing:-1.5px;color:#fff;word-break:keep-all;margin-bottom:20px}
+.hero h1 .hl{color:var(--teal-l)}
+.hero .lead{font-size:clamp(16px,2.3vw,20px);color:rgba(245,243,237,.82);line-height:1.72;max-width:640px;word-break:keep-all;margin-bottom:16px}
+.hero .subnote{font-size:14px;color:rgba(245,243,237,.5);margin-bottom:32px}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:26px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-size:16px;font-weight:800;padding:16px 28px;border-radius:14px;cursor:pointer;border:none;font-family:inherit;transition:transform .15s,filter .15s,background .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--teal);color:#fff;box-shadow:0 8px 28px rgba(13,154,140,.45)}
+.btn-primary:hover{filter:brightness(1.08)}
+.btn-ghost{background:rgba(255,255,255,.07);color:#fff;border:1.5px solid rgba(255,255,255,.22)}
+.btn-ghost:hover{background:rgba(255,255,255,.14)}
+.hero-trust{display:flex;flex-wrap:wrap;gap:22px;font-size:13.5px;color:rgba(245,243,237,.65)}
+.hero-trust b{color:var(--teal-l);font-weight:800}
+
+/* 섹션 공통 */
+section{position:relative;padding:84px 0}
+.sec-head{text-align:center;max-width:760px;margin:0 auto 52px}
+.sec-head h2{font-size:clamp(24px,4.2vw,38px);font-weight:900;letter-spacing:-.8px;color:#fff;line-height:1.32;word-break:keep-all;margin-bottom:14px}
+.sec-head p{font-size:clamp(15px,2vw,17px);color:rgba(245,243,237,.62);line-height:1.75;word-break:keep-all}
+
+/* 문제(일회성의 한계) */
+.prob{background:#0c0f0d}
+.prob-grid{display:grid;grid-template-columns:1fr;gap:18px;max-width:960px;margin:0 auto}
+@media(min-width:820px){.prob-grid{grid-template-columns:repeat(3,1fr)}}
+.prob-card{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:28px 24px}
+.prob-card .n{font-family:'Archivo';font-size:15px;font-weight:900;color:var(--amber);letter-spacing:1px;margin-bottom:12px}
+.prob-card h3{font-size:18px;font-weight:800;color:#fff;margin-bottom:10px;word-break:keep-all}
+.prob-card p{font-size:14.5px;color:rgba(245,243,237,.6);line-height:1.7;word-break:keep-all}
+.prob-turn{text-align:center;margin-top:44px;font-size:clamp(18px,2.6vw,24px);font-weight:800;color:#fff;word-break:keep-all}
+.prob-turn .hl{color:var(--teal-l)}
+
+/* 오퍼 사다리(티어) */
+.tiers{background:transparent}
+.tier-grid{display:grid;grid-template-columns:1fr;gap:20px;max-width:1080px;margin:0 auto;align-items:stretch}
+@media(min-width:900px){.tier-grid{grid-template-columns:repeat(3,1fr)}}
+.tier{position:relative;background:rgba(17,19,17,.72);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:34px 28px;display:flex;flex-direction:column}
+.tier.feat{border-color:var(--teal);box-shadow:0 20px 60px rgba(13,154,140,.28);background:rgba(13,154,140,.08)}
+.tier-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--teal);color:#fff;font-size:12px;font-weight:800;padding:6px 16px;border-radius:999px;white-space:nowrap;box-shadow:0 6px 18px rgba(13,154,140,.5)}
+.tier-badge.free{background:rgba(255,255,255,.14);color:#fff}
+.tier-name{font-size:20px;font-weight:900;color:#fff;margin-bottom:6px}
+.tier-tag{font-size:13.5px;color:rgba(245,243,237,.6);margin-bottom:18px;word-break:keep-all}
+.tier-price{font-family:'Archivo';font-size:30px;font-weight:900;color:#fff;line-height:1;margin-bottom:4px}
+.tier-price small{font-family:'Noto Sans KR';font-size:14px;font-weight:600;color:rgba(245,243,237,.55)}
+.tier-pricenote{font-size:12.5px;color:var(--teal-l);font-weight:700;margin-bottom:22px}
+.tier ul{list-style:none;display:flex;flex-direction:column;gap:11px;margin-bottom:26px;flex:1}
+.tier li{position:relative;padding-left:26px;font-size:14.5px;color:rgba(245,243,237,.86);line-height:1.55;word-break:keep-all}
+.tier li::before{content:"✓";position:absolute;left:0;top:0;color:var(--teal-l);font-weight:900}
+.tier li.muted{color:rgba(245,243,237,.4)}
+.tier li.muted::before{content:"—";color:rgba(245,243,237,.3)}
+.tier .btn{width:100%;justify-content:center;font-size:15px;padding:15px}
+.tier-note{text-align:center;font-size:13px;color:rgba(245,243,237,.45);margin-top:28px;word-break:keep-all}
+
+/* 포함내역 요약 바 */
+.incl{background:#0c0f0d}
+.incl-grid{display:grid;grid-template-columns:1fr;gap:16px;max-width:980px;margin:0 auto}
+@media(min-width:720px){.incl-grid{grid-template-columns:repeat(2,1fr)}}
+.incl-item{display:flex;gap:16px;align-items:flex-start;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:22px}
+.incl-item .ic{flex:none;width:44px;height:44px;border-radius:12px;background:rgba(13,154,140,.16);border:1px solid rgba(20,184,166,.35);display:flex;align-items:center;justify-content:center;font-size:22px}
+.incl-item h4{font-size:16px;font-weight:800;color:#fff;margin-bottom:5px}
+.incl-item p{font-size:14px;color:rgba(245,243,237,.62);line-height:1.65;word-break:keep-all}
+
+/* 전문가팀 */
+.team-strip{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;max-width:900px;margin:0 auto}
+.team-chip{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:9px 18px 9px 10px}
+.team-chip img{width:38px;height:38px;border-radius:50%;object-fit:cover;object-position:top;background:rgba(255,255,255,.08)}
+.team-chip .tn{font-size:14px;font-weight:800;color:#fff}
+.team-chip .tr{font-size:12px;color:var(--teal-l);font-weight:700}
+
+/* 통계 */
+.stats{background:transparent}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:900px;margin:0 auto}
+@media(min-width:720px){.stats-grid{grid-template-columns:repeat(4,1fr)}}
+.stat{text-align:center;background:rgba(17,19,17,.6);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:30px 16px}
+.stat .num{font-family:'Archivo';font-size:clamp(30px,5vw,44px);font-weight:900;color:var(--teal-l);line-height:1}
+.stat .lbl{font-size:13.5px;color:rgba(245,243,237,.62);margin-top:10px;word-break:keep-all}
+
+/* 자가진단 */
+.selfcheck{background:#0c0f0d}
+.sc-box{max-width:720px;margin:0 auto;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:36px 30px}
+.sc-list{display:flex;flex-direction:column;gap:14px;margin:24px 0 28px}
+.sc-item{display:flex;gap:14px;align-items:flex-start;font-size:15.5px;color:rgba(245,243,237,.88);line-height:1.55;cursor:pointer;word-break:keep-all}
+.sc-item input{flex:none;width:22px;height:22px;margin-top:1px;accent-color:var(--teal)}
+.sc-result{font-size:15px;font-weight:700;color:var(--teal-l);text-align:center;min-height:24px;margin-bottom:20px}
+
+/* FAQ */
+.faq-list{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.faq{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:14px;overflow:hidden}
+.faq summary{list-style:none;cursor:pointer;padding:20px 22px;font-size:16px;font-weight:800;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:12px;word-break:keep-all}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-size:22px;color:var(--teal-l);flex:none;transition:transform .2s}
+.faq[open] summary::after{transform:rotate(45deg)}
+.faq .a{padding:0 22px 20px;font-size:14.5px;color:rgba(245,243,237,.68);line-height:1.75;word-break:keep-all}
+
+/* 폼 */
+.apply{background:linear-gradient(180deg,#0c0f0d,#0a0b09)}
+.form-card{max-width:820px;margin:0 auto;background:rgba(17,19,17,.7);border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:clamp(26px,4vw,44px)}
+.fgrid{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:640px){.fgrid{grid-template-columns:1fr 1fr}}
+.field{display:flex;flex-direction:column}
+.field.full{grid-column:1/-1}
+.field label{font-size:13px;font-weight:700;color:rgba(245,243,237,.8);margin-bottom:7px}
+.field label .rq{color:var(--amber);margin-left:3px}
+.field input,.field select{width:100%;padding:13px 15px;border-radius:11px;border:1.5px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:#fff;font-size:15px;font-family:inherit;outline:none}
+.field input:focus,.field select:focus{border-color:var(--teal-l);background:rgba(255,255,255,.08)}
+.field input::placeholder{color:rgba(245,243,237,.38)}
+.field select option{background:#12140f;color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:9px}
+.chip{position:relative;cursor:pointer}
+.chip input{position:absolute;opacity:0;width:0;height:0}
+.chip span{display:inline-block;padding:9px 15px;border-radius:999px;border:1.5px solid rgba(255,255,255,.16);font-size:13.5px;font-weight:700;color:rgba(245,243,237,.8);transition:.15s}
+.chip input:checked+span{background:var(--teal);border-color:var(--teal);color:#fff}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:rgba(245,243,237,.6);line-height:1.6}
+.consent input{flex:none;width:20px;height:20px;margin-top:1px;accent-color:var(--teal)}
+.consent a{color:var(--teal-l)}
+.f-err{display:none;color:#ff9b9b;font-size:13px;font-weight:700;margin-top:4px}
+.f-submit{width:100%;justify-content:center;font-size:17px;padding:17px}
+.f-done{display:none;text-align:center;padding:30px}
+.f-done h3{font-size:22px;font-weight:900;color:#fff;margin-bottom:10px}
+.f-done p{font-size:15px;color:rgba(245,243,237,.7);line-height:1.7}
+.f-info{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;margin-top:22px;font-size:14px;color:rgba(245,243,237,.65)}
+.f-info a{color:var(--teal-l);font-weight:700}
+
+/* 푸터 */
+.ft{background:#08090730;padding:36px 22px 46px;text-align:center;border-top:1px solid rgba(255,255,255,.06)}
+.ft-nav a{color:rgba(245,243,237,.6);font-size:13px;font-weight:600;margin:0 9px}
+.ft-nav a:hover{color:var(--teal-l)}
+.ft-copy{font-size:11.5px;color:rgba(245,243,237,.32);line-height:1.7;margin-top:14px}
+
+/* 등장 애니메이션 */
+.rev{opacity:0;transform:translateY(22px);transition:opacity .6s,transform .6s}
+.rev.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.rev{opacity:1;transform:none}.btn:hover{transform:none}}
+</style>
+
+<div class="fixed-bg"></div><div class="fixed-bg-ov"></div>
+
+<header class="hd">
+  <a class="hd-brand" href="/">(주)오너스경영연구소 · 사외 CFO</a>
+  <nav class="hd-nav">
+    <a class="tx" href="#tiers">파트너십</a>
+    <a class="tx" href="#included">서비스</a>
+    <a class="tx" href="#faq">FAQ</a>
+    <a class="hd-cta" href="#apply">무료 진단 신청</a>
+  </nav>
+</header>
+
+<!-- 히어로 -->
+<section class="hero">
+  <div class="hero-in">
+    <div class="eyebrow rev">사외 CFO 정기 파트너십</div>
+    <h1 class="rev">기업의 돈 문제는<br>한 번으로 끝나지 않습니다.<br><span class="hl">매달 곁에 있는 CFO가</span> 답입니다.</h1>
+    <p class="lead rev">정책자금·절세·인증·투자는 '그때그때' 알아보면 이미 늦습니다.<br>재무 파트너가 1년 내내 타이밍을 설계하고, 전문가팀이 즉시 실행합니다.</p>
+    <p class="subnote rev">일회성 상담이 아니라, 대표님 회사의 재무를 지속적으로 책임지는 사외 CFO 체계입니다.</p>
+    <div class="hero-cta rev">
+      <a class="btn btn-primary" href="#apply">3회 무료 진단으로 시작하기 →</a>
+      <a class="btn btn-ghost" href="#tiers">파트너십 자세히 보기</a>
+    </div>
+    <div class="hero-trust rev">
+      <span><b>50명+</b> 전문 컨설턴트</span>
+      <span><b>변호사·회계사·변리사·세무사</b> 원스톱</span>
+      <span><b>3회 무료</b> 진단 상담</span>
+    </div>
+  </div>
+</section>
+
+<!-- 문제 -->
+<section class="prob" id="why">
+  <div class="wrap">
+    <div class="sec-head rev">
+      <div class="eyebrow">왜 '정기'여야 하는가</div>
+      <h2>한 번의 상담으로는<br>놓치는 돈이 매달 생깁니다</h2>
+      <p>자금·세금·인증·투자는 모두 '타이밍' 게임입니다. 그리고 그 타이밍은 매달 바뀝니다.</p>
+    </div>
+    <div class="prob-grid">
+      <div class="prob-card rev"><div class="n">01</div><h3>공고는 매달 새로 뜨고, 15분이면 마감됩니다</h3><p>정책자금·지원사업은 예산 소진 선착순. 본업에 바쁜 사이 올해 받을 수 있던 자금이 그냥 지나갑니다.</p></div>
+      <div class="prob-card rev"><div class="n">02</div><h3>절세는 '미리' 설계해야만 줄어듭니다</h3><p>증여·상속·법인자금 개인화·경정청구는 시점을 놓치면 세금이 확정됩니다. 결산 뒤엔 손쓸 게 없습니다.</p></div>
+      <div class="prob-card rev"><div class="n">03</div><h3>자금·인증·투자는 '순서'가 성패를 가릅니다</h3><p>인증 먼저냐 자금 먼저냐, 투자를 언제 받느냐. 순서 하나로 결과가 달라지는데, 혼자 판단하긴 어렵습니다.</p></div>
+    </div>
+    <div class="prob-turn rev">그래서, 일이 생길 때 찾는 게 아니라 <span class="hl">매달 먼저 챙겨주는 CFO</span>가 필요합니다.</div>
+  </div>
+</section>
+
+<!-- 오퍼 사다리 -->
+<section class="tiers" id="tiers">
+  <div class="wrap">
+    <div class="sec-head rev">
+      <div class="eyebrow">파트너십 단계</div>
+      <h2>무료 진단으로 시작해,<br>필요한 만큼 CFO를 곁에 두세요</h2>
+      <p>모든 파트너십은 <b style="color:var(--cream)">3회 무료 진단</b>에서 출발합니다. 진단 후 회사 상황에 맞는 단계를 함께 정합니다.</p>
+    </div>
+    <div class="tier-grid">
+      <div class="tier rev">
+        <div class="tier-badge free">지금 여기서 시작</div>
+        <div class="tier-name">무료 진단</div>
+        <div class="tier-tag">우리 회사가 지금 놓치고 있는 게 뭔지부터</div>
+        <div class="tier-price">무료<small> · 3회</small></div>
+        <div class="tier-pricenote">부담 없이 상태 점검</div>
+        <ul>
+          <li>3회 무료 진단 상담 (전화·화상)</li>
+          <li>지금 받을 수 있는 정책자금·지원사업 파악</li>
+          <li>절세·인증 기회 1차 점검</li>
+          <li>맞춤 우선순위 로드맵 제안</li>
+        </ul>
+        <a class="btn btn-ghost" href="#apply">무료로 시작하기</a>
+      </div>
+      <div class="tier feat rev">
+        <div class="tier-badge">가장 많이 선택</div>
+        <div class="tier-name">정기 파트너</div>
+        <div class="tier-tag">매달 먼저 챙겨주는 사외 CFO 자문</div>
+        <div class="tier-price">맞춤<small> 견적</small></div>
+        <div class="tier-pricenote">기업 규모별 · 상담 시 안내</div>
+        <ul>
+          <li><b>무료 진단 전체 포함</b> +</li>
+          <li>월 1회 정기 재무·자금 자문</li>
+          <li>매달 맞춤 정책자금·지원사업 공고 브리핑</li>
+          <li>세무·절세 캘린더 관리 (증여·상속·경정청구 타이밍)</li>
+          <li>전문가팀 상담 우선 배정</li>
+        </ul>
+        <a class="btn btn-primary" href="#apply">파트너십 상담받기 →</a>
+      </div>
+      <div class="tier rev">
+        <div class="tier-name">풀 CFO</div>
+        <div class="tier-tag">전담 CFO + 전문가팀 원스톱 실행</div>
+        <div class="tier-price">맞춤<small> 견적</small></div>
+        <div class="tier-pricenote">전담 배정 · 상담 시 안내</div>
+        <ul>
+          <li><b>정기 파트너 전체 포함</b> +</li>
+          <li>전담 사외 CFO 배정</li>
+          <li>변호사·회계사·변리사·행정사·경영지도사·AC 우선 원스톱</li>
+          <li>분기 임원 리포트 (재무·성장 전략)</li>
+          <li>투자 유치·법인 구조 설계 동행</li>
+        </ul>
+        <a class="btn btn-ghost" href="#apply">풀 CFO 문의</a>
+      </div>
+    </div>
+    <p class="tier-note">※ 파트너십 비용은 매출 규모·필요 범위에 따라 달라져, 무료 진단 상담에서 맞춤으로 안내드립니다. 계약 강매 없이 진단 먼저 받아보세요.</p>
+  </div>
+</section>
+
+<!-- 포함내역 -->
+<section class="incl" id="included">
+  <div class="wrap">
+    <div class="sec-head rev">
+      <div class="eyebrow">정기 파트너십에 포함</div>
+      <h2>대표님은 본업에, 돈 문제는 CFO에게</h2>
+      <p>흩어진 전문가를 매번 찾아다닐 필요 없이, 하나의 팀이 매달 관리합니다.</p>
+    </div>
+    <div class="incl-grid">
+      <div class="incl-item rev"><div class="ic">📅</div><div><h4>매달 맞춤 공고 브리핑</h4><p>업종·업력에 맞는 정책자금·지원사업만 골라, 마감 전에 먼저 알려드립니다.</p></div></div>
+      <div class="incl-item rev"><div class="ic">💰</div><div><h4>절세·세무 캘린더 관리</h4><p>증여·상속·경정청구·법인자금 개인화의 최적 시점을 미리 설계합니다.</p></div></div>
+      <div class="incl-item rev"><div class="ic">🏅</div><div><h4>인증·R&D 로드맵</h4><p>벤처·이노비즈·연구소·R&D를 자금·투자와 순서 맞춰 준비합니다.</p></div></div>
+      <div class="incl-item rev"><div class="ic">⚖️</div><div><h4>법률·노무·투자 동행</h4><p>법인전환·분쟁·노무·투자 유치를 전문 자격사가 직접 챙깁니다.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 전문가팀 -->
+<section id="team">
+  <div class="wrap">
+    <div class="sec-head rev">
+      <div class="eyebrow">하나의 팀</div>
+      <h2>필요할 때마다 부르지 않아도,<br>이미 한 팀입니다</h2>
+    </div>
+    <div class="team-strip rev">
+      <span class="team-chip"><img src="/card-jokiyeol.jpg" alt="조기열"><span><span class="tn">조기열</span><br><span class="tr">경영지도사</span></span></span>
+      <span class="team-chip"><img src="/photo_crop.png" alt="김진기"><span><span class="tn">김진기</span><br><span class="tr">사외 CFO</span></span></span>
+      <span class="team-chip"><img src="/card-yuwooseon.jpg" alt="유우선"><span><span class="tn">유우선</span><br><span class="tr">수석 경영컨설턴트</span></span></span>
+      <span class="team-chip"><img src="/card-ryuyeju.jpg" alt="류예주"><span><span class="tn">류예주</span><br><span class="tr">AC 대표</span></span></span>
+      <span class="team-chip"><img src="/card-leeseungwon.jpg" alt="이승원"><span><span class="tn">이승원</span><br><span class="tr">행정사</span></span></span>
+      <span class="team-chip"><img src="/card-anjisu.jpg" alt="안지수"><span><span class="tn">안지수</span><br><span class="tr">변리사</span></span></span>
+      <span class="team-chip"><img src="/card-chaeyonghyun.jpg" alt="채용현"><span><span class="tn">채용현</span><br><span class="tr">변호사·세무사·변리사</span></span></span>
+      <span class="team-chip"><img src="/card-songgihoon.jpg" alt="송기훈"><span><span class="tn">송기훈</span><br><span class="tr">회계사</span></span></span>
+    </div>
+  </div>
+</section>
+
+<!-- 통계 -->
+<section class="stats">
+  <div class="wrap">
+    <div class="stats-grid">
+      <div class="stat rev"><div class="num">1000+</div><div class="lbl">누적 컨설팅 사례</div></div>
+      <div class="stat rev"><div class="num">100억+</div><div class="lbl">누적 절세액</div></div>
+      <div class="stat rev"><div class="num">50명+</div><div class="lbl">전문 컨설턴트</div></div>
+      <div class="stat rev"><div class="num">3회</div><div class="lbl">무료 진단 상담</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 자가진단 -->
+<section class="selfcheck">
+  <div class="wrap">
+    <div class="sec-head rev">
+      <div class="eyebrow">30초 자가진단</div>
+      <h2>우리 회사, 사외 CFO가 필요할까요?</h2>
+    </div>
+    <div class="sc-box rev">
+      <div class="sc-list">
+        <label class="sc-item"><input type="checkbox" class="sc-c"> 정책자금·지원사업 공고를 챙길 사람이 따로 없다</label>
+        <label class="sc-item"><input type="checkbox" class="sc-c"> 세금이 매년 많이 나오는데 절세 설계는 안 하고 있다</label>
+        <label class="sc-item"><input type="checkbox" class="sc-c"> 법인 돈을 개인화하거나 가업승계를 고민 중이다</label>
+        <label class="sc-item"><input type="checkbox" class="sc-c"> 인증·R&D·투자를 어떤 순서로 할지 판단이 어렵다</label>
+        <label class="sc-item"><input type="checkbox" class="sc-c"> 필요할 때마다 세무사·변호사를 따로 찾아다닌다</label>
+      </div>
+      <div class="sc-result" id="scResult"></div>
+      <a class="btn btn-primary" href="#apply" style="width:100%;justify-content:center">무료 진단으로 확인하기 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head rev"><div class="eyebrow">자주 묻는 질문</div><h2>궁금하실 만한 것들</h2></div>
+    <div class="faq-list">
+      <details class="faq rev"><summary>무료 상담과 정기 파트너십은 뭐가 다른가요?</summary><div class="a">무료 진단(3회)은 현재 상태와 기회를 파악하는 단계입니다. 정기 파트너십은 그 이후, 매달 공고 브리핑·절세 캘린더·전문가팀 대응을 지속적으로 제공하는 '재무 관리' 서비스입니다. 진단만 받고 끝내셔도 전혀 문제없습니다.</div></details>
+      <details class="faq rev"><summary>비용은 얼마인가요?</summary><div class="a">파트너십 비용은 매출 규모와 필요 범위(자문만/전담 CFO/전문가팀 실행)에 따라 달라집니다. 무료 진단 상담에서 회사 상황을 본 뒤 맞춤으로 안내드리며, 강매는 없습니다.</div></details>
+      <details class="faq rev"><summary>어떤 기업에 맞나요?</summary><div class="a">제조·유통 중심의 중소기업·소상공인 대표님께 특히 적합합니다. 매출 3억~80억 구간에서 자금·절세·인증·투자를 동시에 챙겨야 하는 성장기 기업이 가장 큰 효과를 봅니다.</div></details>
+      <details class="faq rev"><summary>정책자금 신청을 대신 해주나요?</summary><div class="a">신청 대행이 아니라, 재무제표를 바탕으로 조달 가능성과 전략을 '검토·컨설팅'하고 준비를 돕는 방식입니다. 정확한 일정·자격은 공고문 기준이며, 전문가가 함께 검토해 드립니다.</div></details>
+      <details class="faq rev"><summary>계약 기간이나 해지 조건은요?</summary><div class="a">약정 방식과 해지 조건은 파트너십 단계별로 다르며, 무료 진단 상담에서 투명하게 안내드립니다. 부담 없는 단계부터 시작해 필요에 따라 조정하실 수 있습니다.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- 상담폼 -->
+<section class="apply" id="apply">
+  <div class="wrap">
+    <div class="sec-head rev">
+      <div class="eyebrow">무료 진단 신청</div>
+      <h2>3회 무료 진단으로 시작하세요</h2>
+      <p>간단한 정보만 남겨주시면, 담당 전문가가 회사 상황을 보고 하루 이틀 안에 연락드립니다.</p>
+    </div>
+    <div class="form-card rev">
+      <iframe name="cfoSink" id="cfoSink" style="display:none" title="접수"></iframe>
+      <form id="cfoForm" action="https://docs.google.com/forms/d/e/1FAIpQLSf6QtuT6mtyObED4KDgTZ7C7rs1xkES0PreLeONFEet37kwHg/formResponse" method="POST" target="cfoSink" novalidate>
+        <div class="fgrid">
+          <div class="field"><label>신청인 성함<span class="rq">*</span></label><input name="entry.195368683" data-req type="text" placeholder="홍길동" autocomplete="name"></div>
+          <div class="field"><label>연락처<span class="rq">*</span></label><input name="entry.8982561" data-req type="tel" placeholder="010-0000-0000" autocomplete="tel"></div>
+          <div class="field"><label>업체명<span class="rq">*</span></label><input name="entry.806238115" data-req type="text" placeholder="주식회사 예시"></div>
+          <div class="field"><label>사업 소재지<span class="rq">*</span></label><input name="entry.2062142960" data-req type="text" placeholder="예: 서울시 강남, 경기도 수원"></div>
+          <div class="field"><label>사업자 형태<span class="rq">*</span></label><select name="entry.518507044" data-req>
+            <option value="" selected disabled hidden>선택하세요</option>
+            <option value="개인사업자">개인사업자</option><option value="법인사업자">법인사업자</option><option value="예비사업자">예비사업자</option>
+            <option value="컨설턴트, 전문자격사(이하 질문에 무작위 체크, 최하단 '컨설팅 협업 문의' 체크)">컨설턴트 · 전문자격사</option>
+          </select></div>
+          <div class="field"><label>업종<span class="rq">*</span></label><select name="entry.328779733" data-req>
+            <option value="" selected disabled hidden>선택하세요</option>
+            <option value="제조업">제조업</option><option value="도소매업">도소매업</option><option value="IT개발업">IT개발업</option>
+            <option value="서비스업">서비스업</option><option value="건설업">건설업</option><option value="기타">기타</option>
+          </select></div>
+          <div class="field"><label>연 매출 규모<span class="rq">*</span></label><select name="entry.1322791980" data-req>
+            <option value="" selected disabled hidden>선택하세요</option>
+            <option value="3억 미만">3억 미만</option><option value="3~10억">3~10억</option><option value="10~30억">10~30억</option><option value="30~80억">30~80억</option><option value="80억 이상">80억 이상</option>
+          </select></div>
+          <div class="field"><label>직원 규모<span class="rq">*</span></label><select name="entry.2056091753" data-req>
+            <option value="" selected disabled hidden>선택하세요</option>
+            <option value="5인 미만">5인 미만</option><option value="5~9인">5~9인</option><option value="10인 이상">10인 이상</option>
+          </select></div>
+          <input type="hidden" name="entry.2118846133" value="SNS(온라인 명함, 인스타그램, 유튜브)">
+          <div class="field full">
+            <label>어떤 게 가장 급하세요? <span style="font-weight:600;color:#8ba39d">(중복 선택)</span><span class="rq">*</span></label>
+            <div class="chips">
+              <label class="chip"><input type="checkbox" name="entry.1210990703" value="정책자금(중진공/소진공/신보/기보/재단 등)"><span>정책자금</span></label>
+              <label class="chip"><input type="checkbox" name="entry.1210990703" value="정부지원사업(무상지원금/바우처사업)"><span>정부지원사업</span></label>
+              <label class="chip"><input type="checkbox" name="entry.1210990703" value="기업 인증(벤처,연구소,이노비즈,메인비즈,ISO인증 등)"><span>기업 인증</span></label>
+              <label class="chip"><input type="checkbox" name="entry.1210990703" value="법인 전환 / 법적 분쟁 / 인사&amp;노무"><span>법인전환·법률·노무</span></label>
+              <label class="chip"><input type="checkbox" name="entry.1210990703" value="재무 관리(절세, 증여, 상속, 경정청구 등 법인자금 개인화)"><span>재무·절세</span></label>
+              <label class="chip"><input type="checkbox" name="entry.1210990703" value="복지몰 구축 및 사내근로복지기금 설립"><span>복지몰·사내근로복지기금</span></label>
+            </div>
+          </div>
+          <input type="hidden" name="entry.1340519393" value="[사외CFO랜딩]">
+          <div class="field full"><div class="f-err" id="cfoErr"></div></div>
+          <label class="consent field full"><input type="checkbox" id="cfoAgree"><span>[필수] 성함·연락처·업체명·사업소재지·업종·매출/직원규모·상담유형 등 상담 신청 정보의 수집·이용에 동의합니다. 수집 정보는 상담 목적으로만 이용되며 구글폼·구글시트(Google, 미국)에 저장·처리위탁됩니다. 자세한 내용은 <a href="/privacy" target="_blank" rel="noopener">개인정보처리방침</a> 참조.</span></label>
+          <button type="submit" class="btn btn-primary f-submit field full" id="cfoSubmit">3회 무료 진단 신청하기 →</button>
+        </div>
+      </form>
+      <div class="f-done" id="cfoDone">
+        <h3>접수됐습니다, 대표님.</h3>
+        <p>담당 전문가가 회사 상황을 보고 하루 이틀 안에 연락드리겠습니다.<br>급하시면 <b style="color:var(--teal-l)">1668-5033</b>으로 바로 전화 주셔도 됩니다.</p>
+      </div>
+      <div class="f-info">
+        <span>전화 상담 <a href="tel:1668-5033">1668-5033</a></span>
+        <span>이메일 <a href="mailto:jinki.kimmm@gmail.com">jinki.kimmm@gmail.com</a></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="ft">
+  <div class="ft-nav"><a href="/">홈페이지</a> · <a href="/programs">정부지원사업 AI 매칭</a> · <a href="/posts">게시글</a> · <a href="/privacy">개인정보처리방침</a></div>
+  <div class="ft-copy">© 2026 (주)오너스경영연구소 전문 컨설팅 그룹 · 사외 CFO 김진기 · 1668-5033<br>※ 게시된 사례·수치는 특정 기업의 결과이며 모든 기업에 동일하게 적용되지 않습니다.</div>
+</footer>
+
+<script>
+/* 등장 애니메이션 */
+(function(){var els=[].slice.call(document.querySelectorAll('.rev'));if(!('IntersectionObserver'in window)){els.forEach(function(e){e.classList.add('in')});return;}
+var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}})},{threshold:.12});els.forEach(function(e){io.observe(e)});})();
+
+/* 자가진단 */
+(function(){var cs=[].slice.call(document.querySelectorAll('.sc-c')),r=document.getElementById('scResult');
+function up(){var n=cs.filter(function(c){return c.checked}).length;
+r.textContent=n===0?'':(n>=3?'✓ 사외 CFO가 확실히 도움이 됩니다 — 무료 진단부터 받아보세요':(n>=1?'✓ 정기 관리로 놓치는 돈을 줄일 수 있어요':''));}
+cs.forEach(function(c){c.addEventListener('change',up)});})();
+
+/* 폼 제출(기존 구글폼 iframe 방식 재사용) */
+(function(){var form=document.getElementById('cfoForm');if(!form)return;
+var sink=document.getElementById('cfoSink'),err=document.getElementById('cfoErr'),done=document.getElementById('cfoDone'),btn=document.getElementById('cfoSubmit'),agree=document.getElementById('cfoAgree'),sent=false;
+form.addEventListener('submit',function(e){
+  err.style.display='none';err.textContent='';
+  var miss=[];form.querySelectorAll('[data-req]').forEach(function(el){if(!String(el.value||'').trim())miss.push(el)});
+  var consult=form.querySelectorAll('input[name="entry.1210990703"]:checked').length;
+  if(miss.length||consult===0||!agree.checked){e.preventDefault();
+    var m=[];if(miss.length)m.push('필수 항목(*)을 모두 입력해 주세요');if(consult===0)m.push('급한 항목을 1개 이상 선택해 주세요');if(!agree.checked)m.push('개인정보 수집·이용에 동의해 주세요');
+    err.textContent=m.join('   ·   ');err.style.display='block';(miss[0]||err).scrollIntoView({behavior:'smooth',block:'center'});if(miss[0]&&miss[0].focus)try{miss[0].focus()}catch(_){}
+    return;}
+  sent=true;btn.disabled=true;btn.textContent='접수 중…';});
+sink.addEventListener('load',function(){if(!sent)return;form.style.display='none';done.style.display='block';done.scrollIntoView({behavior:'smooth',block:'center'});});})();
+</script>
