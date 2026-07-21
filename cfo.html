@@ -465,5 +465,6 @@ form.addEventListener('submit',function(e){
     err.textContent=m.join('   ·   ');err.style.display='block';(miss[0]||err).scrollIntoView({behavior:'smooth',block:'center'});if(miss[0]&&miss[0].focus)try{miss[0].focus()}catch(_){}
     return;}
   sent=true;btn.disabled=true;btn.textContent='접수 중…';});
-sink.addEventListener('load',function(){if(!sent)return;form.style.display='none';done.style.display='block';done.scrollIntoView({behavior:'smooth',block:'center'});});})();
+sink.addEventListener('load',function(){if(!sent)return;form.style.display='none';done.style.display='block';done.scrollIntoView({behavior:'smooth',block:'center'});try{document.dispatchEvent(new CustomEvent('apSubmitOk'));}catch(_){}});})();
 </script>
+<script src="/measure.js" defer></script>

@@ -1811,5 +1811,6 @@
 <script>(function(){try{var p=location.pathname;if(p.slice(0,6)==='/card/'){var r=p.slice(6);sessionStorage.setItem('ownerCard',r.split('/')[0].split('?')[0].split('#')[0]);return;}if(p==='/'||p===''){sessionStorage.removeItem('ownerCard');return;}var slug=sessionStorage.getItem('ownerCard');if(!slug)return;var run=function(){var as=document.getElementsByTagName('a');for(var i=0;i<as.length;i++){var h=as[i].getAttribute('href');if(!h)continue;if(h.charAt(0)==='/'&&h.charAt(1)==='#'){as[i].setAttribute('href','/card/'+slug+h.slice(1));}else if(h==='/'){as[i].setAttribute('href','/card/'+slug);}}};if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}else{run();}}catch(e){}})();</script>
 <!-- ════ AI챗봇 (김진기 화법 · Type A 비노출) ════ -->
 <script src="/chatbot.js?v=20260720compose" defer></script>
+<script src="/measure.js" defer></script>
 </body>
 </html>
