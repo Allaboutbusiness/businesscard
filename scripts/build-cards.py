@@ -20,6 +20,7 @@ MALGUNBD = r"C:\Windows\Fonts\malgunbd.ttf"
 # ── 단일 소스: 구성원 데이터 ──
 MEMBERS = {
     "조기열": dict(eng="jokiyeol", role="경영지도사", photo="/card-jokiyeol.jpg", src="card-jokiyeol.jpg",
+        phone="1644-6733", email="owners.leader@metaowners.com", namecard="/namecard-jokiyeol.jpg",
         tagline="재무 진단부터 정책자금까지,<br>기업의 자금 조달을 설계합니다",
         ogdesc="재무 진단부터 정책자금 조달까지 — 경영지도사 조기열. 오너스경영연구소 전문 컨설팅 그룹. 3회 무료 상담.",
         career=["경영지도사", "정책자금 전문팀 총괄", "재무제표 평가·분석 전문"],
@@ -40,6 +41,7 @@ MEMBERS = {
         career=["행정사", "인증·사업화·R&D 지원금 총괄", "벤처·이노비즈 인증 전문"],
         tags=["기업인증", "R&D", "사업화", "정부지원"]),
     "안지수": dict(eng="anjisu", role="변리사", photo="/card-anjisu.jpg", src="card-anjisu.jpg",
+        phone="010-9119-9635", email="skyjisoo0618@naver.com", namecard="/namecard-anjisu.jpg",
         tagline="핵심 기술을 특허로,<br>기업의 지식재산을 지킵니다",
         ogdesc="핵심 기술을 특허로 — 변리사 안지수. 오너스경영연구소 전문 컨설팅 그룹. 3회 무료 상담.",
         career=["변리사", "특허·지식재산권 총괄", "IP 포트폴리오 관리"],
@@ -193,6 +195,40 @@ def bake(name, m):
     # 상담폼 담당자 태그
     hid = soup.find("input", {"name": "entry.1340519393"})
     if hid: hid["value"] = f"[담당자:{name}]"
+
+    # 개인 연락처(전화·이메일) 교체 — phone/email 지정된 구성원만(나머지는 회사 대표번호 유지)
+    if m.get("phone") or m.get("email"):
+        for a in soup.select(".contact-bar a.contact-item"):
+            href = a.get("href", ""); val = a.select_one(".c-value")
+            if href.startswith("tel:") and m.get("phone"):
+                a["href"] = "tel:" + m["phone"]
+                if val: val.string = m["phone"]
+            elif href.startswith("mailto:") and m.get("email"):
+                a["href"] = "mailto:" + m["email"]
+                if val: val.string = m["email"]
+        for c in soup.select(".ap-card"):
+            k = c.select_one(".k"); a = c.select_one(".v a")
+            if not k or not a: continue
+            kt = k.get_text(strip=True)
+            if kt == "전화 상담" and m.get("phone"):
+                a["href"] = "tel:" + m["phone"]; a.string = m["phone"]
+            elif kt == "이메일" and m.get("email"):
+                a["href"] = "mailto:" + m["email"]; a.string = m["email"]
+
+    # 명함(실물 명함 스캔) 섹션 — 연락처 바 바로 뒤에 삽입(초상 사진은 그대로 유지)
+    if m.get("namecard"):
+        cb = soup.select_one(".contact-bar")
+        if cb:
+            html = (
+                '<section class="namecard-sec" style="padding:16px 22px 46px;text-align:center">'
+                '<div style="max-width:600px;margin:0 auto">'
+                '<div style="font-size:11px;font-weight:800;letter-spacing:2px;color:#14B8A6;margin-bottom:12px">명함</div>'
+                f'<img src="{m["namecard"]}" alt="{name} {m["role"]} 명함" loading="lazy" '
+                'style="width:100%;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.12)"/>'
+                '</div></section>'
+            )
+            sec = BeautifulSoup(html, "html.parser").find("section")
+            cb.insert_after(sec)
 
     # 정적 베이크 완료 → card.js 스크립트 제거(중복 방지)
     for s in soup.find_all("script", src=True):
