@@ -1,0 +1,36 @@
+#!/bin/sh
+# ─────────────────────────────────────────────────────────────
+# 개인 명함 자동 재빌드 pre-commit 훅
+#   index.html 또는 scripts/build-cards.py 가 이번 커밋에 포함되면
+#   build-cards.py 를 돌려 card/*.html · og-*.jpg 를 최신화하고
+#   같은 커밋에 자동으로 함께 담는다. → "카드 재빌드 잊음" 방지.
+#
+# 활성화(최초 1회, 새 클론에서도):  git config core.hooksPath scripts/hooks
+# 이번만 건너뛰기:                    git commit --no-verify
+# ─────────────────────────────────────────────────────────────
+
+CHANGED=$(git diff --cached --name-only)
+
+if echo "$CHANGED" | grep -Eq '^(index\.html|scripts/build-cards\.py)$'; then
+  if command -v python >/dev/null 2>&1; then PY=python
+  elif command -v py >/dev/null 2>&1; then PY=py
+  elif command -v python3 >/dev/null 2>&1; then PY=python3
+  else
+    echo "[pre-commit] ✗ python 을 못 찾아 개인 명함을 재빌드하지 못했습니다."
+    echo "            수동: python scripts/build-cards.py"
+    echo "            이번만 건너뛰려면: git commit --no-verify"
+    exit 1
+  fi
+
+  echo "[pre-commit] index.html/build-cards.py 변경 감지 → 개인 명함 재빌드..."
+  if ! "$PY" scripts/build-cards.py >/dev/null 2>&1; then
+    echo "[pre-commit] ✗ build-cards.py 실패 — 커밋 중단."
+    echo "            직접 실행해 원인 확인: $PY scripts/build-cards.py"
+    exit 1
+  fi
+
+  git add card/*.html og-*.jpg 2>/dev/null
+  echo "[pre-commit] ✓ 개인 명함 8개 재빌드·스테이징 완료"
+fi
+
+exit 0
