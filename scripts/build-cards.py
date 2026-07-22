@@ -215,20 +215,19 @@ def bake(name, m):
             elif kt == "이메일" and m.get("email"):
                 a["href"] = "mailto:" + m["email"]; a.string = m["email"]
 
-    # 명함(실물 명함 스캔) 섹션 — 연락처 바 바로 뒤에 삽입(초상 사진은 그대로 유지)
-    if m.get("namecard"):
-        cb = soup.select_one(".contact-bar")
-        if cb:
-            html = (
-                '<section class="namecard-sec" style="padding:16px 22px 46px;text-align:center">'
-                '<div style="max-width:600px;margin:0 auto">'
-                '<div style="font-size:11px;font-weight:800;letter-spacing:2px;color:#14B8A6;margin-bottom:12px">명함</div>'
-                f'<img src="{m["namecard"]}" alt="{name} {m["role"]} 명함" loading="lazy" '
-                'style="width:100%;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.12)"/>'
-                '</div></section>'
-            )
-            sec = BeautifulSoup(html, "html.parser").find("section")
-            cb.insert_after(sec)
+    # 명함 이미지: index의 .card-band(원본 = 김진기 명함 card.jpg)를 구성원별로 처리
+    #   · namecard 지정(안지수·조기열): 그 자리를 개인 명함으로 교체
+    #   · 그 외 비-김진기(유우선·류예주 등): 김진기 명함 밴드 제거(남의 명함 노출 방지)
+    #   · 김진기 본인: 그대로 유지
+    band = soup.select_one(".card-band")
+    if band:
+        if m.get("namecard"):
+            img = band.find("img")
+            if img:
+                img["src"] = m["namecard"]
+                img["alt"] = f"{name} {m['role']} 명함"
+        elif name != "김진기":
+            band.decompose()
 
     # 정적 베이크 완료 → card.js 스크립트 제거(중복 방지)
     for s in soup.find_all("script", src=True):
