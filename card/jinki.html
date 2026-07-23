@@ -1613,7 +1613,9 @@
 
   /* ── 공유하기: 페이지 URL 클립보드 복사 + "복사됨!" 피드백 ── */
   function copyPageUrl(btn) {
-    var url = location.origin + location.pathname;
+    /* 각 페이지의 정식(canonical) 링크를 우선 복사 — 카드에선 그 사람 카드 URL, 홈에선 홈 URL */
+    var canon = document.querySelector('link[rel="canonical"]');
+    var url = (canon && canon.getAttribute('href')) ? canon.href : (location.origin + location.pathname);
     var span = btn.querySelector('span');
     function show() {
       if (!span.getAttribute('data-orig')) span.setAttribute('data-orig', span.textContent);
