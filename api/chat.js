@@ -1,7 +1,7 @@
 // POST /api/chat  {message} → RAG 답변. 토큰 최소화:
 //  (1) 로컬 가드레일 0토큰 차단 → (2) 통과 시 질문 1회 임베딩+검색 → (3) 생성 1회(짧은 출력).
 // 실패/차단 시에도 deflect:true로 기존 상담연결 흐름을 이어가게 함.
-const { localGuard, embed, generate, buildUserPrompt, SYSTEM_PROMPT, toVectorLiteral } = require('../lib/rag');
+const { localGuard, embed, generate, buildUserPrompt, SYSTEM_PROMPT, toVectorLiteral, naverSearch, inDomainScope } = require('../lib/rag');
 const { kbSearch } = require('../lib/db');
 
 // best-effort 인메모리 IP 스로틀(따뜻한 인스턴스 한정) — Gemini 쿼터 남용 방지
@@ -36,10 +36,17 @@ module.exports = async (req, res) => {
     } catch (_) { chunks = []; }
     chunks = (chunks || []).filter((c) => c.score == null || Number(c.score) >= 0.62);
 
-    // 3) 생성 1회(짧은 답변)
-    const answer = await generate(SYSTEM_PROMPT, buildUserPrompt(chunks, q), 220);
+    // 2.5) 허용범위(정책자금·지원사업·세무·인증·투자 등) 질문일 때만 네이버 검색으로 최신정보 보강.
+    //      범위 밖 질문엔 검색조차 안 함. 자격증명 없거나 실패해도 무시(RAG만으로 진행).
+    let web = [];
+    if (inDomainScope(q)) {
+      try { web = await naverSearch(q); } catch (_) { web = []; }
+    }
+
+    // 3) 생성 1회(짧은 답변) — 웹 결과는 참고용으로만, 범위 밖 답변 금지 규칙은 SYSTEM_PROMPT가 강제
+    const answer = await generate(SYSTEM_PROMPT, buildUserPrompt(chunks, q, web), 240);
     if (!answer) return res.json({ reply: '', deflect: true, empty: true });
-    return res.json({ reply: answer, deflect: true, grounded: chunks.length });
+    return res.json({ reply: answer, deflect: true, grounded: chunks.length, web: web.length });
   } catch (e) {
     // Gemini 오류 → 빈 reply로 폴백(클라이언트가 기존 안내로 대체)
     return res.json({ reply: '', deflect: true, error: 'gen' });
