@@ -26,6 +26,7 @@ MEMBERS = {
         career=["경영지도사", "정책자금 전문팀 총괄", "재무제표 평가·분석 전문"],
         tags=["정책자금", "재무진단", "운영자금", "시설자금"]),
     "유우선": dict(eng="yuwooseon", role="수석 경영컨설턴트", photo="/card-yuwooseon.jpg", src="card-yuwooseon.jpg",
+        phone="010-7194-6931", email="blackstar365@naver.com", namecard="/namecard-yuwooseon.jpg",
         tagline="정책자금의 시작부터 사후관리까지,<br>기업의 자금을 책임집니다",
         ogdesc="정책자금의 시작부터 사후관리까지 — 수석 경영컨설턴트 유우선. 오너스경영연구소 전문 컨설팅 그룹. 3회 무료 상담.",
         career=["수석 경영컨설턴트", "정책자금 총괄 운영 관리", "자금 활용 효율 극대화"],
