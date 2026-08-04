@@ -9,8 +9,7 @@
   --jk-panel-bg:#fbfaf7; --jk-shadow:0 18px 60px rgba(17,18,16,.32);
 }
 
-/* 기존 플로팅 CTA는 런처가 대체 — 억제 */
-#floatCta{ display:none !important; }
+/* 플로팅 CTA는 런처와 공존(모바일은 index.html 미디어쿼리에서 런처 옆 바로 배치) */
 
 /* ── 런처(pill + 로고) ── */
 .jk-launcher{
