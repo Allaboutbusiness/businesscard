@@ -55,7 +55,7 @@ module.exports = async (req, res) => {
       const s = await getSubscriberByToken(String(q.sub));
       if (!s) return res.status(404).json({ error: '구독 정보를 찾을 수 없습니다' });
       res.setHeader('Cache-Control', 'no-store');
-      return res.status(200).json({ ok: true, sector: s.sector, sub: s.sub, region: s.region, needs: s.needs || [] });
+      return res.status(200).json({ ok: true, company: s.company || '', sector: s.sector, sub: s.sub, region: s.region, needs: s.needs || [] });
     } catch (e) { return res.status(500).json({ error: String((e && e.message) || e) }); }
   }
 
