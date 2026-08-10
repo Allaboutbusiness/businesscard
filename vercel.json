@@ -3,6 +3,14 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/admin",
+      "destination": "https://ownerskr-studio.vercel.app/admin"
+    },
+    {
+      "source": "/admin/:path*",
+      "destination": "https://ownerskr-studio.vercel.app/admin/:path*"
+    },
+    {
       "source": "/post/:id",
       "destination": "/api/render-post?id=:id"
     },
@@ -37,6 +45,15 @@
     }
   ],
   "headers": [
+    {
+      "source": "/admin/:path*",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
     {
       "source": "/(.*)",
       "headers": [
