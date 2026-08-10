@@ -11,11 +11,15 @@ button{width:100%;padding:12px;margin-top:8px;background:#0D9A8C;color:#fff;bord
 <input id="u" placeholder="아이디" autocomplete="username">
 <input id="p" type="password" placeholder="비밀번호" autocomplete="current-password">
 <button type="submit">로그인</button><div class="err" id="e"></div>
-<div style="text-align:center;margin-top:8px"><a href="/">← 홈으로</a></div>
+<div style="text-align:center;margin-top:8px"><a href="/write">글쓰기</a> · <a href="/">← 홈으로</a></div>
 </form><script>
 document.getElementById('f').addEventListener('submit',async function(ev){
   ev.preventDefault();var e=document.getElementById('e');e.textContent='';
   var r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({username:document.getElementById('u').value,password:document.getElementById('p').value})});
-  if(r.ok){location.href='/write';}else{var d=await r.json().catch(function(){return{}});e.textContent=d.error||'로그인 실패';}
+  if(r.ok){
+    // 로그인 후 돌아갈 곳. 관리자 대시보드에서 튕겨 왔으면 그리로, 아니면 글쓰기로.
+    var nx=new URLSearchParams(location.search).get('next');
+    location.href=(nx && nx.charAt(0)==='/' && nx.charAt(1)!=='/') ? nx : '/admin';
+  }else{var d=await r.json().catch(function(){return{}});e.textContent=d.error||'로그인 실패';}
 });</script></body></html>
