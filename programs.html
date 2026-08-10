@@ -123,6 +123,23 @@
     .foot a.foot-member{display:inline-block;margin-top:20px;background:none;box-shadow:none;padding:2px 0;border-radius:0;color:#8fa39e;font-size:13.5px;font-weight:600;border-bottom:1px solid rgba(255,255,255,.25);word-break:keep-all}
     .foot a.foot-member:hover{color:#fff;border-color:rgba(255,255,255,.7)}
 
+    /* 매일 매칭 이메일 구독 */
+    .subbanner{background:linear-gradient(135deg,rgba(20,184,166,.16),rgba(13,154,140,.07));border:1px solid rgba(20,184,166,.32);border-radius:14px;padding:15px 18px;margin-bottom:16px;font-size:14.5px;color:#dff3ee;line-height:1.6;word-break:keep-all}
+    .subbanner b{color:#5eead4}
+    .subbox{margin-top:22px;background:rgba(255,255,255,.04);border:1px solid rgba(20,184,166,.28);border-radius:16px;padding:24px 20px;text-align:center}
+    .subbox-t{font-size:16.5px;font-weight:800;color:#fff;word-break:keep-all;line-height:1.5}
+    .subbox-t b{color:var(--teal-l)}
+    .subbox-sub{font-size:13px;color:#8ba39d;margin-top:7px;word-break:keep-all;line-height:1.6}
+    .subbox-row{display:flex;gap:10px;max-width:470px;margin:18px auto 0}
+    .subbox-row input{flex:1;min-width:0;height:56px;padding:0 18px;border-radius:12px;border:2px solid rgba(255,255,255,.4);background:#fff;color:#111b18;font-size:16px;font-family:inherit;outline:none}
+    .subbox-row input:focus{border-color:var(--teal-l)}
+    .subbox-row input:disabled{background:#e8efec;color:#7d918c}
+    .subbox-row button{height:56px;padding:0 24px;border-radius:12px;border:none;background:var(--teal);color:#fff;font-size:16px;font-weight:800;font-family:inherit;cursor:pointer;white-space:nowrap}
+    .subbox-row button:disabled{opacity:.55;cursor:not-allowed}
+    .subbox-msg{margin-top:13px;font-size:13.5px;line-height:1.65;word-break:break-all}
+    .subbox-msg.ok{color:#5eead4}
+    .subbox-msg.err{color:#ff9b9b}
+
     /* 태블릿 */
     @media (max-width:900px){
       .hero{padding:56px 20px 46px}
@@ -146,6 +163,8 @@
       .hd a.brand{font-size:12px}
       .hd .btn{padding:10px 13px;font-size:12.5px}
       .card{padding:15px 16px}
+      .subbox-row{flex-direction:column}
+      .subbox-row input,.subbox-row button{width:100%;flex:none}
     }
     @media (prefers-reduced-motion:reduce){
       html{scroll-behavior:auto}
@@ -258,6 +277,7 @@
 
       <!-- Step 3 -->
       <div id="step3" hidden>
+        <div id="subBanner" class="subbanner" hidden></div>
         <div id="aiMsg" class="msg" hidden></div>
         <div id="aiHead" class="rhead" hidden>
           <p class="rcount">추천 <b id="acnt">0</b>건 <span style="color:#6f827d;font-size:12px">· 관련도 순</span></p>
@@ -267,6 +287,15 @@
           </div>
         </div>
         <div id="aiCards" class="cards"></div>
+        <div id="subscribeBox" class="subbox" hidden>
+          <div class="subbox-t">📬 이 조건으로 <b>매일 새로 뜨는 지원사업</b>을 이메일로 받기</div>
+          <div class="subbox-sub">매일 추가된 공고 중 내 조건에 맞는 것만 골라 보내드려요. 이메일 속 링크로 현재 열린 전체 매칭도 확인 · 언제든 해지 가능.</div>
+          <div class="subbox-row">
+            <input id="subEmail" type="email" inputmode="email" autocomplete="email" placeholder="이메일 주소 입력" />
+            <button id="subBtn" type="button">매일 받기</button>
+          </div>
+          <div id="subMsg" class="subbox-msg"></div>
+        </div>
         <div class="acts">
           <button class="btn-sec" id="backTo2" type="button">← 조건 변경</button>
         </div>
@@ -408,7 +437,7 @@ $('#dlSearch').addEventListener('click', () => download(toText(searchList), `정
 $('#cpSearch').addEventListener('click', (e) => copyText(toText(searchList), e.target));
 
 /* ═══ AI 매칭 ═══ */
-let major = '', sub = '', region = '', kws = [], aiList = [];
+let major = '', sub = '', region = '', kws = [], aiList = [], subMode = false;
 
 INDUSTRY_CATEGORIES.forEach((c) => $('#major').add(new Option(c, c)));
 REGIONS.forEach((r) => $('#region').add(new Option(r, r)));
@@ -501,19 +530,72 @@ $('#runMatch').addEventListener('click', async () => {
       .map((p) => scoreForTrial(p, major, sub, '', kws, region))
       .filter((p) => p.score > 0)
       .sort(compareScored)
-      .slice(0, 15);
+      .slice(0, subMode ? 60 : 15);
     aiList = scored;
-    if (!scored.length) { msg.textContent = '조건에 맞는 진행 중인 공고를 찾지 못했습니다. 업종이나 조건을 바꿔 다시 시도해 보세요.'; return; }
+    $('#subscribeBox').hidden = true;
+    if (!scored.length) {
+      msg.textContent = subMode
+        ? '지금은 조건에 맞는 열린 공고가 없어요. 새 공고가 뜨면 이메일로 알려드릴게요.'
+        : '조건에 맞는 진행 중인 공고를 찾지 못했습니다. 업종이나 조건을 바꿔 다시 시도해 보세요.';
+      if (subMode) { $('#subBanner').innerHTML = '📬 <b>회원님 맞춤 지원사업</b> — 매일 새 공고가 뜨면 이메일로 보내드립니다.'; $('#subBanner').hidden = false; }
+      return;
+    }
     msg.hidden = true;
     $('#acnt').textContent = scored.length;
     $('#aiHead').hidden = false;
     $('#aiCards').innerHTML = scored.map((p) => cardHtml(p, p.matchReasons)).join('');
+    if (subMode) {
+      $('#subBanner').innerHTML = '📬 <b>회원님 맞춤 지원사업</b> — 지금 열려있는 <b>' + scored.length + '건</b>입니다. 매일 새로 뜨는 공고를 이메일로 보내드려요.';
+      $('#subBanner').hidden = false;
+    } else {
+      $('#subscribeBox').hidden = false;
+    }
   } catch (e) {
     msg.className = 'msg err'; msg.textContent = String(e.message || e);
   }
 });
 $('#dlAi').addEventListener('click', () => download(toText(aiList), `AI매칭_정부지원사업_${today()}`));
 $('#cpAi').addEventListener('click', (e) => copyText(toText(aiList), e.target));
+
+/* ═══ 매일 매칭 이메일 구독 ═══ */
+$('#subBtn').addEventListener('click', async () => {
+  const email = $('#subEmail').value.trim();
+  const m = $('#subMsg');
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { m.className = 'subbox-msg err'; m.textContent = '이메일 주소를 정확히 입력해 주세요.'; return; }
+  $('#subBtn').disabled = true; m.className = 'subbox-msg'; m.textContent = '등록 중...';
+  try {
+    const r = await fetch('/api/programs', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, sector: major, sub, region, needs: kws }) });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || '등록에 실패했습니다');
+    m.className = 'subbox-msg ok';
+    m.innerHTML = '✓ 등록 완료! 매일 새 지원사업을 이메일로 보내드립니다.<br>내 맞춤 페이지: <a href="' + esc(d.url) + '" style="color:#5eead4;text-decoration:underline;word-break:break-all">' + esc(d.url) + '</a>';
+    $('#subEmail').disabled = true;
+  } catch (e) { m.className = 'subbox-msg err'; m.textContent = String(e.message || e); $('#subBtn').disabled = false; }
+});
+
+/* ?sub=token → 저장된 조건으로 '현재 열려있는' 매칭 자동 표시(매일 갱신 뷰) */
+async function loadSubscriberView(token) {
+  try {
+    const r = await fetch('/api/programs?sub=' + encodeURIComponent(token));
+    const d = await r.json();
+    if (!r.ok) return;
+    major = d.sector || ''; sub = d.sub || ''; region = d.region || ''; kws = Array.isArray(d.needs) ? d.needs : [];
+    if (major) {
+      $('#major').value = major;
+      const subs = INDUSTRY_TREE[major] || []; const s = $('#sub');
+      s.innerHTML = '<option value="">세부 업종 선택...</option>'; subs.forEach((x) => s.add(new Option(x, x)));
+      $('#subFld').hidden = !subs.length; if (sub) $('#sub').value = sub;
+    }
+    if (region) $('#region').value = region;
+    document.querySelectorAll('.chip').forEach((c) => { if (kws.includes(c.dataset.k)) c.classList.add('on'); });
+    subMode = true;
+    $('#runMatch').disabled = false;
+    $('#runMatch').click();
+  } catch (e) {}
+}
+const _subTok = new URLSearchParams(location.search).get('sub');
+if (_subTok) loadSubscriberView(_subTok);
 </script>
 <script src="/measure.js" defer></script>
 </body>
