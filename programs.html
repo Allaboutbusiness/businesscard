@@ -130,12 +130,15 @@
     .subbox-t{font-size:16.5px;font-weight:800;color:#fff;word-break:keep-all;line-height:1.5}
     .subbox-t b{color:var(--teal-l)}
     .subbox-sub{font-size:13px;color:#8ba39d;margin-top:7px;word-break:keep-all;line-height:1.6}
-    .subbox-row{display:flex;gap:10px;max-width:470px;margin:18px auto 0}
-    .subbox-row input{flex:1;min-width:0;height:56px;padding:0 18px;border-radius:12px;border:2px solid rgba(255,255,255,.4);background:#fff;color:#111b18;font-size:16px;font-family:inherit;outline:none}
-    .subbox-row input:focus{border-color:var(--teal-l)}
-    .subbox-row input:disabled{background:#e8efec;color:#7d918c}
-    .subbox-row button{height:56px;padding:0 24px;border-radius:12px;border:none;background:var(--teal);color:#fff;font-size:16px;font-weight:800;font-family:inherit;cursor:pointer;white-space:nowrap}
-    .subbox-row button:disabled{opacity:.55;cursor:not-allowed}
+    .subbox-fields{display:flex;gap:12px;max-width:540px;margin:20px auto 0;text-align:left}
+    .subbox-fld{flex:1;min-width:0;display:flex;flex-direction:column;gap:7px}
+    .subbox-lb{font-size:12.5px;font-weight:800;color:#a9c4bd;padding-left:3px;letter-spacing:.4px}
+    .subbox-fld input{width:100%;height:58px;padding:0 18px;border-radius:12px;border:2px solid rgba(255,255,255,.4);background:#fff;color:#111b18;font-size:16.5px;font-family:inherit;outline:none;box-sizing:border-box}
+    .subbox-fld input::placeholder{color:#9aa8a4}
+    .subbox-fld input:focus{border-color:var(--teal-l);box-shadow:0 0 0 3px rgba(20,184,166,.18)}
+    .subbox-fld input:disabled{background:#e8efec;color:#7d918c}
+    .subbox-submit{display:block;width:100%;max-width:540px;margin:14px auto 0;height:58px;padding:0 24px;border-radius:12px;border:none;background:var(--teal);color:#fff;font-size:16.5px;font-weight:800;font-family:inherit;cursor:pointer}
+    .subbox-submit:disabled{opacity:.55;cursor:not-allowed}
     .subbox-msg{margin-top:13px;font-size:13.5px;line-height:1.65;word-break:break-all}
     .subbox-msg.ok{color:#5eead4}
     .subbox-msg.err{color:#ff9b9b}
@@ -163,8 +166,8 @@
       .hd a.brand{font-size:12px}
       .hd .btn{padding:10px 13px;font-size:12.5px}
       .card{padding:15px 16px}
-      .subbox-row{flex-direction:column}
-      .subbox-row input,.subbox-row button{width:100%;flex:none}
+      .subbox-fields{flex-direction:column;gap:14px}
+      .subbox-fld{flex:none}
     }
     @media (prefers-reduced-motion:reduce){
       html{scroll-behavior:auto}
@@ -290,10 +293,17 @@
         <div id="subscribeBox" class="subbox" hidden>
           <div class="subbox-t">📬 이 조건으로 <b>매일 새로 뜨는 지원사업</b>을 이메일로 받기</div>
           <div class="subbox-sub">매일 추가된 공고 중 내 조건에 맞는 것만 골라 보내드려요. 이메일 속 링크로 현재 열린 전체 매칭도 확인 · 언제든 해지 가능.</div>
-          <div class="subbox-row">
-            <input id="subEmail" type="email" inputmode="email" autocomplete="email" placeholder="이메일 주소 입력" />
-            <button id="subBtn" type="button">매일 받기</button>
+          <div class="subbox-fields">
+            <label class="subbox-fld">
+              <span class="subbox-lb">기업명</span>
+              <input id="subCompany" type="text" autocomplete="organization" maxlength="80" placeholder="예) 오너스경영연구소" />
+            </label>
+            <label class="subbox-fld">
+              <span class="subbox-lb">이메일</span>
+              <input id="subEmail" type="email" inputmode="email" autocomplete="email" placeholder="받을 이메일 주소" />
+            </label>
           </div>
+          <button id="subBtn" type="button" class="subbox-submit">매일 받기</button>
           <div id="subMsg" class="subbox-msg"></div>
         </div>
         <div class="acts">
@@ -559,18 +569,20 @@ $('#cpAi').addEventListener('click', (e) => copyText(toText(aiList), e.target));
 
 /* ═══ 매일 매칭 이메일 구독 ═══ */
 $('#subBtn').addEventListener('click', async () => {
+  const company = $('#subCompany').value.trim();
   const email = $('#subEmail').value.trim();
   const m = $('#subMsg');
+  if (!company) { m.className = 'subbox-msg err'; m.textContent = '기업명을 입력해 주세요.'; return; }
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { m.className = 'subbox-msg err'; m.textContent = '이메일 주소를 정확히 입력해 주세요.'; return; }
   $('#subBtn').disabled = true; m.className = 'subbox-msg'; m.textContent = '등록 중...';
   try {
     const r = await fetch('/api/programs', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, sector: major, sub, region, needs: kws }) });
+      body: JSON.stringify({ company, email, sector: major, sub, region, needs: kws }) });
     const d = await r.json();
     if (!r.ok) throw new Error(d.error || '등록에 실패했습니다');
     m.className = 'subbox-msg ok';
-    m.innerHTML = '✓ 등록 완료! 매일 새 지원사업을 이메일로 보내드립니다.<br>내 맞춤 페이지: <a href="' + esc(d.url) + '" style="color:#5eead4;text-decoration:underline;word-break:break-all">' + esc(d.url) + '</a>';
-    $('#subEmail').disabled = true;
+    m.innerHTML = '✓ <b>' + esc(company) + '</b>님, 등록 완료! 매일 새 지원사업을 <b>' + esc(email) + '</b>로 보내드립니다.<br>내 맞춤 페이지: <a href="' + esc(d.url) + '" style="color:#5eead4;text-decoration:underline;word-break:break-all">' + esc(d.url) + '</a>';
+    $('#subCompany').disabled = true; $('#subEmail').disabled = true;
   } catch (e) { m.className = 'subbox-msg err'; m.textContent = String(e.message || e); $('#subBtn').disabled = false; }
 });
 

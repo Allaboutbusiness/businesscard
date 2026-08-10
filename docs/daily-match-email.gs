@@ -44,7 +44,8 @@ function sendDailyMatches() {
 }
 
 function buildSubject(p) {
-  return '[오너스] 오늘 새로 뜬 맞춤 지원사업 ' + p.count + '건';
+  var who = p.company ? p.company + ' — ' : '';
+  return '[오너스] ' + who + '오늘 새로 뜬 맞춤 지원사업 ' + p.count + '건';
 }
 
 function buildHtml(p) {
@@ -59,6 +60,7 @@ function buildHtml(p) {
   return ''
     + '<div style="max-width:600px;margin:0 auto;font-family:\'Apple SD Gothic Neo\',\'Malgun Gothic\',sans-serif;color:#1f2a28;padding:8px">'
     + '<div style="font-size:12px;font-weight:800;letter-spacing:2px;color:#0D9A8C">OWNERS · 정부지원사업 매칭</div>'
+    + (p.company ? '<div style="font-size:15px;font-weight:800;color:#1f2a28;margin:10px 0 2px">' + esc(p.company) + ' 님</div>' : '')
     + '<h2 style="font-size:19px;margin:8px 0 4px">오늘 새로 뜬, 회원님 조건에 맞는 지원사업 ' + p.count + '건</h2>'
     + '<p style="color:#8a9a95;font-size:13px;margin:0 0 14px">어제 이후 추가된 공고 중 회원님 업종·지역·관심에 맞는 것만 추렸습니다.</p>'
     + '<table style="width:100%;border-collapse:collapse">' + rows + '</table>'
@@ -69,6 +71,7 @@ function buildHtml(p) {
     + '</div>'
     + '<hr style="border:0;border-top:1px solid #eee;margin:20px 0">'
     + '<p style="color:#aab4b1;font-size:11.5px;line-height:1.6">(주)오너스경영연구소 전문 컨설팅 그룹 · 1668-5033<br>'
+    + (p.company ? esc(p.company) + ' · ' : '') + '수신: ' + esc(p.email) + '<br>'
     + '회원님이 신청하신 조건으로 자동 발송되는 메일입니다. '
     + '<a href="' + p.unsubUrl + '" style="color:#aab4b1">구독 해지</a> · '
     + '자세한 상담은 <a href="https://ownerskr.com/#apply" style="color:#0D9A8C">무료 3회 상담</a></p>'

@@ -40,6 +40,7 @@ module.exports = async (req, res) => {
       const token = crypto.randomBytes(9).toString('base64url');
       await initSubscribers();
       await createSubscriber({ email, token,
+        company: String(b.company || '').trim().slice(0, 80) || null,
         sector: String(b.sector || '').slice(0, 60) || null,
         sub: String(b.sub || '').slice(0, 60) || null,
         region: String(b.region || '').slice(0, 20) || null,
@@ -83,6 +84,7 @@ module.exports = async (req, res) => {
         if (fresh.length) {
           out.push({
             email: s.email,
+            company: s.company || '',
             url: `https://ownerskr.com/programs?sub=${s.token}`,
             unsubUrl: `https://ownerskr.com/api/programs?unsub=${s.token}`,
             count: fresh.length,
