@@ -11,7 +11,7 @@ const TIMEOUT_MS = 25000;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // 매칭 이메일 구독: 함수 한도(12) 때문에 이 프록시에 병합. (POST 구독 / ?sub 조회 / ?unsub 해지 / ?action=daily 다이제스트)
-const { createSubscriber, getSubscriberByToken, listActiveSubscribers, updateSubscriberSeen, deactivateSubscriber } = require('../lib/db');
+const { initSubscribers, createSubscriber, getSubscriberByToken, listActiveSubscribers, updateSubscriberSeen, deactivateSubscriber } = require('../lib/db');
 const { matchProgram, extractEndDate, isActiveProgram } = require('../lib/match-server');
 const crypto = require('crypto');
 
@@ -38,6 +38,7 @@ module.exports = async (req, res) => {
       if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return res.status(400).json({ error: '이메일 형식이 올바르지 않습니다' });
       const needs = Array.isArray(b.needs) ? b.needs.slice(0, 20).map(String) : [];
       const token = crypto.randomBytes(9).toString('base64url');
+      await initSubscribers();
       await createSubscriber({ email, token,
         sector: String(b.sector || '').slice(0, 60) || null,
         sub: String(b.sub || '').slice(0, 60) || null,
@@ -69,6 +70,7 @@ module.exports = async (req, res) => {
   if (q.action === 'daily') {
     if (String(q.secret || '') !== process.env.INIT_SECRET) return res.status(403).json({ error: 'forbidden' });
     try {
+      await initSubscribers();
       const [subs, programs] = await Promise.all([listActiveSubscribers(), fetchProgramsJson()]);
       const today = new Date().toISOString().slice(0, 10);
       const active = programs.filter((p) => isActiveProgram(p, today));
