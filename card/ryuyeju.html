@@ -923,6 +923,7 @@
   </script>
 <noscript><style>.fade-up{opacity:1!important;transform:none!important}</style></noscript>
 <link href="/chatbot.css?v=20260727float" rel="stylesheet"/>
+<link href="/roadmap.css?v=20260818a" rel="stylesheet"/>
 </head>
 <body>
 <!-- 모바일 세로 고정 (가로 회전 시 안내 오버레이) -->
@@ -1115,6 +1116,74 @@
 </div>
 </div>
 <span class="peek">＋ 5가지 절세 솔루션 보기</span>
+</div>
+</div>
+</section>
+<!-- ════ CONSULTING 두 번째 탭 — 성장 로드맵 (시네마틱 트랙) ════
+     스타일 /roadmap.css · 동작 /roadmap.js (수정 시 ?v= 함께 올릴 것)
+     카드 내용은 roadmap.js 의 GROWTH / STARTUP 배열에서 렌더된다. -->
+<section class="rm-sec" id="roadmap">
+<header class="rm-head">
+<div class="rm-wrap">
+<span class="rm-mark">TAB 02 · ROADMAP</span>
+<h2>법인 설립에서 <b>M&amp;A EXIT</b>까지,<br/>한 회사의 <i>일생</i>을 함께 설계합니다</h2>
+</div>
+</header>
+<!-- 로드맵 01 · 기업 성장 -->
+<div class="rm-wrap">
+<div class="rm-intro">
+<div class="rm-idx">ROADMAP 01</div>
+<h3>기업 성장 로드맵 <span style="color:var(--rm-teal-l)">9단계</span></h3>
+<p>설립 · 성장 · 확장 · 승계와 EXIT</p>
+</div>
+</div>
+<div class="rm-pin" id="rm-pin-growth">
+<div class="rm-stick">
+<div class="rm-hud">
+<div>
+<div class="rm-kicker">CURRENT PHASE</div>
+<div class="rm-phase" id="rm-ph-growth">설립기</div>
+</div>
+<div class="rm-cnt"><span id="rm-cn-growth">01</span><small>/ 09</small></div>
+</div>
+<div class="rm-bar"><span class="rm-fill" id="rm-fl-growth"></span><span class="rm-orb" id="rm-or-growth"></span></div>
+<div class="rm-seg" id="rm-sg-growth"></div>
+<div class="rm-view">
+<span class="rm-line"></span>
+<div class="rm-track" id="rm-tk-growth"></div>
+</div>
+<div class="rm-spacer"></div>
+</div>
+</div>
+<!-- 로드맵 02 · 스타트업 자금유치 -->
+<div class="rm-wrap">
+<div class="rm-intro">
+<div class="rm-idx">ROADMAP 02</div>
+<h3>스타트업 자금유치 로드맵 <span style="color:var(--rm-amber-l)">16단계</span></h3>
+<p>지원사업 · 투자유치 · 융자 · TIPS를 성장 단계에 맞춰 순서대로</p>
+</div>
+</div>
+<div class="rm-pin" id="rm-pin-startup">
+<div class="rm-stick">
+<div class="rm-hud">
+<div>
+<div class="rm-kicker">CURRENT STAGE</div>
+<div class="rm-phase" id="rm-ph-startup">창업 준비</div>
+</div>
+<div class="rm-cnt"><span id="rm-cn-startup">01</span><small>/ 16</small></div>
+</div>
+<div class="rm-bar"><span class="rm-fill" id="rm-fl-startup"></span><span class="rm-orb" id="rm-or-startup"></span></div>
+<div class="rm-seg" id="rm-sg-startup"></div>
+<div class="rm-view">
+<span class="rm-line"></span>
+<div class="rm-track" id="rm-tk-startup"></div>
+</div>
+<div class="rm-legend" id="rm-legend"></div>
+</div>
+</div>
+<div class="rm-wrap">
+<div class="rm-end">
+<a class="rm-cta" href="#apply">지금 우리 회사 단계 진단받기 →</a>
 </div>
 </div>
 </section>
@@ -1503,7 +1572,7 @@
 </div>
 <input name="entry.1340519393" type="hidden" value="[담당자:류예주]"/>
 <div aria-live="assertive" class="ap-err" id="apErr" role="alert"></div>
-<label class="ap-consent"><input id="apAgree" type="checkbox"/><span>[필수] 성함·연락처·업체명·사업소재지·업종·매출/직원규모·상담유형 등 상담 신청 정보의 수집·이용에 동의합니다. 수집 정보는 상담 목적으로만 이용되며 구글폼·구글시트(Google, 미국)에 저장·처리위탁됩니다. 자세한 내용은 <a href="/privacy" rel="noopener noreferrer" style="color:var(--teal-l)" target="_blank">개인정보처리방침</a> 참조. 동의를 거부할 수 있으나 거부 시 상담 신청이 제한됩니다.</span></label>
+<label class="ap-consent"><input id="apAgree" type="checkbox"/><span>[필수] 성함·연락처·업체명·사업소재지·업종·매출/직원규모·상담유형 등 상담 신청 정보의 수집·이용에 동의합니다. 수집 정보는 상담 목적으로만 이용되며 구글폼·구글시트(Google, 미국) 및 오너스 상담관리 시스템(Supabase, 미국)에 저장·처리위탁됩니다. 자세한 내용은 <a href="/privacy" rel="noopener noreferrer" style="color:var(--teal-l)" target="_blank">개인정보처리방침</a> 참조. 동의를 거부할 수 있으나 거부 시 상담 신청이 제한됩니다.</span></label>
 <button class="ap-submit" id="apSubmit" type="submit">전문가 상담 신청하기 →</button>
 </div>
 </form>
@@ -1765,5 +1834,9 @@
 <!-- ════ AI챗봇 (김진기 화법 · Type A 비노출) ════ -->
 <script defer="" src="/chatbot.js?v=20260720compose"></script>
 <script defer="" src="/measure.js"></script>
+<!-- 상담 신청을 구글폼과 병행으로 studio 에도 보낸다. defer 라 위의 인라인
+     핸들러가 먼저 등록되고, 그 핸들러가 막은 제출은 여기서도 보내지 않는다. -->
+<script defer="" src="/ownerskr-intake.js"></script>
+<script defer="" src="/roadmap.js?v=20260818a"></script>
 </body>
 </html>
