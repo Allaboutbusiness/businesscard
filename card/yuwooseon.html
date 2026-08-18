@@ -1552,7 +1552,7 @@
 </div>
 <input name="entry.1340519393" type="hidden" value="[담당자:유우선]"/>
 <div aria-live="assertive" class="ap-err" id="apErr" role="alert"></div>
-<label class="ap-consent"><input id="apAgree" type="checkbox"/><span>[필수] 성함·연락처·업체명·사업소재지·업종·매출규모·상담유형 등 상담 신청 정보의 수집·이용에 동의합니다. 수집 정보는 상담 목적으로만 이용되며 구글폼·구글시트(Google, 미국)에 저장·처리위탁됩니다. 자세한 내용은 <a href="/privacy" rel="noopener noreferrer" style="color:var(--teal-l)" target="_blank">개인정보처리방침</a> 참조. 동의를 거부할 수 있으나 거부 시 상담 신청이 제한됩니다.</span></label>
+<label class="ap-consent"><input id="apAgree" type="checkbox"/><span>[필수] 성함·연락처·업체명·사업소재지·업종·매출규모·상담유형 등 상담 신청 정보의 수집·이용에 동의합니다. 수집 정보는 상담 목적으로만 이용되며 구글폼·구글시트(Google, 미국) 및 오너스 상담관리 시스템(Supabase, 미국)에 저장·처리위탁됩니다. 자세한 내용은 <a href="/privacy" rel="noopener noreferrer" style="color:var(--teal-l)" target="_blank">개인정보처리방침</a> 참조. 동의를 거부할 수 있으나 거부 시 상담 신청이 제한됩니다.</span></label>
 <button class="ap-submit" id="apSubmit" type="submit">전문가 상담 신청하기 →</button>
 </div>
 </form>
@@ -1819,6 +1819,9 @@
 <!-- ════ AI챗봇 (김진기 화법 · Type A 비노출) ════ -->
 <script defer="" src="/chatbot.js?v=20260818radio"></script>
 <script defer="" src="/measure.js"></script>
+<!-- 상담 신청을 구글폼과 병행으로 studio(/admin/leads)에도 보낸다.
+     defer 라 위의 인라인 핸들러가 먼저 등록되고, 그 핸들러가 막은 제출은 여기서도 보내지 않는다. -->
+<script defer="" src="/ownerskr-intake.js?v=20260818"></script>
 <script defer="" src="/roadmap.js?v=20260818a"></script>
 </body>
 </html>

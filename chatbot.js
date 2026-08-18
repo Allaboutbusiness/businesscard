@@ -428,6 +428,10 @@
   }
   function onSubmitOk() {
     if (window.__jkOkTimer) { clearTimeout(window.__jkOkTimer); window.__jkOkTimer = null; }
+    /* apSubmitOk 는 페이지 폼으로 직접 낸 접수에서도 발행된다. 그때 챗봇 패널을 한 번도
+       연 적이 없으면 logEl/inputEl 이 없어 say() 안에서 터진다(접수는 이미 끝났지만
+       콘솔에 매번 오류가 남는다). 패널이 없으면 조용히 넘어간다. */
+    if (!logEl || !inputEl) return;
     say('접수됐습니다, 대표님. 담당 전문가가 보고 하루 이틀 안에 연락드릴게요.', 300).then(function () {
       clearInput();
       inputEl.appendChild(el('<div class="jk-back"><button type="button">닫기</button></div>'));
