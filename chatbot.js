@@ -373,7 +373,34 @@
     if (submitted) return;
     if (!contact.tel) { if (errEl) { errEl.style.display = 'block'; errEl.textContent = '연락처만 입력해주시면 바로 접수돼요.'; } return; }
     if (!apForm) { window.location.href = 'tel:' + TEL; return; }
-    var set = function (name, val) { var e = F(name); if (e && val != null) e.value = val; };
+    /* 사업자 형태·연 매출·세금체납은 #apply 에서 라디오다.
+       라디오에 e.value = val 을 하면 '선택'이 아니라 값 자체를 덮어써서
+       필수값이 빈 채로 구글폼에 제출된다(=접수 유실). 반드시 체크로 처리한다. */
+    var set = function (name, val) {
+      if (val == null) return;
+      var group = apForm.querySelectorAll('input[type="radio"][name="' + name + '"]');
+      if (group.length) {
+        for (var i = 0; i < group.length; i++) {
+          if (group[i].value === val) { group[i].checked = true; return; }
+        }
+        return hidden(name, val);   /* 라디오에 없는 값(예: 예비사업자) → 히든으로 그대로 보낸다 */
+      }
+      var e = F(name); if (e) { e.value = val; return; }
+      hidden(name, val);            /* 화면에서 뺀 항목(직원 규모 등)도 값은 살려 보낸다 */
+    };
+    /* 화면에 없는 항목을 잃지 않도록 히든 필드로 실어 보낸다 */
+    function hidden(name, val) {
+      /* 같은 항목이 라디오로도 선택돼 있으면 값이 2개로 제출된다 — 라디오를 먼저 해제한다 */
+      var rs = apForm.querySelectorAll('input[type="radio"][name="' + name + '"]');
+      for (var j = 0; j < rs.length; j++) rs[j].checked = false;
+      var h = apForm.querySelector('input[type="hidden"][name="' + name + '"]');
+      if (!h) {
+        h = document.createElement('input');
+        h.type = 'hidden'; h.name = name;
+        apForm.appendChild(h);
+      }
+      h.value = val;
+    }
     set('entry.328779733', SECTOR_FORM[answers.sector]);
     set('entry.2056091753', EMP_FORM[answers.employees]);
     set('entry.1322791980', REV_FORM[answers.revenue]);
