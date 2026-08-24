@@ -925,6 +925,36 @@
   <noscript><style>.fade-up{opacity:1!important;transform:none!important}</style></noscript>
   <link rel="stylesheet" href="/chatbot.css?v=20260727float">
   <link rel="stylesheet" href="/roadmap.css?v=20260818a">
+  <script>
+  /* [비율 고정 · B안] 데스크톱(넓은 실기기)에서만 홈페이지를 고정폭(1280)으로 스케일해
+     확대해도 레이아웃 점프 없이 비율 유지. 실제 모바일 기기는 기존 반응형 그대로.
+     iframe 내부(재귀)·모바일·구글 모바일봇에는 적용 안 됨. 되돌리려면 이 <script> 블록만 제거. */
+  (function(){
+    try{
+      if (window.self !== window.top) return;                 // iframe 내부 → 원본 그대로(재귀 방지)
+      if (!(window.screen && screen.width >= 1000)) return;    // 실제 화면이 좁으면(모바일/소형) 기존 반응형
+      var d=document, de=d.documentElement;
+      var hide=d.createElement('style'); hide.id='__lkhide';
+      hide.textContent='html{visibility:hidden!important}';
+      (d.head||de).appendChild(hide);
+      d.addEventListener('DOMContentLoaded', function(){
+        try{
+          var st=d.createElement('style');
+          st.textContent='html.__lk,html.__lk body{margin:0!important;padding:0!important;height:100%!important;min-width:0!important;max-width:none!important;overflow:hidden!important;background:#0d0f0e!important}#__lkf{position:absolute;top:0;left:0;border:0;background:#fff;transform-origin:top left}';
+          d.head.appendChild(st);
+          de.className+=' __lk';
+          var f=d.createElement('iframe');
+          f.id='__lkf'; f.title='(주)오너스경영연구소'; f.setAttribute('scrolling','auto');
+          f.src=location.pathname+location.search+location.hash;
+          d.body.innerHTML=''; d.body.appendChild(f);
+          var BASE=1280;
+          function fit(){ var s=window.innerWidth/BASE; f.style.width=BASE+'px'; f.style.height=(window.innerHeight/s)+'px'; f.style.transform='scale('+s+')'; }
+          window.addEventListener('resize',fit); f.addEventListener('load',fit); fit();
+        }finally{ var hd=d.getElementById('__lkhide'); if(hd) hd.parentNode.removeChild(hd); }
+      });
+    }catch(e){ var hd=document.getElementById('__lkhide'); if(hd&&hd.parentNode) hd.parentNode.removeChild(hd); }
+  })();
+  </script>
 </head>
 <body>
 
