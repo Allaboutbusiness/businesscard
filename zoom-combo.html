@@ -1,0 +1,155 @@
+<!DOCTYPE html><html lang="ko"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>섹션별 다른 방식 — 조합 시연</title>
+<style>
+  :root{
+    --bg:#F7F9F8; --surface:#fff; --ink:#16211F; --soft:#5B6A66; --muted:#93A09B;
+    --teal:#0D9A8C; --teal-deep:#0A6E62; --teal-tint:#E9F5F2; --line:#E6ECEA;
+    --violet:#7E6BC4; --violet-tint:#F0EDFA; --amber:#C9822F; --amber-tint:#FBEFE2;
+    --blue:#3B72C9; --blue-tint:#EAF1FB;
+    --shadow:0 12px 32px rgba(20,50,45,.12); --shadow-sm:0 1px 2px rgba(20,50,45,.05);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,'Apple SD Gothic Neo','Pretendard','Malgun Gothic',sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .page{max-width:920px;margin:0 auto;padding:38px 22px 64px}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:800;letter-spacing:.04em;color:var(--teal-deep);background:var(--teal-tint);border:1px solid #CFEAE4;padding:6px 12px;border-radius:999px;margin:0 0 14px}
+  .eyebrow .d{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 3px rgba(13,154,140,.2)}
+  h1{margin:0;font-size:clamp(25px,4.4vw,33px);font-weight:800;letter-spacing:-.02em;line-height:1.15;text-wrap:balance}
+  .lede{margin:10px 0 0;font-size:15.5px;color:var(--soft);max-width:60ch}
+
+  .controls{margin:24px 0 20px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 20px;box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .controls .lab{font-size:13.5px;font-weight:800;white-space:nowrap}
+  .controls input[type=range]{flex:1;min-width:200px;accent-color:var(--teal)}
+  .zval{font-variant-numeric:tabular-nums;font-weight:800;font-size:15px;color:var(--teal-deep);min-width:58px;text-align:right}
+  .controls button{font-family:inherit;font-weight:800;height:36px;min-width:36px;padding:0 12px;border-radius:11px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;font-size:14px;transition:background .14s,border-color .14s}
+  .controls button:hover{background:var(--teal-tint);border-color:var(--teal)}
+
+  /* 브라우저 프레임 */
+  .frame{position:relative;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;box-shadow:var(--shadow)}
+  .chrome{height:30px;background:#EEF3F1;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:6px;padding:0 12px}
+  .chrome i{width:9px;height:9px;border-radius:50%;background:#CBD6D2;display:block}
+  .chrome .url{margin-left:8px;font-size:11px;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:6px;padding:2px 10px}
+  .stage{height:440px;overflow:auto;background:#fff}
+
+  /* 섹션 라벨 */
+  .seclabel{position:sticky;left:0;display:flex;align-items:center;gap:8px;padding:8px 14px;background:#fff;border-bottom:1px dashed var(--line);font-size:12px;font-weight:800;color:var(--soft);z-index:2}
+  .pill{font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:6px}
+  .pill.fix{background:var(--amber-tint);color:var(--amber)}
+  .pill.resp{background:var(--teal-tint);color:var(--teal-deep)}
+
+  /* ── ① 히어로: 통째로 scale (비율 고정) ── */
+  .hero-clip{overflow:hidden}
+  #heroScale{transform-origin:top left;width:360px}
+  .hero{position:relative;padding:26px 22px 30px;background:
+    radial-gradient(120% 120% at 80% 0%, #DCEFEB 0%, #EAF5F2 40%, #F4FBF9 100%)}
+  .hero .tag{display:inline-block;font-size:11px;font-weight:800;color:var(--teal-deep);background:#fff;border:1px solid #CFEAE4;padding:4px 10px;border-radius:999px}
+  .hero h2{margin:12px 0 0;font-size:26px;font-weight:800;letter-spacing:-.03em;color:#123}
+  .hero p{margin:8px 0 0;font-size:13px;color:var(--soft)}
+  .hero .btn{margin-top:16px;display:inline-flex;align-items:center;gap:7px;background:var(--teal-deep);color:#fff;font-size:13px;font-weight:800;padding:10px 18px;border-radius:11px}
+
+  /* ── ② 본문: 반응형(rem/유동, 비율 유지 + 깔끔 재배치) ── */
+  .body{padding:16px 16px 22px;font-size:16px}      /* 이 폰트크기(em 기준)가 섹션 전체 스케일 */
+  .body .h{font-size:.82em;font-weight:800;color:var(--ink);margin:2px 2px 12px}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:.6em}
+  .card{border:1px solid var(--line);border-radius:.75em;padding:.85em .7em;background:#F7FAF9;text-align:center}
+  .card.c-fin{border-color:#D8E4F6;background:var(--blue-tint)}
+  .card.c-tech{border-color:#E4DEF5;background:var(--violet-tint)}
+  .card.c-exp{border-color:#F1E2CF;background:var(--amber-tint)}
+  .card .n{font-size:.9em;font-weight:800}
+  .card.c-fin .n{color:var(--blue)}.card.c-tech .n{color:var(--violet)}.card.c-exp .n{color:var(--amber)}
+  .card .c{font-size:.72em;color:var(--muted);margin-top:.25em;font-variant-numeric:tabular-nums}
+  .rows{margin-top:.9em;display:grid;gap:.45em}
+  .ln{height:.6em;border-radius:.3em;background:#EEF2F1}
+  .ln.s{width:64%}.ln.m{width:82%}
+
+  .caps{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+  @media (max-width:620px){.caps{grid-template-columns:1fr}}
+  .cap{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow-sm)}
+  .cap h3{margin:0 0 4px;font-size:13.5px;font-weight:800;display:flex;align-items:center;gap:8px}
+  .cap p{margin:0;font-size:12.5px;color:var(--soft);line-height:1.55}
+
+  .how{margin-top:22px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow-sm)}
+  .how h2{margin:0 0 6px;font-size:15px;font-weight:800}
+  .how p{margin:0;font-size:13.5px;color:var(--soft)}
+  .how b{color:var(--ink)}
+</style>
+</head><body>
+<div class="page">
+  <p class="eyebrow"><span class="d" aria-hidden="true"></span>섹션별 조합 · 시연</p>
+  <h1>한 페이지, 섹션마다 다른 방식</h1>
+  <p class="lede">아래 <b>확대 레벨</b>을 올려보세요. 같은 페이지 안에서 <b>히어로는 통째로(비율 고정)</b>, <b>본문은 반응형(비율 유지하며 재배치)</b>으로 서로 다르게 동작합니다.</p>
+
+  <div class="controls">
+    <span class="lab">확대 레벨</span>
+    <button id="minus" aria-label="축소">−</button>
+    <input id="z" type="range" min="100" max="220" step="1" value="100" aria-label="확대 레벨">
+    <button id="plus" aria-label="확대">+</button>
+    <span class="zval" id="zval">100%</span>
+    <button id="reset">되돌리기</button>
+  </div>
+
+  <div class="frame">
+    <div class="chrome" aria-hidden="true"><i></i><i></i><i></i><span class="url">ownerskr.com</span></div>
+    <div class="stage">
+
+      <div class="seclabel"><span class="pill fix">방식 ①</span> 히어로 · 비율 고정(통째로 확대)</div>
+      <div class="hero-clip">
+        <div id="heroScale">
+          <div class="hero">
+            <span class="tag">중소기업 정책자금 · 지원사업</span>
+            <h2>법인의 돈, 김진기 사외 CFO</h2>
+            <p>정책자금 · 절세 · 복지몰 구축 전문 상담</p>
+            <span class="btn">3회 무료 상담 →</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="seclabel"><span class="pill resp">방식 ②</span> 본문 · 반응형(비율 유지 + 깔끔 재배치)</div>
+      <div class="body" id="bodySec">
+        <div class="h">진행중 지원사업</div>
+        <div class="cards" id="cards">
+          <div class="card c-fin"><div class="n">금융</div><div class="c">206건</div></div>
+          <div class="card c-tech"><div class="n">기술</div><div class="c">312건</div></div>
+          <div class="card c-exp"><div class="n">수출</div><div class="c">249건</div></div>
+        </div>
+        <div class="rows"><div class="ln m"></div><div class="ln"></div><div class="ln s"></div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="caps">
+    <div class="cap"><h3><span class="pill fix">①</span> 히어로 — 비율 고정</h3><p>확대하면 사진·제목·버튼이 <b>한 덩어리로</b> 커집니다. 배치·비율이 절대 안 변해요(포스터처럼). 넘치면 프레임이 스크롤됩니다.</p></div>
+    <div class="cap"><h3><span class="pill resp">②</span> 본문 — 반응형(비율 유지)</h3><p>글자·간격·카드가 <b>같은 비율로</b> 커지고, 아주 넓어지면 3열→2열→1열로 <b>깔끔하게</b> 재배치돼요. 지금처럼 틀어지지 않습니다.</p></div>
+  </div>
+
+  <section class="how">
+    <h2>이 조합이 실제 코드에서 뜻하는 것</h2>
+    <p>한 페이지 안에서 <b>히어로 섹션만</b> ‘고정 스케일(transform)’, <b>나머지 본문 섹션</b>은 ‘rem 반응형’으로 각각 스코프를 나눠 적용합니다. 섹션끼리 간섭하지 않아, 원하는 구역만 골라 방식을 정할 수 있어요. 정하시면 실제 메인페이지에 이대로 반영해 배포하겠습니다.</p>
+  </section>
+</div>
+
+<script>
+  (function(){
+    var z=document.getElementById('z'),zval=document.getElementById('zval');
+    var hero=document.getElementById('heroScale'),body=document.getElementById('bodySec'),cards=document.getElementById('cards');
+    function render(){
+      var v=parseInt(z.value,10),f=v/100; zval.textContent=v+'%';
+      // ① 히어로: 통째로 scale → 비율 완전 고정
+      hero.style.transform='scale('+f+')';
+      // ② 본문: em(=rem) 기준 폰트만 키우면 섹션 전체가 같은 비율로 확대. 넓어지면 열 수만 깔끔히 변경
+      body.style.fontSize=(16*f)+'px';
+      var cols = f<1.45 ? 3 : (f<1.9 ? 2 : 1);
+      cards.style.gridTemplateColumns='repeat('+cols+',1fr)';
+    }
+    z.addEventListener('input',render);
+    document.getElementById('plus').onclick=function(){z.value=Math.min(220,+z.value+10);render();};
+    document.getElementById('minus').onclick=function(){z.value=Math.max(100,+z.value-10);render();};
+    document.getElementById('reset').onclick=function(){z.value=100;render();};
+    render();
+  })();
+</script>
+</body></html>
