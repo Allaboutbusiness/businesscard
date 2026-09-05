@@ -5,5 +5,10 @@
     "@neondatabase/serverless": "^0.10.4",
     "@vercel/blob": "^0.27.3",
     "markdown-it": "^14.1.0"
+  },
+  "scripts": {
+    "heygen": "node scripts/heygen/create.mjs",
+    "heygen:setup": "node scripts/heygen/setup.mjs",
+    "heygen:test": "node scripts/heygen/verify.test.mjs"
   }
 }
