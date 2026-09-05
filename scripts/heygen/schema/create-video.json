@@ -1,0 +1,2171 @@
+{
+ "description": "Discriminated union for POST /v3/videos request body.",
+ "discriminator": {
+  "mapping": {
+   "avatar": "#/components/schemas/CreateVideoFromAvatar",
+   "cinematic_avatar": "#/components/schemas/CreateVideoFromCinematicAvatar",
+   "image": "#/components/schemas/CreateVideoFromImage",
+   "studio": "#/components/schemas/CreateVideoFromStudio"
+  },
+  "propertyName": "type"
+ },
+ "oneOf": [
+  {
+   "description": "Create a video from a HeyGen avatar (video or photo avatar).\n\nProvide an avatar_id to use a previously created avatar. Supports all\navatar types: studio_avatar, digital_twin, and photo_avatar. Optionally\nset ``engine`` to select Avatar V for eligible avatars; when omitted, the\nserver defaults to Avatar IV.",
+   "properties": {
+    "aspect_ratio": {
+     "default": "16:9",
+     "description": "Output video aspect ratio. Supported values: '16:9', '9:16', '4:5', '5:4', '1:1', 'auto'. Defaults to '16:9'. 'auto' preserves the source's aspect ratio (avatar source frames or uploaded image), short-edge anchored to the requested resolution and capped at the tier's long edge. Falls back to '16:9' when source dimensions can't be read.",
+     "enum": [
+      "16:9",
+      "9:16",
+      "4:5",
+      "5:4",
+      "1:1",
+      "auto"
+     ],
+     "nullable": true,
+     "type": "string"
+    },
+    "audio_asset_id": {
+     "description": "HeyGen asset ID of an uploaded audio file. Mutually exclusive with script.",
+     "nullable": true,
+     "type": "string"
+    },
+    "audio_url": {
+     "description": "Public URL of an audio file to lip-sync. Mutually exclusive with script.",
+     "nullable": true,
+     "type": "string"
+    },
+    "avatar_id": {
+     "description": "HeyGen avatar ID (video avatar or photo avatar look ID).",
+     "type": "string"
+    },
+    "background": {
+     "description": "Background settings for the video.",
+     "nullable": true,
+     "properties": {
+      "asset_id": {
+       "description": "HeyGen asset ID of the background image. Used when type is 'image'. Mutually exclusive with url.",
+       "nullable": true,
+       "type": "string"
+      },
+      "type": {
+       "description": "Background type. 'color' uses a solid hex color; 'image' uses an image from url or asset_id.",
+       "enum": [
+        "color",
+        "image"
+       ],
+       "type": "string"
+      },
+      "url": {
+       "description": "URL of the background image. Used when type is 'image'. Mutually exclusive with asset_id.",
+       "nullable": true,
+       "type": "string"
+      },
+      "value": {
+       "description": "Hex color code (e.g. '#ff0000'). Required when type is 'color'.",
+       "nullable": true,
+       "type": "string"
+      }
+     },
+     "required": [
+      "type"
+     ],
+     "type": "object"
+    },
+    "brand_glossary_id": {
+     "description": "Brand glossary ID controlling how custom terms are pronounced in generated speech (for example, saying 'HeyGen' as 'hey-jen'). Applies when the audio is synthesized from `script`; a caller-supplied `audio_url` or `audio_asset_id` is unaffected. Pronunciation is applied to the synthesized audio only, so caption and subtitle text still show the original script wording. Discover IDs via GET /v3/brand-glossaries.",
+     "nullable": true,
+     "type": "string"
+    },
+    "callback_id": {
+     "description": "Caller-defined identifier echoed back in the webhook payload.",
+     "nullable": true,
+     "type": "string"
+    },
+    "callback_url": {
+     "description": "Webhook URL to receive a POST notification when the video is ready.",
+     "nullable": true,
+     "type": "string"
+    },
+    "caption": {
+     "description": "Caption generation settings. A sidecar subtitle file is always returned via subtitle_url; set 'style' to additionally burn captions into the rendered video.",
+     "nullable": true,
+     "properties": {
+      "file_format": {
+       "default": "srt",
+       "description": "Output format for the sidecar caption file.",
+       "enum": [
+        "srt"
+       ],
+       "type": "string"
+      },
+      "style": {
+       "description": "Visual style for burning captions into the rendered video. Omit for sidecar-only captions.",
+       "enum": [
+        "default"
+       ],
+       "nullable": true,
+       "type": "string"
+      }
+     },
+     "required": [],
+     "type": "object"
+    },
+    "engine": {
+     "description": "Engine configuration for video generation. Pass {\"type\": \"avatar_v\"} to enable cross-reference-driven animation for higher quality. Check supported_api_engines on the avatar look to confirm eligibility. Defaults to Avatar IV when omitted.",
+     "discriminator": {
+      "mapping": {
+       "avatar_iii": "#/components/schemas/AvatarIIIEngineConfig",
+       "avatar_iv": "#/components/schemas/AvatarIVEngineConfig",
+       "avatar_v": "#/components/schemas/AvatarVEngineConfig"
+      },
+      "propertyName": "type"
+     },
+     "nullable": true,
+     "oneOf": [
+      {
+       "description": "Avatar V engine configuration with cross-reference-driven animation.",
+       "properties": {
+        "reference_look_id": {
+         "description": "Optional look to use as the animation reference. When provided, it must be a `digital_twin` look accessible to your workspace and in the same avatar group as `avatar_id` (`studio_avatar` and `photo_avatar` looks are rejected). When omitted, video avatars self-reference and photo avatars select from their group's eligible candidates, preferring digital twins (ready first, then processing / upgrading), then curated public studio looks. A photo avatar whose group has no eligible reference renders directly from its image without one; motion_prompt is rejected in that case. A non-public `digital_twin` reference, whether provided or selected automatically, must also satisfy its group's consent requirements.",
+         "nullable": true,
+         "type": "string"
+        },
+        "type": {
+         "description": "Engine type discriminator. Must be 'avatar_v'. Check supported_api_engines on the avatar look to confirm eligibility.",
+         "type": "string"
+        }
+       },
+       "required": [
+        "type"
+       ],
+       "type": "object"
+      },
+      {
+       "description": "Avatar IV engine configuration (default behavior).",
+       "properties": {
+        "type": {
+         "description": "Engine type discriminator. Must be 'avatar_iv'.",
+         "type": "string"
+        }
+       },
+       "required": [
+        "type"
+       ],
+       "type": "object"
+      },
+      {
+       "description": "Avatar III engine configuration.\n\nA single engine value that resolves to the right product by the avatar's\nlook type (mirrors how ``avatar_iv`` already serves both photo and video\navatars):\n\n- video avatar looks (``digital_twin``, ``studio_avatar``) -> Digital Twin\n  (supports 4K)\n- ``photo_avatar`` look -> Photo Avatar (no 4K output)\n\nNot supported for raw image input (``type: \"image\"``).\n``motion_prompt`` and ``expressiveness`` are not supported with this engine.",
+       "properties": {
+        "type": {
+         "description": "Engine type discriminator. Must be 'avatar_iii'. Resolves to Digital Twin for video avatar looks (digital_twin, studio_avatar) and Photo Avatar for photo_avatar looks; not supported for raw image input. Check supported_api_engines on the avatar look to confirm eligibility.",
+         "type": "string"
+        }
+       },
+       "required": [
+        "type"
+       ],
+       "type": "object"
+      }
+     ]
+    },
+    "expressiveness": {
+     "description": "Avatar expressiveness level. Photo avatars only. Defaults to 'low' when omitted. Avatar IV only; rejected when engine.type is 'avatar_v'.",
+     "enum": [
+      "high",
+      "medium",
+      "low"
+     ],
+     "nullable": true,
+     "type": "string"
+    },
+    "fit": {
+     "description": "How the subject is fitted to the output canvas. 'cover' scales to fill the frame (may crop edges). 'contain' scales to fit entirely within the frame (may show background). When omitted, the server picks the best option based on the source and canvas orientations.",
+     "enum": [
+      "contain",
+      "cover"
+     ],
+     "nullable": true,
+     "type": "string"
+    },
+    "folder_id": {
+     "description": "Destination folder ID in the caller's workspace. Omit, pass null, or pass an empty string to place the video at the workspace root. Supported only for single-video creation; batch video items cannot set their own destination folder.",
+     "nullable": true,
+     "type": "string"
+    },
+    "motion_prompt": {
+     "description": "Natural-language prompt controlling avatar body motion and hand gestures. Supported for photo avatars on either engine, and for video avatars when engine.type is 'avatar_v'. Rejected for video avatars on the default Avatar IV engine, and for photo avatars on 'avatar_v' when the avatar's group has no animation reference (no digital twin or curated reference look).",
+     "nullable": true,
+     "type": "string"
+    },
+    "output_format": {
+     "default": "mp4",
+     "description": "Output container. 'webm' returns a video with a transparent background (alpha channel); 'mp4' (default) returns a standard video. 'webm' requires an avatar that supports matting. When 'webm' is selected, any 'background' value is rejected and background removal is applied automatically — the caller does not need to set 'remove_background'.",
+     "enum": [
+      "mp4",
+      "webm"
+     ],
+     "type": "string"
+    },
+    "remove_background": {
+     "description": "Remove the avatar background. Video avatars must be trained with matting enabled.",
+     "nullable": true,
+     "type": "boolean"
+    },
+    "resolution": {
+     "description": "Output video resolution.",
+     "enum": [
+      "4k",
+      "1080p",
+      "720p"
+     ],
+     "nullable": true,
+     "type": "string"
+    },
+    "script": {
+     "description": "Text script for the avatar to speak. Pair with voice_id, or omit voice_id when using avatar_id to use the avatar's default voice. Mutually exclusive with audio_url/audio_asset_id.",
+     "nullable": true,
+     "type": "string"
+    },
+    "title": {
+     "description": "Display title for the video in the HeyGen dashboard.",
+     "nullable": true,
+     "type": "string"
+    },
+    "type": {
+     "description": "Must be 'avatar' for avatar-based video creation.",
+     "type": "string"
+    },
+    "voice_id": {
+     "description": "Voice ID for text-to-speech. Required when script is provided, unless avatar_id is set (the avatar's default voice is used as fallback).",
+     "nullable": true,
+     "type": "string"
+    },
+    "voice_settings": {
+     "description": "Voice tuning parameters (speed, pitch, locale).",
+     "nullable": true,
+     "properties": {
+      "engine_settings": {
+       "description": "Engine-specific voice tuning, discriminated by 'engine_type'. Use the variant matching the engine backing the chosen voice (e.g. engine_type='elevenlabs' for ElevenLabs-backed voices). The request is rejected if the voice_id is not compatible with the selected engine.",
+       "discriminator": {
+        "mapping": {
+         "elevenlabs": "#/components/schemas/ElevenLabsEngineSettings",
+         "fish": "#/components/schemas/FishEngineSettings",
+         "starfish": "#/components/schemas/StarfishEngineSettings"
+        },
+        "propertyName": "engine_type"
+       },
+       "nullable": true,
+       "oneOf": [
+        {
+         "description": "Engine-specific voice settings for ElevenLabs-backed voices.\n\nSupports model, stability, similarity_boost, style, and use_speaker_boost.\nWhen using eleven_v3, stability must be 0, 0.5, or 1.",
+         "properties": {
+          "engine_type": {
+           "description": "Engine type discriminator. Must be 'elevenlabs' for ElevenLabs-backed voices.",
+           "type": "string"
+          },
+          "model": {
+           "description": "The model ID to use for ElevenLabs.",
+           "enum": [
+            "eleven_multilingual_v2",
+            "eleven_turbo_v2_5",
+            "eleven_flash_v2_5",
+            "eleven_v3"
+           ],
+           "nullable": true,
+           "type": "string"
+          },
+          "similarity_boost": {
+           "description": "The similarity boost parameter for ElevenLabs.",
+           "nullable": true,
+           "type": "number"
+          },
+          "stability": {
+           "description": "The stability parameter for ElevenLabs.",
+           "nullable": true,
+           "type": "number"
+          },
+          "style": {
+           "description": "The style parameter for ElevenLabs.",
+           "nullable": true,
+           "type": "number"
+          },
+          "use_speaker_boost": {
+           "description": "Whether to use speaker boost for ElevenLabs.",
+           "nullable": true,
+           "type": "boolean"
+          }
+         },
+         "required": [
+          "engine_type"
+         ],
+         "type": "object"
+        },
+        {
+         "description": "Engine-specific voice settings for Fish Audio-backed voices.\n\nInherits Fish's tuning fields (model, stability, similarity).",
+         "properties": {
+          "engine_type": {
+           "description": "Engine type discriminator. Must be 'fish' for Fish Audio-backed voices.",
+           "type": "string"
+          },
+          "model": {
+           "description": "Fish Audio model version (default 's1').",
+           "enum": [
+            "s1",
+            "s2-pro"
+           ],
+           "nullable": true,
+           "type": "string"
+          },
+          "similarity": {
+           "description": "Similarity parameter; how closely to match the source voice.",
+           "nullable": true,
+           "type": "number"
+          },
+          "stability": {
+           "description": "Stability parameter; higher is more consistent.",
+           "nullable": true,
+           "type": "number"
+          }
+         },
+         "required": [
+          "engine_type"
+         ],
+         "type": "object"
+        },
+        {
+         "description": "Engine-selection for Starfish-backed voices.\n\nStarfish has no user-tunable settings today; set ``engine_type='starfish'`` to force\nStarfish routing on voices that support multiple engines.",
+         "properties": {
+          "engine_type": {
+           "description": "Engine type discriminator. Must be 'starfish' for Starfish-backed voices.",
+           "type": "string"
+          }
+         },
+         "required": [
+          "engine_type"
+         ],
+         "type": "object"
+        }
+       ]
+      },
+      "locale": {
+       "description": "Locale/accent hint for multi-lingual voices (e.g. 'en-US').",
+       "nullable": true,
+       "type": "string"
+      },
+      "pitch": {
+       "default": 0,
+       "description": "Pitch adjustment in semitones. -50 to +50.",
+       "type": "number"
+      },
+      "speed": {
+       "default": 1,
+       "description": "Playback speed multiplier. 0.5 (half speed) to 1.5 (1.5x speed).",
+       "type": "number"
+      },
+      "volume": {
+       "default": 1,
+       "description": "Voice audio volume. 1.0 = full, 0.0 = silent. Useful when mixing spoken voice with background audio.",
+       "type": "number"
+      }
+     },
+     "required": [],
+     "type": "object"
+    },
+    "watermark": {
+     "description": "Custom watermark image to overlay on the video (PNG or JPEG). Available as a premium option for select Enterprise customers. To request access, please contact our support team.",
+     "nullable": true,
+     "properties": {
+      "image": {
+       "description": "Image asset to use as the watermark overlay (PNG or JPEG).",
+       "discriminator": {
+        "mapping": {
+         "asset_id": "#/components/schemas/AssetId",
+         "base64": "#/components/schemas/AssetBase64",
+         "url": "#/components/schemas/AssetUrl"
+        },
+        "propertyName": "type"
+       },
+       "oneOf": [
+        {
+         "description": "Asset input via publicly accessible HTTPS URL.",
+         "properties": {
+          "type": {
+           "description": "Input type discriminator",
+           "type": "string"
+          },
+          "url": {
+           "description": "Publicly accessible HTTPS URL for the asset",
+           "type": "string"
+          }
+         },
+         "required": [
+          "type",
+          "url"
+         ],
+         "type": "object"
+        },
+        {
+         "description": "Asset input via HeyGen asset ID from the asset upload endpoint.",
+         "properties": {
+          "asset_id": {
+           "description": "HeyGen asset ID from the asset upload endpoint",
+           "type": "string"
+          },
+          "type": {
+           "description": "Input type discriminator",
+           "type": "string"
+          }
+         },
+         "required": [
+          "type",
+          "asset_id"
+         ],
+         "type": "object"
+        },
+        {
+         "description": "Asset input via base64-encoded content.",
+         "properties": {
+          "data": {
+           "description": "Base64-encoded file content",
+           "type": "string"
+          },
+          "media_type": {
+           "description": "MIME type of the encoded content (e.g. \"image/png\")",
+           "type": "string"
+          },
+          "type": {
+           "description": "Input type discriminator",
+           "type": "string"
+          }
+         },
+         "required": [
+          "type",
+          "media_type",
+          "data"
+         ],
+         "type": "object"
+        }
+       ]
+      },
+      "opacity": {
+       "default": 1,
+       "description": "Watermark opacity. 0.0 is fully transparent, 1.0 is fully opaque.",
+       "type": "number"
+      },
+      "placement": {
+       "description": "Watermark placement. Defaults to bottom-right with standard margins when omitted.",
+       "nullable": true,
+       "properties": {
+        "offset_x": {
+         "description": "Fine-tune horizontal position. Fraction of frame width; 0.05 shifts 5% rightward, -0.05 shifts 5% leftward.",
+         "nullable": true,
+         "type": "number"
+        },
+        "offset_y": {
+         "description": "Fine-tune vertical position. Fraction of frame height; 0.05 shifts 5% downward, -0.05 shifts 5% upward.",
+         "nullable": true,
+         "type": "number"
+        },
+        "position": {
+         "default": "bottom_right",
+         "description": "Anchor corner for the watermark.",
+         "enum": [
+          "top_left",
+          "top_right",
+          "bottom_left",
+          "bottom_right"
+         ],
+         "type": "string"
+        }
+       },
+       "required": [],
+       "type": "object"
+      },
+      "scale": {
+       "default": 1,
+       "description": "Scale multiplier for the watermark image. 1.0 renders at native size.",
+       "type": "number"
+      }
+     },
+     "required": [
+      "image"
+     ],
+     "type": "object"
+    }
+   },
+   "required": [
+    "type",
+    "avatar_id"
+   ],
+   "type": "object"
+  },
+  {
+   "description": "Create a video by animating an arbitrary image.\n\nProvide an image via URL, asset ID, or inline base64. The image will be\nanimated with lip-sync to the provided audio or generated speech.",
+   "properties": {
+    "aspect_ratio": {
+     "default": "16:9",
+     "description": "Output video aspect ratio. Supported values: '16:9', '9:16', '4:5', '5:4', '1:1', 'auto'. Defaults to '16:9'. 'auto' preserves the source's aspect ratio (avatar source frames or uploaded image), short-edge anchored to the requested resolution and capped at the tier's long edge. Falls back to '16:9' when source dimensions can't be read.",
+     "enum": [
+      "16:9",
+      "9:16",
+      "4:5",
+      "5:4",
+      "1:1",
+      "auto"
+     ],
+     "nullable": true,
+     "type": "string"
+    },
+    "audio_asset_id": {
+     "description": "HeyGen asset ID of an uploaded audio file. Mutually exclusive with script.",
+     "nullable": true,
+     "type": "string"
+    },
+    "audio_url": {
+     "description": "Public URL of an audio file to lip-sync. Mutually exclusive with script.",
+     "nullable": true,
+     "type": "string"
+    },
+    "background": {
+     "description": "Background settings for the video.",
+     "nullable": true,
+     "properties": {
+      "asset_id": {
+       "description": "HeyGen asset ID of the background image. Used when type is 'image'. Mutually exclusive with url.",
+       "nullable": true,
+       "type": "string"
+      },
+      "type": {
+       "description": "Background type. 'color' uses a solid hex color; 'image' uses an image from url or asset_id.",
+       "enum": [
+        "color",
+        "image"
+       ],
+       "type": "string"
+      },
+      "url": {
+       "description": "URL of the background image. Used when type is 'image'. Mutually exclusive with asset_id.",
+       "nullable": true,
+       "type": "string"
+      },
+      "value": {
+       "description": "Hex color code (e.g. '#ff0000'). Required when type is 'color'.",
+       "nullable": true,
+       "type": "string"
+      }
+     },
+     "required": [
+      "type"
+     ],
+     "type": "object"
+    },
+    "brand_glossary_id": {
+     "description": "Brand glossary ID controlling how custom terms are pronounced in generated speech (for example, saying 'HeyGen' as 'hey-jen'). Applies when the audio is synthesized from `script`; a caller-supplied `audio_url` or `audio_asset_id` is unaffected. Pronunciation is applied to the synthesized audio only, so caption and subtitle text still show the original script wording. Discover IDs via GET /v3/brand-glossaries.",
+     "nullable": true,
+     "type": "string"
+    },
+    "callback_id": {
+     "description": "Caller-defined identifier echoed back in the webhook payload.",
+     "nullable": true,
+     "type": "string"
+    },
+    "callback_url": {
+     "description": "Webhook URL to receive a POST notification when the video is ready.",
+     "nullable": true,
+     "type": "string"
+    },
+    "caption": {
+     "description": "Caption generation settings. A sidecar subtitle file is always returned via subtitle_url; set 'style' to additionally burn captions into the rendered video.",
+     "nullable": true,
+     "properties": {
+      "file_format": {
+       "default": "srt",
+       "description": "Output format for the sidecar caption file.",
+       "enum": [
+        "srt"
+       ],
+       "type": "string"
+      },
+      "style": {
+       "description": "Visual style for burning captions into the rendered video. Omit for sidecar-only captions.",
+       "enum": [
+        "default"
+       ],
+       "nullable": true,
+       "type": "string"
+      }
+     },
+     "required": [],
+     "type": "object"
+    },
+    "expressiveness": {
+     "description": "Avatar expressiveness level. Photo avatars only. Defaults to 'low' when omitted.",
+     "enum": [
+      "high",
+      "medium",
+      "low"
+     ],
+     "nullable": true,
+     "type": "string"
+    },
+    "fit": {
+     "description": "How the subject is fitted to the output canvas. 'cover' scales to fill the frame (may crop edges). 'contain' scales to fit entirely within the frame (may show background). When omitted, the server picks the best option based on the source and canvas orientations.",
+     "enum": [
+      "contain",
+      "cover"
+     ],
+     "nullable": true,
+     "type": "string"
+    },
+    "folder_id": {
+     "description": "Destination folder ID in the caller's workspace. Omit, pass null, or pass an empty string to place the video at the workspace root. Supported only for single-video creation; batch video items cannot set their own destination folder.",
+     "nullable": true,
+     "type": "string"
+    },
+    "image": {
+     "description": "Image to animate. Accepts URL, asset ID, or base64-encoded data.",
+     "discriminator": {
+      "mapping": {
+       "asset_id": "#/components/schemas/AssetId",
+       "base64": "#/components/schemas/AssetBase64",
+       "url": "#/components/schemas/AssetUrl"
+      },
+      "propertyName": "type"
+     },
+     "oneOf": [
+      {
+       "description": "Asset input via publicly accessible HTTPS URL.",
+       "properties": {
+        "type": {
+         "description": "Input type discriminator",
+         "type": "string"
+        },
+        "url": {
+         "description": "Publicly accessible HTTPS URL for the asset",
+         "type": "string"
+        }
+       },
+       "required": [
+        "type",
+        "url"
+       ],
+       "type": "object"
+      },
+      {
+       "description": "Asset input via HeyGen asset ID from the asset upload endpoint.",
+       "properties": {
+        "asset_id": {
+         "description": "HeyGen asset ID from the asset upload endpoint",
+         "type": "string"
+        },
+        "type": {
+         "description": "Input type discriminator",
+         "type": "string"
+        }
+       },
+       "required": [
+        "type",
+        "asset_id"
+       ],
+       "type": "object"
+      },
+      {
+       "description": "Asset input via base64-encoded content.",
+       "properties": {
+        "data": {
+         "description": "Base64-encoded file content",
+         "type": "string"
+        },
+        "media_type": {
+         "description": "MIME type of the encoded content (e.g. \"image/png\")",
+         "type": "string"
+        },
+        "type": {
+         "description": "Input type discriminator",
+         "type": "string"
+        }
+       },
+       "required": [
+        "type",
+        "media_type",
+        "data"
+       ],
+       "type": "object"
+      }
+     ]
+    },
+    "motion_prompt": {
+     "description": "Natural-language prompt controlling avatar body motion. Photo avatars only.",
+     "nullable": true,
+     "type": "string"
+    },
+    "output_format": {
+     "default": "mp4",
+     "description": "Output container. 'webm' returns a video with a transparent background (alpha channel); 'mp4' (default) returns a standard video. 'webm' requires an avatar that supports matting. When 'webm' is selected, any 'background' value is rejected and background removal is applied automatically — the caller does not need to set 'remove_background'.",
+     "enum": [
+      "mp4",
+      "webm"
+     ],
+     "type": "string"
+    },
+    "remove_background": {
+     "description": "Remove the avatar background. Video avatars must be trained with matting enabled.",
+     "nullable": true,
+     "type": "boolean"
+    },
+    "resolution": {
+     "description": "Output video resolution.",
+     "enum": [
+      "4k",
+      "1080p",
+      "720p"
+     ],
+     "nullable": true,
+     "type": "string"
+    },
+    "script": {
+     "description": "Text script for the avatar to speak. Pair with voice_id, or omit voice_id when using avatar_id to use the avatar's default voice. Mutually exclusive with audio_url/audio_asset_id.",
+     "nullable": true,
+     "type": "string"
+    },
+    "title": {
+     "description": "Display title for the video in the HeyGen dashboard.",
+     "nullable": true,
+     "type": "string"
+    },
+    "type": {
+     "description": "Must be 'image' for image-based video creation.",
+     "type": "string"
+    },
+    "voice_id": {
+     "description": "Voice ID for text-to-speech. Required when script is provided, unless avatar_id is set (the avatar's default voice is used as fallback).",
+     "nullable": true,
+     "type": "string"
+    },
+    "voice_settings": {
+     "description": "Voice tuning parameters (speed, pitch, locale).",
+     "nullable": true,
+     "properties": {
+      "engine_settings": {
+       "description": "Engine-specific voice tuning, discriminated by 'engine_type'. Use the variant matching the engine backing the chosen voice (e.g. engine_type='elevenlabs' for ElevenLabs-backed voices). The request is rejected if the voice_id is not compatible with the selected engine.",
+       "discriminator": {
+        "mapping": {
+         "elevenlabs": "#/components/schemas/ElevenLabsEngineSettings",
+         "fish": "#/components/schemas/FishEngineSettings",
+         "starfish": "#/components/schemas/StarfishEngineSettings"
+        },
+        "propertyName": "engine_type"
+       },
+       "nullable": true,
+       "oneOf": [
+        {
+         "description": "Engine-specific voice settings for ElevenLabs-backed voices.\n\nSupports model, stability, similarity_boost, style, and use_speaker_boost.\nWhen using eleven_v3, stability must be 0, 0.5, or 1.",
+         "properties": {
+          "engine_type": {
+           "description": "Engine type discriminator. Must be 'elevenlabs' for ElevenLabs-backed voices.",
+           "type": "string"
+          },
+          "model": {
+           "description": "The model ID to use for ElevenLabs.",
+           "enum": [
+            "eleven_multilingual_v2",
+            "eleven_turbo_v2_5",
+            "eleven_flash_v2_5",
+            "eleven_v3"
+           ],
+           "nullable": true,
+           "type": "string"
+          },
+          "similarity_boost": {
+           "description": "The similarity boost parameter for ElevenLabs.",
+           "nullable": true,
+           "type": "number"
+          },
+          "stability": {
+           "description": "The stability parameter for ElevenLabs.",
+           "nullable": true,
+           "type": "number"
+          },
+          "style": {
+           "description": "The style parameter for ElevenLabs.",
+           "nullable": true,
+           "type": "number"
+          },
+          "use_speaker_boost": {
+           "description": "Whether to use speaker boost for ElevenLabs.",
+           "nullable": true,
+           "type": "boolean"
+          }
+         },
+         "required": [
+          "engine_type"
+         ],
+         "type": "object"
+        },
+        {
+         "description": "Engine-specific voice settings for Fish Audio-backed voices.\n\nInherits Fish's tuning fields (model, stability, similarity).",
+         "properties": {
+          "engine_type": {
+           "description": "Engine type discriminator. Must be 'fish' for Fish Audio-backed voices.",
+           "type": "string"
+          },
+          "model": {
+           "description": "Fish Audio model version (default 's1').",
+           "enum": [
+            "s1",
+            "s2-pro"
+           ],
+           "nullable": true,
+           "type": "string"
+          },
+          "similarity": {
+           "description": "Similarity parameter; how closely to match the source voice.",
+           "nullable": true,
+           "type": "number"
+          },
+          "stability": {
+           "description": "Stability parameter; higher is more consistent.",
+           "nullable": true,
+           "type": "number"
+          }
+         },
+         "required": [
+          "engine_type"
+         ],
+         "type": "object"
+        },
+        {
+         "description": "Engine-selection for Starfish-backed voices.\n\nStarfish has no user-tunable settings today; set ``engine_type='starfish'`` to force\nStarfish routing on voices that support multiple engines.",
+         "properties": {
+          "engine_type": {
+           "description": "Engine type discriminator. Must be 'starfish' for Starfish-backed voices.",
+           "type": "string"
+          }
+         },
+         "required": [
+          "engine_type"
+         ],
+         "type": "object"
+        }
+       ]
+      },
+      "locale": {
+       "description": "Locale/accent hint for multi-lingual voices (e.g. 'en-US').",
+       "nullable": true,
+       "type": "string"
+      },
+      "pitch": {
+       "default": 0,
+       "description": "Pitch adjustment in semitones. -50 to +50.",
+       "type": "number"
+      },
+      "speed": {
+       "default": 1,
+       "description": "Playback speed multiplier. 0.5 (half speed) to 1.5 (1.5x speed).",
+       "type": "number"
+      },
+      "volume": {
+       "default": 1,
+       "description": "Voice audio volume. 1.0 = full, 0.0 = silent. Useful when mixing spoken voice with background audio.",
+       "type": "number"
+      }
+     },
+     "required": [],
+     "type": "object"
+    },
+    "watermark": {
+     "description": "Custom watermark image to overlay on the video (PNG or JPEG). Available as a premium option for select Enterprise customers. To request access, please contact our support team.",
+     "nullable": true,
+     "properties": {
+      "image": {
+       "description": "Image asset to use as the watermark overlay (PNG or JPEG).",
+       "discriminator": {
+        "mapping": {
+         "asset_id": "#/components/schemas/AssetId",
+         "base64": "#/components/schemas/AssetBase64",
+         "url": "#/components/schemas/AssetUrl"
+        },
+        "propertyName": "type"
+       },
+       "oneOf": [
+        {
+         "description": "Asset input via publicly accessible HTTPS URL.",
+         "properties": {
+          "type": {
+           "description": "Input type discriminator",
+           "type": "string"
+          },
+          "url": {
+           "description": "Publicly accessible HTTPS URL for the asset",
+           "type": "string"
+          }
+         },
+         "required": [
+          "type",
+          "url"
+         ],
+         "type": "object"
+        },
+        {
+         "description": "Asset input via HeyGen asset ID from the asset upload endpoint.",
+         "properties": {
+          "asset_id": {
+           "description": "HeyGen asset ID from the asset upload endpoint",
+           "type": "string"
+          },
+          "type": {
+           "description": "Input type discriminator",
+           "type": "string"
+          }
+         },
+         "required": [
+          "type",
+          "asset_id"
+         ],
+         "type": "object"
+        },
+        {
+         "description": "Asset input via base64-encoded content.",
+         "properties": {
+          "data": {
+           "description": "Base64-encoded file content",
+           "type": "string"
+          },
+          "media_type": {
+           "description": "MIME type of the encoded content (e.g. \"image/png\")",
+           "type": "string"
+          },
+          "type": {
+           "description": "Input type discriminator",
+           "type": "string"
+          }
+         },
+         "required": [
+          "type",
+          "media_type",
+          "data"
+         ],
+         "type": "object"
+        }
+       ]
+      },
+      "opacity": {
+       "default": 1,
+       "description": "Watermark opacity. 0.0 is fully transparent, 1.0 is fully opaque.",
+       "type": "number"
+      },
+      "placement": {
+       "description": "Watermark placement. Defaults to bottom-right with standard margins when omitted.",
+       "nullable": true,
+       "properties": {
+        "offset_x": {
+         "description": "Fine-tune horizontal position. Fraction of frame width; 0.05 shifts 5% rightward, -0.05 shifts 5% leftward.",
+         "nullable": true,
+         "type": "number"
+        },
+        "offset_y": {
+         "description": "Fine-tune vertical position. Fraction of frame height; 0.05 shifts 5% downward, -0.05 shifts 5% upward.",
+         "nullable": true,
+         "type": "number"
+        },
+        "position": {
+         "default": "bottom_right",
+         "description": "Anchor corner for the watermark.",
+         "enum": [
+          "top_left",
+          "top_right",
+          "bottom_left",
+          "bottom_right"
+         ],
+         "type": "string"
+        }
+       },
+       "required": [],
+       "type": "object"
+      },
+      "scale": {
+       "default": 1,
+       "description": "Scale multiplier for the watermark image. 1.0 renders at native size.",
+       "type": "number"
+      }
+     },
+     "required": [
+      "image"
+     ],
+     "type": "object"
+    }
+   },
+   "required": [
+    "type",
+    "image"
+   ],
+   "type": "object"
+  },
+  {
+   "description": "Create a video from a text prompt plus avatar and asset references (Cinematic Avatar).\n\nCinematic Avatar generates a video from a natural-language ``prompt`` guided by\nreference content: one to three avatar looks and optional reference assets\n(images / videos / audio). Unlike the ``avatar`` and ``image`` modes there is\nno script or voice — motion and speech are driven entirely by the prompt and\nthe supplied references. Backed by the Seedance generation pipeline.",
+   "properties": {
+    "aspect_ratio": {
+     "default": "16:9",
+     "description": "Output aspect ratio. Supported for cinematic_avatar: '16:9', '9:16', '1:1'. Defaults to '16:9'.",
+     "enum": [
+      "16:9",
+      "9:16",
+      "1:1"
+     ],
+     "type": "string"
+    },
+    "auto_duration": {
+     "default": false,
+     "description": "Let the model choose the video length. When true, omit duration.",
+     "type": "boolean"
+    },
+    "avatar_id": {
+     "description": "Avatar look ID(s) used as visual references. Provide 1 to 3 look IDs.",
+     "items": {
+      "type": "string"
+     },
+     "type": "array"
+    },
+    "duration": {
+     "description": "Video length in seconds (4–15). Defaults to 10. Omit when auto_duration is true.",
+     "nullable": true,
+     "type": "integer"
+    },
+    "enhance_prompt": {
+     "default": false,
+     "description": "Enable server-side prompt enhancement.",
+     "type": "boolean"
+    },
+    "folder_id": {
+     "description": "Destination folder ID in the caller's workspace. Omit, pass null, or pass an empty string to place the video at the workspace root. Supported only for single-video creation; batch video items cannot set their own destination folder.",
+     "nullable": true,
+     "type": "string"
+    },
+    "prompt": {
+     "description": "Natural-language prompt describing the video to generate.",
+     "type": "string"
+    },
+    "references": {
+     "description": "Reference assets (images, videos, or audio) guiding the generation. Each accepts a URL, an asset_id, or inline base64. Combined limits: at most 3 videos and 9 images across avatars and references.",
+     "items": {
+      "discriminator": {
+       "mapping": {
+        "asset_id": "#/components/schemas/AssetId",
+        "base64": "#/components/schemas/AssetBase64",
+        "url": "#/components/schemas/AssetUrl"
+       },
+       "propertyName": "type"
+      },
+      "oneOf": [
+       {
+        "description": "Asset input via publicly accessible HTTPS URL.",
+        "properties": {
+         "type": {
+          "description": "Input type discriminator",
+          "type": "string"
+         },
+         "url": {
+          "description": "Publicly accessible HTTPS URL for the asset",
+          "type": "string"
+         }
+        },
+        "required": [
+         "type",
+         "url"
+        ],
+        "type": "object"
+       },
+       {
+        "description": "Asset input via HeyGen asset ID from the asset upload endpoint.",
+        "properties": {
+         "asset_id": {
+          "description": "HeyGen asset ID from the asset upload endpoint",
+          "type": "string"
+         },
+         "type": {
+          "description": "Input type discriminator",
+          "type": "string"
+         }
+        },
+        "required": [
+         "type",
+         "asset_id"
+        ],
+        "type": "object"
+       },
+       {
+        "description": "Asset input via base64-encoded content.",
+        "properties": {
+         "data": {
+          "description": "Base64-encoded file content",
+          "type": "string"
+         },
+         "media_type": {
+          "description": "MIME type of the encoded content (e.g. \"image/png\")",
+          "type": "string"
+         },
+         "type": {
+          "description": "Input type discriminator",
+          "type": "string"
+         }
+        },
+        "required": [
+         "type",
+         "media_type",
+         "data"
+        ],
+        "type": "object"
+       }
+      ]
+     },
+     "nullable": true,
+     "type": "array"
+    },
+    "resolution": {
+     "default": "720p",
+     "description": "Output resolution. Supported for cinematic_avatar: '720p', '1080p'. Defaults to '720p'.",
+     "enum": [
+      "720p",
+      "1080p"
+     ],
+     "type": "string"
+    },
+    "title": {
+     "description": "Display title for the video in the HeyGen dashboard.",
+     "nullable": true,
+     "type": "string"
+    },
+    "type": {
+     "description": "Must be 'cinematic_avatar' for prompt-and-reference video creation.",
+     "type": "string"
+    }
+   },
+   "required": [
+    "type",
+    "prompt",
+    "avatar_id"
+   ],
+   "type": "object"
+  },
+  {
+   "description": "Create a single video by composing an ordered list of whole-frame scenes.\n\nThe server owns layout and center-crops each scene to the global output\ncanvas. Output settings are global (one per request); a single video_id is\nreturned and rendering is all-or-nothing. MP4 only in v1 — the output\ncontainer is fixed and ``output_format`` is not exposed.",
+   "properties": {
+    "aspect_ratio": {
+     "default": "16:9",
+     "description": "Global output aspect ratio. Supported values: '16:9', '9:16', '4:5', '5:4', '1:1', 'auto'. Defaults to '16:9'. Each scene is center-cropped to this canvas.",
+     "enum": [
+      "16:9",
+      "9:16",
+      "4:5",
+      "5:4",
+      "1:1",
+      "auto"
+     ],
+     "nullable": true,
+     "type": "string"
+    },
+    "brand_glossary_id": {
+     "description": "Brand glossary ID controlling how custom terms are pronounced in generated speech (for example, saying 'HeyGen' as 'hey-jen'). Applies to every scene whose audio is synthesized from a script; scenes that supply their own audio URL or audio asset are unaffected. Pronunciation is applied to the synthesized audio only, so caption and subtitle text still show the original script wording. Discover IDs via GET /v3/brand-glossaries.",
+     "nullable": true,
+     "type": "string"
+    },
+    "callback_id": {
+     "description": "Caller-defined identifier echoed back in the webhook payload.",
+     "nullable": true,
+     "type": "string"
+    },
+    "callback_url": {
+     "description": "Webhook URL to receive a POST notification when the video is ready.",
+     "nullable": true,
+     "type": "string"
+    },
+    "caption": {
+     "description": "Caption generation settings. A sidecar subtitle file is always returned via subtitle_url; set 'style' to additionally burn captions into the rendered video.",
+     "nullable": true,
+     "properties": {
+      "file_format": {
+       "default": "srt",
+       "description": "Output format for the sidecar caption file.",
+       "enum": [
+        "srt"
+       ],
+       "type": "string"
+      },
+      "style": {
+       "description": "Visual style for burning captions into the rendered video. Omit for sidecar-only captions.",
+       "enum": [
+        "default"
+       ],
+       "nullable": true,
+       "type": "string"
+      }
+     },
+     "required": [],
+     "type": "object"
+    },
+    "folder_id": {
+     "description": "Destination folder ID in the caller's workspace. Omit, pass null, or pass an empty string to place the video at the workspace root. Supported only for single-video creation; batch video items cannot set their own destination folder.",
+     "nullable": true,
+     "type": "string"
+    },
+    "resolution": {
+     "description": "Global output video resolution.",
+     "enum": [
+      "4k",
+      "1080p",
+      "720p"
+     ],
+     "nullable": true,
+     "type": "string"
+    },
+    "scenes": {
+     "description": "Ordered list of whole-frame scenes to concatenate. Each scene is one of 'avatar_video', 'image', or 'video'. Must contain 1 to 50 scenes.",
+     "items": {
+      "discriminator": {
+       "mapping": {
+        "avatar_video": "#/components/schemas/AvatarVideoScene",
+        "image": "#/components/schemas/ImageScene",
+        "video": "#/components/schemas/VideoScene"
+       },
+       "propertyName": "type"
+      },
+      "oneOf": [
+       {
+        "description": "A whole-frame speaking scene backed by an avatar.",
+        "properties": {
+         "input": {
+          "description": "Scene source ('type': 'avatar'): an avatar_id plus one audio source. The avatar_id accepts any avatar look — video avatars and photo avatars alike (pass a photo avatar's look id to get a talking photo). The scene duration is derived server-side from the audio.",
+          "properties": {
+           "audio_asset_id": {
+            "description": "HeyGen asset ID of an uploaded audio file. Mutually exclusive with script.",
+            "nullable": true,
+            "type": "string"
+           },
+           "audio_url": {
+            "description": "Public URL of an audio file to lip-sync. Mutually exclusive with script.",
+            "nullable": true,
+            "type": "string"
+           },
+           "avatar_id": {
+            "description": "HeyGen avatar ID (video avatar or photo avatar look ID).",
+            "type": "string"
+           },
+           "background": {
+            "description": "Optional scene background composited behind the avatar. Color-only in v1: pass {\"type\": \"color\", \"color\": \"#RRGGBB\"}. Other background types are not yet supported.",
+            "discriminator": {
+             "mapping": {
+              "color": "#/components/schemas/StudioColorBackgroundInput"
+             },
+             "propertyName": "type"
+            },
+            "nullable": true,
+            "oneOf": [
+             {
+              "description": "Solid-color background for an ``avatar_video`` studio scene.\n\nStudio v1 supports solid-color backgrounds.",
+              "properties": {
+               "color": {
+                "description": "Background color as a 6-digit hex string, e.g. '#1a2b3c'.",
+                "type": "string"
+               },
+               "type": {
+                "description": "Background type discriminator. Must be 'color'.",
+                "type": "string"
+               }
+              },
+              "required": [
+               "type",
+               "color"
+              ],
+              "type": "object"
+             }
+            ]
+           },
+           "engine": {
+            "description": "Engine configuration for video generation. Pass {\"type\": \"avatar_v\"} to enable cross-reference-driven animation for higher quality. Check supported_api_engines on the avatar look to confirm eligibility. Defaults to Avatar IV when omitted.",
+            "discriminator": {
+             "mapping": {
+              "avatar_iii": "#/components/schemas/AvatarIIIEngineConfig",
+              "avatar_iv": "#/components/schemas/AvatarIVEngineConfig",
+              "avatar_v": "#/components/schemas/AvatarVEngineConfig"
+             },
+             "propertyName": "type"
+            },
+            "nullable": true,
+            "oneOf": [
+             {
+              "description": "Avatar V engine configuration with cross-reference-driven animation.",
+              "properties": {
+               "reference_look_id": {
+                "description": "Optional look to use as the animation reference. When provided, it must be a `digital_twin` look accessible to your workspace and in the same avatar group as `avatar_id` (`studio_avatar` and `photo_avatar` looks are rejected). When omitted, video avatars self-reference and photo avatars select from their group's eligible candidates, preferring digital twins (ready first, then processing / upgrading), then curated public studio looks. A photo avatar whose group has no eligible reference renders directly from its image without one; motion_prompt is rejected in that case. A non-public `digital_twin` reference, whether provided or selected automatically, must also satisfy its group's consent requirements.",
+                "nullable": true,
+                "type": "string"
+               },
+               "type": {
+                "description": "Engine type discriminator. Must be 'avatar_v'. Check supported_api_engines on the avatar look to confirm eligibility.",
+                "type": "string"
+               }
+              },
+              "required": [
+               "type"
+              ],
+              "type": "object"
+             },
+             {
+              "description": "Avatar IV engine configuration (default behavior).",
+              "properties": {
+               "type": {
+                "description": "Engine type discriminator. Must be 'avatar_iv'.",
+                "type": "string"
+               }
+              },
+              "required": [
+               "type"
+              ],
+              "type": "object"
+             },
+             {
+              "description": "Avatar III engine configuration.\n\nA single engine value that resolves to the right product by the avatar's\nlook type (mirrors how ``avatar_iv`` already serves both photo and video\navatars):\n\n- video avatar looks (``digital_twin``, ``studio_avatar``) -> Digital Twin\n  (supports 4K)\n- ``photo_avatar`` look -> Photo Avatar (no 4K output)\n\nNot supported for raw image input (``type: \"image\"``).\n``motion_prompt`` and ``expressiveness`` are not supported with this engine.",
+              "properties": {
+               "type": {
+                "description": "Engine type discriminator. Must be 'avatar_iii'. Resolves to Digital Twin for video avatar looks (digital_twin, studio_avatar) and Photo Avatar for photo_avatar looks; not supported for raw image input. Check supported_api_engines on the avatar look to confirm eligibility.",
+                "type": "string"
+               }
+              },
+              "required": [
+               "type"
+              ],
+              "type": "object"
+             }
+            ]
+           },
+           "expressiveness": {
+            "description": "Avatar expressiveness level. Photo avatars only. Defaults to 'low' when omitted. Avatar IV only; rejected when engine.type is 'avatar_v'.",
+            "enum": [
+             "high",
+             "medium",
+             "low"
+            ],
+            "nullable": true,
+            "type": "string"
+           },
+           "motion_prompt": {
+            "description": "Natural-language prompt controlling avatar body motion and hand gestures. Supported for photo avatars on either engine, and for video avatars when engine.type is 'avatar_v'. Rejected for video avatars on the default Avatar IV engine, and for photo avatars on 'avatar_v' when the avatar's group has no animation reference (no digital twin or curated reference look).",
+            "nullable": true,
+            "type": "string"
+           },
+           "script": {
+            "description": "Text script for the avatar to speak. Pair with voice_id, or omit voice_id when using avatar_id to use the avatar's default voice. Mutually exclusive with audio_url/audio_asset_id.",
+            "nullable": true,
+            "type": "string"
+           },
+           "type": {
+            "description": "Must be 'avatar' for an avatar-driven scene source.",
+            "type": "string"
+           },
+           "voice_id": {
+            "description": "Voice ID for text-to-speech. Required when script is provided, unless avatar_id is set (the avatar's default voice is used as fallback).",
+            "nullable": true,
+            "type": "string"
+           },
+           "voice_settings": {
+            "description": "Voice tuning parameters (speed, pitch, locale).",
+            "nullable": true,
+            "properties": {
+             "engine_settings": {
+              "description": "Engine-specific voice tuning, discriminated by 'engine_type'. Use the variant matching the engine backing the chosen voice (e.g. engine_type='elevenlabs' for ElevenLabs-backed voices). The request is rejected if the voice_id is not compatible with the selected engine.",
+              "discriminator": {
+               "mapping": {
+                "elevenlabs": "#/components/schemas/ElevenLabsEngineSettings",
+                "fish": "#/components/schemas/FishEngineSettings",
+                "starfish": "#/components/schemas/StarfishEngineSettings"
+               },
+               "propertyName": "engine_type"
+              },
+              "nullable": true,
+              "oneOf": [
+               {
+                "description": "Engine-specific voice settings for ElevenLabs-backed voices.\n\nSupports model, stability, similarity_boost, style, and use_speaker_boost.\nWhen using eleven_v3, stability must be 0, 0.5, or 1.",
+                "properties": {
+                 "engine_type": {
+                  "description": "Engine type discriminator. Must be 'elevenlabs' for ElevenLabs-backed voices.",
+                  "type": "string"
+                 },
+                 "model": {
+                  "description": "The model ID to use for ElevenLabs.",
+                  "enum": [
+                   "eleven_multilingual_v2",
+                   "eleven_turbo_v2_5",
+                   "eleven_flash_v2_5",
+                   "eleven_v3"
+                  ],
+                  "nullable": true,
+                  "type": "string"
+                 },
+                 "similarity_boost": {
+                  "description": "The similarity boost parameter for ElevenLabs.",
+                  "nullable": true,
+                  "type": "number"
+                 },
+                 "stability": {
+                  "description": "The stability parameter for ElevenLabs.",
+                  "nullable": true,
+                  "type": "number"
+                 },
+                 "style": {
+                  "description": "The style parameter for ElevenLabs.",
+                  "nullable": true,
+                  "type": "number"
+                 },
+                 "use_speaker_boost": {
+                  "description": "Whether to use speaker boost for ElevenLabs.",
+                  "nullable": true,
+                  "type": "boolean"
+                 }
+                },
+                "required": [
+                 "engine_type"
+                ],
+                "type": "object"
+               },
+               {
+                "description": "Engine-specific voice settings for Fish Audio-backed voices.\n\nInherits Fish's tuning fields (model, stability, similarity).",
+                "properties": {
+                 "engine_type": {
+                  "description": "Engine type discriminator. Must be 'fish' for Fish Audio-backed voices.",
+                  "type": "string"
+                 },
+                 "model": {
+                  "description": "Fish Audio model version (default 's1').",
+                  "enum": [
+                   "s1",
+                   "s2-pro"
+                  ],
+                  "nullable": true,
+                  "type": "string"
+                 },
+                 "similarity": {
+                  "description": "Similarity parameter; how closely to match the source voice.",
+                  "nullable": true,
+                  "type": "number"
+                 },
+                 "stability": {
+                  "description": "Stability parameter; higher is more consistent.",
+                  "nullable": true,
+                  "type": "number"
+                 }
+                },
+                "required": [
+                 "engine_type"
+                ],
+                "type": "object"
+               },
+               {
+                "description": "Engine-selection for Starfish-backed voices.\n\nStarfish has no user-tunable settings today; set ``engine_type='starfish'`` to force\nStarfish routing on voices that support multiple engines.",
+                "properties": {
+                 "engine_type": {
+                  "description": "Engine type discriminator. Must be 'starfish' for Starfish-backed voices.",
+                  "type": "string"
+                 }
+                },
+                "required": [
+                 "engine_type"
+                ],
+                "type": "object"
+               }
+              ]
+             },
+             "locale": {
+              "description": "Locale/accent hint for multi-lingual voices (e.g. 'en-US').",
+              "nullable": true,
+              "type": "string"
+             },
+             "pitch": {
+              "default": 0,
+              "description": "Pitch adjustment in semitones. -50 to +50.",
+              "type": "number"
+             },
+             "speed": {
+              "default": 1,
+              "description": "Playback speed multiplier. 0.5 (half speed) to 1.5 (1.5x speed).",
+              "type": "number"
+             },
+             "volume": {
+              "default": 1,
+              "description": "Voice audio volume. 1.0 = full, 0.0 = silent. Useful when mixing spoken voice with background audio.",
+              "type": "number"
+             }
+            },
+            "required": [],
+            "type": "object"
+           }
+          },
+          "required": [
+           "type",
+           "avatar_id"
+          ],
+          "type": "object"
+         },
+         "type": {
+          "description": "Must be 'avatar_video' for an avatar speaking scene.",
+          "type": "string"
+         }
+        },
+        "required": [
+         "type",
+         "input"
+        ],
+        "type": "object"
+       },
+       {
+        "description": "A whole-frame still-image scene: either silent (held for ``duration``) or narrated.\n\nExactly one mode must be chosen:\n- silent: set ``duration`` (seconds) and no audio source.\n- narrated: set exactly one audio source (script + voice_id, audio_url, or\n  audio_asset_id) and omit ``duration`` — the scene length follows the audio.",
+        "properties": {
+         "audio_asset_id": {
+          "description": "Narrated mode: HeyGen asset ID of an uploaded audio file. Mutually exclusive with duration/script.",
+          "nullable": true,
+          "type": "string"
+         },
+         "audio_url": {
+          "description": "Narrated mode: public URL of an audio file to play over the image. Mutually exclusive with duration/script.",
+          "nullable": true,
+          "type": "string"
+         },
+         "duration": {
+          "description": "Silent mode: hold the still image for this many seconds. Mutually exclusive with any audio source. Must be > 0 and <= 300.",
+          "nullable": true,
+          "type": "number"
+         },
+         "script": {
+          "description": "Narrated mode: text to speak over the image. Pair with voice_id. Mutually exclusive with duration/audio_url/audio_asset_id.",
+          "nullable": true,
+          "type": "string"
+         },
+         "source": {
+          "description": "Still image to display. Accepts URL, asset ID, or base64-encoded data.",
+          "discriminator": {
+           "mapping": {
+            "asset_id": "#/components/schemas/AssetId",
+            "base64": "#/components/schemas/AssetBase64",
+            "url": "#/components/schemas/AssetUrl"
+           },
+           "propertyName": "type"
+          },
+          "oneOf": [
+           {
+            "description": "Asset input via publicly accessible HTTPS URL.",
+            "properties": {
+             "type": {
+              "description": "Input type discriminator",
+              "type": "string"
+             },
+             "url": {
+              "description": "Publicly accessible HTTPS URL for the asset",
+              "type": "string"
+             }
+            },
+            "required": [
+             "type",
+             "url"
+            ],
+            "type": "object"
+           },
+           {
+            "description": "Asset input via HeyGen asset ID from the asset upload endpoint.",
+            "properties": {
+             "asset_id": {
+              "description": "HeyGen asset ID from the asset upload endpoint",
+              "type": "string"
+             },
+             "type": {
+              "description": "Input type discriminator",
+              "type": "string"
+             }
+            },
+            "required": [
+             "type",
+             "asset_id"
+            ],
+            "type": "object"
+           },
+           {
+            "description": "Asset input via base64-encoded content.",
+            "properties": {
+             "data": {
+              "description": "Base64-encoded file content",
+              "type": "string"
+             },
+             "media_type": {
+              "description": "MIME type of the encoded content (e.g. \"image/png\")",
+              "type": "string"
+             },
+             "type": {
+              "description": "Input type discriminator",
+              "type": "string"
+             }
+            },
+            "required": [
+             "type",
+             "media_type",
+             "data"
+            ],
+            "type": "object"
+           }
+          ]
+         },
+         "type": {
+          "description": "Must be 'image' for a still-image scene.",
+          "type": "string"
+         },
+         "voice_id": {
+          "description": "Voice ID for text-to-speech. Required when script is provided.",
+          "nullable": true,
+          "type": "string"
+         },
+         "voice_settings": {
+          "description": "Voice tuning parameters (speed, pitch, locale).",
+          "nullable": true,
+          "properties": {
+           "engine_settings": {
+            "description": "Engine-specific voice tuning, discriminated by 'engine_type'. Use the variant matching the engine backing the chosen voice (e.g. engine_type='elevenlabs' for ElevenLabs-backed voices). The request is rejected if the voice_id is not compatible with the selected engine.",
+            "discriminator": {
+             "mapping": {
+              "elevenlabs": "#/components/schemas/ElevenLabsEngineSettings",
+              "fish": "#/components/schemas/FishEngineSettings",
+              "starfish": "#/components/schemas/StarfishEngineSettings"
+             },
+             "propertyName": "engine_type"
+            },
+            "nullable": true,
+            "oneOf": [
+             {
+              "description": "Engine-specific voice settings for ElevenLabs-backed voices.\n\nSupports model, stability, similarity_boost, style, and use_speaker_boost.\nWhen using eleven_v3, stability must be 0, 0.5, or 1.",
+              "properties": {
+               "engine_type": {
+                "description": "Engine type discriminator. Must be 'elevenlabs' for ElevenLabs-backed voices.",
+                "type": "string"
+               },
+               "model": {
+                "description": "The model ID to use for ElevenLabs.",
+                "enum": [
+                 "eleven_multilingual_v2",
+                 "eleven_turbo_v2_5",
+                 "eleven_flash_v2_5",
+                 "eleven_v3"
+                ],
+                "nullable": true,
+                "type": "string"
+               },
+               "similarity_boost": {
+                "description": "The similarity boost parameter for ElevenLabs.",
+                "nullable": true,
+                "type": "number"
+               },
+               "stability": {
+                "description": "The stability parameter for ElevenLabs.",
+                "nullable": true,
+                "type": "number"
+               },
+               "style": {
+                "description": "The style parameter for ElevenLabs.",
+                "nullable": true,
+                "type": "number"
+               },
+               "use_speaker_boost": {
+                "description": "Whether to use speaker boost for ElevenLabs.",
+                "nullable": true,
+                "type": "boolean"
+               }
+              },
+              "required": [
+               "engine_type"
+              ],
+              "type": "object"
+             },
+             {
+              "description": "Engine-specific voice settings for Fish Audio-backed voices.\n\nInherits Fish's tuning fields (model, stability, similarity).",
+              "properties": {
+               "engine_type": {
+                "description": "Engine type discriminator. Must be 'fish' for Fish Audio-backed voices.",
+                "type": "string"
+               },
+               "model": {
+                "description": "Fish Audio model version (default 's1').",
+                "enum": [
+                 "s1",
+                 "s2-pro"
+                ],
+                "nullable": true,
+                "type": "string"
+               },
+               "similarity": {
+                "description": "Similarity parameter; how closely to match the source voice.",
+                "nullable": true,
+                "type": "number"
+               },
+               "stability": {
+                "description": "Stability parameter; higher is more consistent.",
+                "nullable": true,
+                "type": "number"
+               }
+              },
+              "required": [
+               "engine_type"
+              ],
+              "type": "object"
+             },
+             {
+              "description": "Engine-selection for Starfish-backed voices.\n\nStarfish has no user-tunable settings today; set ``engine_type='starfish'`` to force\nStarfish routing on voices that support multiple engines.",
+              "properties": {
+               "engine_type": {
+                "description": "Engine type discriminator. Must be 'starfish' for Starfish-backed voices.",
+                "type": "string"
+               }
+              },
+              "required": [
+               "engine_type"
+              ],
+              "type": "object"
+             }
+            ]
+           },
+           "locale": {
+            "description": "Locale/accent hint for multi-lingual voices (e.g. 'en-US').",
+            "nullable": true,
+            "type": "string"
+           },
+           "pitch": {
+            "default": 0,
+            "description": "Pitch adjustment in semitones. -50 to +50.",
+            "type": "number"
+           },
+           "speed": {
+            "default": 1,
+            "description": "Playback speed multiplier. 0.5 (half speed) to 1.5 (1.5x speed).",
+            "type": "number"
+           },
+           "volume": {
+            "default": 1,
+            "description": "Voice audio volume. 1.0 = full, 0.0 = silent. Useful when mixing spoken voice with background audio.",
+            "type": "number"
+           }
+          },
+          "required": [],
+          "type": "object"
+         }
+        },
+        "required": [
+         "type",
+         "source"
+        ],
+        "type": "object"
+       },
+       {
+        "description": "A whole-frame scene backed by an existing video clip.\n\nOptional ``playback`` exposes the audio volume / mute capability; when\nomitted the clip plays at its source volume.\n\nFor optional voiceover / narration, supply at most one audio source\n(``script`` + ``voice_id``, ``audio_url``, or ``audio_asset_id``) — the *same*\naudio inputs a narrated ``image`` scene accepts. When present, the narration\ndrives the scene length and ``playback.mode`` controls whether the clip\nfreezes, loops, or changes speed to fit that duration. When omitted the clip\nplays full-length as before. The clip's own audio level is still governed by\n``playback`` (the two compose).",
+        "properties": {
+         "audio_asset_id": {
+          "description": "Optional voiceover: HeyGen asset ID of an uploaded audio file. Mutually exclusive with script/audio_url.",
+          "nullable": true,
+          "type": "string"
+         },
+         "audio_url": {
+          "description": "Optional voiceover: public URL of an audio file to play over the clip. Mutually exclusive with script/audio_asset_id.",
+          "nullable": true,
+          "type": "string"
+         },
+         "playback": {
+          "description": "Optional playback capability: narrated-clip alignment 'mode', audio 'volume' (0.0–1.0), and 'mute'. Omit to use freeze alignment and keep the clip's source volume.",
+          "nullable": true,
+          "properties": {
+           "mode": {
+            "description": "How a narrated clip aligns to the voiceover-driven scene duration. 'freeze' plays once and holds the last frame; 'loop' repeats the clip; 'fit_to_scene' adjusts playback speed to exactly match the scene. Defaults to 'freeze' when omitted. Requires a video-scene voiceover.",
+            "enum": [
+             "freeze",
+             "loop",
+             "fit_to_scene"
+            ],
+            "nullable": true,
+            "type": "string"
+           },
+           "mute": {
+            "default": false,
+            "description": "If True, force the clip silent regardless of 'volume'.",
+            "type": "boolean"
+           },
+           "volume": {
+            "default": 1,
+            "description": "Clip audio volume. 1.0 = source level (default), 0.0 = silent.",
+            "type": "number"
+           }
+          },
+          "required": [],
+          "type": "object"
+         },
+         "script": {
+          "description": "Optional voiceover: text to speak over the clip. Pair with voice_id. Mutually exclusive with audio_url/audio_asset_id.",
+          "nullable": true,
+          "type": "string"
+         },
+         "source": {
+          "description": "Video clip to include. Accepts URL, asset ID, or base64-encoded data.",
+          "discriminator": {
+           "mapping": {
+            "asset_id": "#/components/schemas/AssetId",
+            "base64": "#/components/schemas/AssetBase64",
+            "url": "#/components/schemas/AssetUrl"
+           },
+           "propertyName": "type"
+          },
+          "oneOf": [
+           {
+            "description": "Asset input via publicly accessible HTTPS URL.",
+            "properties": {
+             "type": {
+              "description": "Input type discriminator",
+              "type": "string"
+             },
+             "url": {
+              "description": "Publicly accessible HTTPS URL for the asset",
+              "type": "string"
+             }
+            },
+            "required": [
+             "type",
+             "url"
+            ],
+            "type": "object"
+           },
+           {
+            "description": "Asset input via HeyGen asset ID from the asset upload endpoint.",
+            "properties": {
+             "asset_id": {
+              "description": "HeyGen asset ID from the asset upload endpoint",
+              "type": "string"
+             },
+             "type": {
+              "description": "Input type discriminator",
+              "type": "string"
+             }
+            },
+            "required": [
+             "type",
+             "asset_id"
+            ],
+            "type": "object"
+           },
+           {
+            "description": "Asset input via base64-encoded content.",
+            "properties": {
+             "data": {
+              "description": "Base64-encoded file content",
+              "type": "string"
+             },
+             "media_type": {
+              "description": "MIME type of the encoded content (e.g. \"image/png\")",
+              "type": "string"
+             },
+             "type": {
+              "description": "Input type discriminator",
+              "type": "string"
+             }
+            },
+            "required": [
+             "type",
+             "media_type",
+             "data"
+            ],
+            "type": "object"
+           }
+          ]
+         },
+         "type": {
+          "description": "Must be 'video' for a video-clip scene.",
+          "type": "string"
+         },
+         "voice_id": {
+          "description": "Voice ID for text-to-speech. Required when script is provided.",
+          "nullable": true,
+          "type": "string"
+         },
+         "voice_settings": {
+          "description": "Voice tuning parameters (speed, pitch, locale) for a script voiceover.",
+          "nullable": true,
+          "properties": {
+           "engine_settings": {
+            "description": "Engine-specific voice tuning, discriminated by 'engine_type'. Use the variant matching the engine backing the chosen voice (e.g. engine_type='elevenlabs' for ElevenLabs-backed voices). The request is rejected if the voice_id is not compatible with the selected engine.",
+            "discriminator": {
+             "mapping": {
+              "elevenlabs": "#/components/schemas/ElevenLabsEngineSettings",
+              "fish": "#/components/schemas/FishEngineSettings",
+              "starfish": "#/components/schemas/StarfishEngineSettings"
+             },
+             "propertyName": "engine_type"
+            },
+            "nullable": true,
+            "oneOf": [
+             {
+              "description": "Engine-specific voice settings for ElevenLabs-backed voices.\n\nSupports model, stability, similarity_boost, style, and use_speaker_boost.\nWhen using eleven_v3, stability must be 0, 0.5, or 1.",
+              "properties": {
+               "engine_type": {
+                "description": "Engine type discriminator. Must be 'elevenlabs' for ElevenLabs-backed voices.",
+                "type": "string"
+               },
+               "model": {
+                "description": "The model ID to use for ElevenLabs.",
+                "enum": [
+                 "eleven_multilingual_v2",
+                 "eleven_turbo_v2_5",
+                 "eleven_flash_v2_5",
+                 "eleven_v3"
+                ],
+                "nullable": true,
+                "type": "string"
+               },
+               "similarity_boost": {
+                "description": "The similarity boost parameter for ElevenLabs.",
+                "nullable": true,
+                "type": "number"
+               },
+               "stability": {
+                "description": "The stability parameter for ElevenLabs.",
+                "nullable": true,
+                "type": "number"
+               },
+               "style": {
+                "description": "The style parameter for ElevenLabs.",
+                "nullable": true,
+                "type": "number"
+               },
+               "use_speaker_boost": {
+                "description": "Whether to use speaker boost for ElevenLabs.",
+                "nullable": true,
+                "type": "boolean"
+               }
+              },
+              "required": [
+               "engine_type"
+              ],
+              "type": "object"
+             },
+             {
+              "description": "Engine-specific voice settings for Fish Audio-backed voices.\n\nInherits Fish's tuning fields (model, stability, similarity).",
+              "properties": {
+               "engine_type": {
+                "description": "Engine type discriminator. Must be 'fish' for Fish Audio-backed voices.",
+                "type": "string"
+               },
+               "model": {
+                "description": "Fish Audio model version (default 's1').",
+                "enum": [
+                 "s1",
+                 "s2-pro"
+                ],
+                "nullable": true,
+                "type": "string"
+               },
+               "similarity": {
+                "description": "Similarity parameter; how closely to match the source voice.",
+                "nullable": true,
+                "type": "number"
+               },
+               "stability": {
+                "description": "Stability parameter; higher is more consistent.",
+                "nullable": true,
+                "type": "number"
+               }
+              },
+              "required": [
+               "engine_type"
+              ],
+              "type": "object"
+             },
+             {
+              "description": "Engine-selection for Starfish-backed voices.\n\nStarfish has no user-tunable settings today; set ``engine_type='starfish'`` to force\nStarfish routing on voices that support multiple engines.",
+              "properties": {
+               "engine_type": {
+                "description": "Engine type discriminator. Must be 'starfish' for Starfish-backed voices.",
+                "type": "string"
+               }
+              },
+              "required": [
+               "engine_type"
+              ],
+              "type": "object"
+             }
+            ]
+           },
+           "locale": {
+            "description": "Locale/accent hint for multi-lingual voices (e.g. 'en-US').",
+            "nullable": true,
+            "type": "string"
+           },
+           "pitch": {
+            "default": 0,
+            "description": "Pitch adjustment in semitones. -50 to +50.",
+            "type": "number"
+           },
+           "speed": {
+            "default": 1,
+            "description": "Playback speed multiplier. 0.5 (half speed) to 1.5 (1.5x speed).",
+            "type": "number"
+           },
+           "volume": {
+            "default": 1,
+            "description": "Voice audio volume. 1.0 = full, 0.0 = silent. Useful when mixing spoken voice with background audio.",
+            "type": "number"
+           }
+          },
+          "required": [],
+          "type": "object"
+         }
+        },
+        "required": [
+         "type",
+         "source"
+        ],
+        "type": "object"
+       }
+      ]
+     },
+     "type": "array"
+    },
+    "title": {
+     "description": "Display title for the video in the HeyGen dashboard.",
+     "nullable": true,
+     "type": "string"
+    },
+    "type": {
+     "description": "Must be 'studio' for scene-composition video creation.",
+     "type": "string"
+    },
+    "watermark": {
+     "description": "Custom watermark image to overlay on the video (PNG or JPEG). Available as a premium option for select Enterprise customers. To request access, please contact our support team.",
+     "nullable": true,
+     "properties": {
+      "image": {
+       "description": "Image asset to use as the watermark overlay (PNG or JPEG).",
+       "discriminator": {
+        "mapping": {
+         "asset_id": "#/components/schemas/AssetId",
+         "base64": "#/components/schemas/AssetBase64",
+         "url": "#/components/schemas/AssetUrl"
+        },
+        "propertyName": "type"
+       },
+       "oneOf": [
+        {
+         "description": "Asset input via publicly accessible HTTPS URL.",
+         "properties": {
+          "type": {
+           "description": "Input type discriminator",
+           "type": "string"
+          },
+          "url": {
+           "description": "Publicly accessible HTTPS URL for the asset",
+           "type": "string"
+          }
+         },
+         "required": [
+          "type",
+          "url"
+         ],
+         "type": "object"
+        },
+        {
+         "description": "Asset input via HeyGen asset ID from the asset upload endpoint.",
+         "properties": {
+          "asset_id": {
+           "description": "HeyGen asset ID from the asset upload endpoint",
+           "type": "string"
+          },
+          "type": {
+           "description": "Input type discriminator",
+           "type": "string"
+          }
+         },
+         "required": [
+          "type",
+          "asset_id"
+         ],
+         "type": "object"
+        },
+        {
+         "description": "Asset input via base64-encoded content.",
+         "properties": {
+          "data": {
+           "description": "Base64-encoded file content",
+           "type": "string"
+          },
+          "media_type": {
+           "description": "MIME type of the encoded content (e.g. \"image/png\")",
+           "type": "string"
+          },
+          "type": {
+           "description": "Input type discriminator",
+           "type": "string"
+          }
+         },
+         "required": [
+          "type",
+          "media_type",
+          "data"
+         ],
+         "type": "object"
+        }
+       ]
+      },
+      "opacity": {
+       "default": 1,
+       "description": "Watermark opacity. 0.0 is fully transparent, 1.0 is fully opaque.",
+       "type": "number"
+      },
+      "placement": {
+       "description": "Watermark placement. Defaults to bottom-right with standard margins when omitted.",
+       "nullable": true,
+       "properties": {
+        "offset_x": {
+         "description": "Fine-tune horizontal position. Fraction of frame width; 0.05 shifts 5% rightward, -0.05 shifts 5% leftward.",
+         "nullable": true,
+         "type": "number"
+        },
+        "offset_y": {
+         "description": "Fine-tune vertical position. Fraction of frame height; 0.05 shifts 5% downward, -0.05 shifts 5% upward.",
+         "nullable": true,
+         "type": "number"
+        },
+        "position": {
+         "default": "bottom_right",
+         "description": "Anchor corner for the watermark.",
+         "enum": [
+          "top_left",
+          "top_right",
+          "bottom_left",
+          "bottom_right"
+         ],
+         "type": "string"
+        }
+       },
+       "required": [],
+       "type": "object"
+      },
+      "scale": {
+       "default": 1,
+       "description": "Scale multiplier for the watermark image. 1.0 renders at native size.",
+       "type": "number"
+      }
+     },
+     "required": [
+      "image"
+     ],
+     "type": "object"
+    }
+   },
+   "required": [
+    "type",
+    "scenes"
+   ],
+   "type": "object"
+  }
+ ]
+}
